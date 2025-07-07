@@ -1,6 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+// 标准版 AC 自动机
 constexpr int MX = 1'000'001;
 int tree[MX][27];
 int fail[MX];

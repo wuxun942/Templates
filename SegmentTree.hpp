@@ -6,7 +6,7 @@ class SegmentTree {
     int n;
     vector<T> tree;
 
-    T merge_val(T a, T b) {
+    T merge_val(T a, T b) const {
         return max(a, b);
     }
 
@@ -39,7 +39,7 @@ class SegmentTree {
         maintain(o);
     }
 
-    T query(int o, int l, int r, int ql, int qr) {
+    T query(int o, int l, int r, int ql, int qr) const {
         if (ql <= l && r <= qr) {
             return tree[o];
         }
@@ -50,7 +50,8 @@ class SegmentTree {
         if (ql > m) {
             return query(o * 2 + 1, m + 1, r, ql, qr);
         }
-        T l_res = query(o * 2, l, m, ql, qr), r_res = query(o * 2 + 1, m + 1, r, ql, qr);
+        T l_res = query(o * 2, l, m, ql, qr);
+        T r_res = query(o * 2 + 1, m + 1, r, ql, qr);
         return merge_val(l_res, r_res);
     }
 
@@ -65,11 +66,11 @@ public:
         update(1, 0, n - 1, i, val);
     }
 
-    T query(int ql, int qr) {
+    T query(int ql, int qr) const {
         return query(1, 0, n - 1, ql, qr);
     }
 
-    T get(int i) {
+    T get(int i) const {
         return query(1, 0, n - 1, i, i);
     }
 };

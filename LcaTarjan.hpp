@@ -38,15 +38,15 @@ public:
             groups[queries[i][1]].emplace_back(queries[i][0], i);
         }
         vector vis(n, false);
-        vector ans(n, 0);
+        vector ans(queries.size(), 0);
         auto dfs = [&](auto&& dfs, int x, int fa) -> void {
             vis[x] = true;
             for (int e = head[x]; e >= 0; e = nxt[e]) {
                 int y = to[e];
                 if (y != fa) {
                     dfs(dfs, y, x);
+                    pa[y] = x;
                 }
-                pa[y] = x;
             }
             for (auto [y, idx]: groups[x]) {
                 if (vis[y]) {

@@ -1,5 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std;
+
 // Lazy 线段树，以维护区间和为例
 template<typename T, typename F>
 class LazySegmentTree {

@@ -61,7 +61,7 @@ void init(int n) {
     for (int i = 0; i <= n; ++i) {
         tree[i][0] = 0;
         tree[i][1] = 0;
-        tree[i][2] = 0;
+        tree[i][2] = 0; // 经过次数，用于删除节点
     }
 }
 

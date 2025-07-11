@@ -1,6 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
-// 以找区间最大值为例
+
+// 线段树，单点更新 + 区间查询，以找区间最大值为例
 template<typename T>
 class SegmentTree {
     int n;

@@ -11,7 +11,7 @@ void build(const vector<string>& a) {
     for (auto &s: a) {
         sum_len += s.size();
     }
-    for (int m = sum_len, i = 0; i <= m; ++i) {
+    for (int i = 0; i <= sum_len; ++i) {
         memset(tree[i], 0, sizeof(tree[i]));
         fail[i] = 0;
     }
@@ -38,7 +38,7 @@ void build(const vector<string>& a) {
     while (!q.empty()) {
         int x = q.front();
         q.pop();
-        tree[x][26] |= tree[fail[x]][26]; // 继承命中状态
+        tree[x][26] |= tree[fail[x]][26];
         for (int j = 0; j < 26; ++j) {
             if (tree[x][j] == 0) {
                 tree[x][j] = tree[fail[x]][j];
@@ -54,7 +54,7 @@ bool search(string& s) {
     int cur = 0;
     for (char c: s) {
         cur = tree[cur][c - 'a'];
-        if (tree[cur][26]) { // 命中
+        if (tree[cur][26]) {
             return true;
         }
     }
@@ -74,19 +74,17 @@ constexpr int MX2 = 1'000'001;
 int end_node[MX2];
 int n;
 void build(const vector<string>& a) {
-    // reset
     int sum_len = 0;
     for (auto &s: a) {
         sum_len += s.size();
     }
-    for (int m = sum_len, i = 0; i <= m; ++i) {
+    for (int i = 0; i <= sum_len; ++i) {
         memset(tree[i], 0, sizeof(tree[i]));
         fail[i] = 0;
         head[i] = -1;
         cnt[i] = 0;
     }
 
-    // 插入字符串
     n = a.size();
     cnt_e = 0;
     for (int i = 0; i < n; ++i) {
@@ -102,7 +100,6 @@ void build(const vector<string>& a) {
         end_node[i] = cur;
     }
 
-    // 构建 fail
     queue<int> q;
     for (int j = 0; j < 26; ++j) {
         if (tree[0][j] != 0) {
@@ -122,7 +119,6 @@ void build(const vector<string>& a) {
         }
     }
 
-    // 根据 fail 反向建树
     for (int i = 1; i <= cnt_e; ++i) {
         int x = fail[i], y = i;
         nxt[i] = head[x];

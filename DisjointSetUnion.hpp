@@ -1,5 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std;
+
 // 并查集
 class UnionFind {
     vector<int> fa, sz;

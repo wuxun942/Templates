@@ -7,7 +7,7 @@ class SegmentTree {
     int n;
     vector<T> tree;
 
-    T merge_val(T a, T b) const {
+    T merge_val(T a, T b) {
         return max(a, b);
     }
 
@@ -40,7 +40,7 @@ class SegmentTree {
         maintain(o);
     }
 
-    T query(int o, int l, int r, int ql, int qr) const {
+    T query(int o, int l, int r, int ql, int qr) {
         if (ql <= l && r <= qr) {
             return tree[o];
         }
@@ -67,11 +67,11 @@ public:
         update(1, 0, n - 1, i, val);
     }
 
-    T query(int ql, int qr) const {
+    T query(int ql, int qr) {
         return query(1, 0, n - 1, ql, qr);
     }
 
-    T get(int i) const {
+    T get(int i) {
         return query(1, 0, n - 1, i, i);
     }
 };

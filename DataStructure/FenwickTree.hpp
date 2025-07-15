@@ -26,7 +26,7 @@ public:
         }
     }
 
-    T query(int i) const {
+    T query(int i) {
         T res = 0;
         for (; i > 0; i &= i - 1) {
             res += tree[i];
@@ -34,7 +34,7 @@ public:
         return res;
     }
 
-    T query(int l, int r) const {
+    T query(int l, int r) {
         if (l > r) {
             return 0;
         }

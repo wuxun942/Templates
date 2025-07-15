@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-// Lazy 线段树，以维护区间和为例
+// Lazy 线段树，以区间增加+维护区间和为例
 template<typename T, typename F>
 class LazySegmentTree {
     const F TODO_INIT = 0;
@@ -14,11 +14,11 @@ class LazySegmentTree {
     int n;
     vector<Node> tree;
 
-    T merge_val(T a, T b) const {
+    T merge_val(T a, T b) {
         return a + b;
     }
 
-    F merge_todo(F a, F b) const {
+    F merge_todo(F a, F b) {
         return a + b;
     }
 
@@ -74,9 +74,9 @@ class LazySegmentTree {
         maintain(o);
     }
 
-    T query(int o, int l, int r, int ql, int qr) const {
+    T query(int o, int l, int r, int ql, int qr) {
         if (ql <= l && r <= qr) {
-            return tree[o];
+            return tree[o].val;
         }
         spread(o, l, r);
         int m = (l + r) / 2;
@@ -98,10 +98,13 @@ public:
     }
 
     void update(int ql, int qr, F f) {
+        if (ql > qr) {
+            return;
+        }
         update(1, 0, n - 1, ql, qr, f);
     }
 
-    T query(int ql, int qr) const {
+    T query(int ql, int qr) {
         return query(1, 0, n - 1, ql, qr);
     }
 };

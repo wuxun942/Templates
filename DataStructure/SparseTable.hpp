@@ -1,6 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+// ST 表：处理可重复贡献的查询问题，只支持静态查询
 class ST {
     vector<vector<int>> st;
 

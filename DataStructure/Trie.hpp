@@ -5,8 +5,7 @@ using namespace std;
 
 // 一般字典树
 constexpr int MX = 5'000'001;
-// 末位为 end
-int tree[MX][27];
+int tree[MX][27]; // 末位表示 end
 int cnt;
 void init(int n) {
     cnt = 0;

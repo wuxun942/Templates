@@ -8,6 +8,7 @@ public:
     int cc;
     UnionFind(int n): fa(n), sz(n, 1), cc(n) {
         ranges::iota(fa, 0);
+        // iota(fa.begin(), fa.end(), 0);
     }
 
     int find(int x) {

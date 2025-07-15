@@ -1,4 +1,6 @@
 // 乘法快速幂
+
+// 不取模
 long long qpow(unsigned long long x, int n) {
     long long ans = 1;
     for (; n > 0; n >>= 1, x *= x) {
@@ -9,7 +11,7 @@ long long qpow(unsigned long long x, int n) {
     return ans;
 }
 
-constexpr int MOD = 1'000'000'007;
+// 取模
 int qpow(long long x, long long n, int mod) {
     int ans = 1;
     x %= mod;

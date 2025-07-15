@@ -47,14 +47,7 @@ template<typename T>
 class FenwickTree {
     vector<T> info1, info2;
 
-    T query(const vector<T>& tree, int i) {
-        T res = 0;
-        for (; i > 0; i &= i - 1) {
-            res += tree[i];
-        }
-        return res;
-    }
-
+    // 传统初始化方法
     void build(vector<T>& tree, const vector<T>& a) {
         int n = a.size();
         for (int i = 1; i <= n; i++) {
@@ -65,10 +58,20 @@ class FenwickTree {
         }
     }
 
+    // 传统单点更新
     void update(vector<T>& tree, int i, T val) {
         for (; i < tree.size(); i += i & -i) {
             tree[i] += val;
         }
+    }
+
+    // 传统单点查询
+    T query(const vector<T>& tree, int i) {
+        T res = 0;
+        for (; i > 0; i &= i - 1) {
+            res += tree[i];
+        }
+        return res;
     }
 
 public:
@@ -87,6 +90,7 @@ public:
         build(info2, diff2);
     }
 
+    // 区间更新
     void update(int l, int r, T val) {
         update(info1, l, val);
         update(info1, r + 1, -val);
@@ -94,6 +98,7 @@ public:
         update(info2, r + 1, -r * val);
     }
 
+    // 区间查询
     T query(int l, int r) {
         return query(info1, r) * r - query(info1, l - 1) * (l - 1) - query(info2, r) + query(info2, l - 1);
     }

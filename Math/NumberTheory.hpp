@@ -11,7 +11,7 @@ auto init = []() {
     for (int i = 2; i * i < MX; i++) {
         if (is_prime[i]) {
             primes.push_back(i);
-            for (long long j = 1LL * i * i; j < MX; j += i) {
+            for (int j = i * i; j < MX; j += i) {
                 is_prime[j] = false;
             }
         }

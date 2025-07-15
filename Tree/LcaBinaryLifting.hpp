@@ -6,7 +6,7 @@ template<typename T>
 class LcaBinaryLifting {
     vector<vector<int>> pa;
     vector<int> depth;
-    vector<T> dis;
+    vector<T> dis; // 无权图用 depth 代替
 public:
     LcaBinaryLifting(const vector<vector<int>>& edges) {
         int n = edges.size() + 1;
@@ -49,7 +49,9 @@ public:
     int get_lca(int x, int y) {
         if (depth[x] > depth[y]) swap(x, y);
         y = get_kth_ancestor(y, depth[y] - depth[x]);
-        if (x == y) return x;
+        if (x == y) {
+            return x;
+        }
         for (int i = bit_width((unsigned) depth[x]) - 1; i >= 0; i--) {
             if (int px = pa[i][x], py = pa[i][y]; px != py) {
                 x = px;
@@ -59,21 +61,18 @@ public:
         return pa[0][x];
     }
 
-    T get_dis(int x) {
-        return dis[x];
-    }
-
     T get_dis(int x, int y) {
         return dis[x] + dis[y] - 2 * dis[get_lca(x, y)];
     }
 
-    int upto_dis(int x, T d) {
-        for (int i = bit_width((unsigned) depth[x]) - 1; i >= 0; --i) {
-            if (int p = pa[i][x]; p >= 0 && dis[x] - dis[p] <= d) {
-                d -= dis[x] - dis[p];
-                x = p;
-            }
-        }
-        return x;
-    }
+    // 从 x 出发向上跳至多 d 距离
+    // int upto_dis(int x, T d) {
+    //     for (int i = bit_width((unsigned) depth[x]) - 1; i >= 0; --i) {
+    //         if (int p = pa[i][x]; p >= 0 && dis[x] - dis[p] <= d) {
+    //             d -= dis[x] - dis[p];
+    //             x = p;
+    //         }
+    //     }
+    //     return x;
+    // }
 };

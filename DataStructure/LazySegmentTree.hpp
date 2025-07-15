@@ -22,12 +22,14 @@ class LazySegmentTree {
         return a + b;
     }
 
+    // 懒标记应用于当前节点
     void apply(int o, int l, int r, F todo) {
         Node &cur = tree[o];
         cur.val += todo * (r - l + 1);
         cur.todo = merge_todo(cur.todo, todo);
     }
 
+    // 懒标记下传
     void spread(int o, int l, int r) {
         Node &cur = tree[o];
         if (cur.todo == TODO_INIT) {

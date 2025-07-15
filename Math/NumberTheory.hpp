@@ -4,7 +4,7 @@ using namespace std;
 // 埃氏筛筛质数
 constexpr int MX = 100'001;
 bool not_prime[MX]{};
-auto init_prime = []() {
+auto init = []() {
     not_prime[0] = not_prime[1] = true;
     for (int i = 2; i * i < MX; i++) {
         if (!not_prime[i]) {
@@ -20,7 +20,7 @@ auto init_prime = []() {
 constexpr int MX = 100'001;
 vector<int> primes;
 array<int, MX> lpf;
-auto init_lpf = []() {
+auto init = []() {
     for (int i = 2; i < MX; i++) {
         if (lpf[i] == 0) {
             lpf[i] = i;
@@ -45,7 +45,7 @@ auto init_lpf = []() {
 // 预处理因数
 constexpr int MX = 100'001;
 vector<int> divisors[MX];
-auto init_div = []() {
+auto init = []() {
     for (int i = 1; i < MX; ++i) {
         for (int j = i; j < MX; j += i) {
             divisors[j].push_back(i);

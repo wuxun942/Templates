@@ -17,7 +17,7 @@ int qpow(long long x, long long n, int mod) {
 constexpr int MOD = 1'000'000'007;
 constexpr int MX = 200'001;
 long long fac[MX], inv_f[MX];
-auto init_fac = []() {
+auto init = []() {
     fac[0] = 1;
     for (int i = 1; i < MX; i++) {
         fac[i] = fac[i - 1] * i % MOD;

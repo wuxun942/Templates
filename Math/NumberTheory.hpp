@@ -3,13 +3,16 @@ using namespace std;
 
 // 埃氏筛筛质数
 constexpr int MX = 100'001;
-bool not_prime[MX]{};
+bool is_prime[MX]{};
+vector<int> primes;
 auto init = []() {
-    not_prime[0] = not_prime[1] = true;
+    ranges::fill(is_prime, true);
+    is_prime[0] = is_prime[1] = false;
     for (int i = 2; i * i < MX; i++) {
-        if (!not_prime[i]) {
-            for (int j = i * i; j < MX; j += i) {
-                not_prime[j] = true;
+        if (is_prime[i]) {
+            primes.push_back(i);
+            for (long long j = 1LL * i * i; j < MX; j += i) {
+                is_prime[j] = false;
             }
         }
     }

@@ -3,7 +3,7 @@ using namespace std;
 
 // 数位DP v2.1
 // 代码示例：返回 [low, high] 中的恰好包含 target 个 0 的数字个数
-int func(int low, int high, int target) {
+int digitDP(int low, int high, int target) {
     string low_s = to_string(low);
     string high_s = to_string(high);
     int n = high_s.size();

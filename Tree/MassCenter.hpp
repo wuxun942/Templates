@@ -81,7 +81,6 @@ vector<int> calc_masscenter2(const vector<vector<int>>& edges) {
         add_edge(x, y);
         add_edge(y, x);
     }
-    int cnt = INT_MAX;
     int ans1 = 0, ans2 = 0;
     auto dfs = [&](auto&& dfs, int x, int fa) -> int {
         int res = 1;
@@ -162,7 +161,7 @@ vector<int> calc_masscenter1(const vector<vector<int>>& edges) {
     return {ans1, ans2};
 }
 
-// 有权树，第二种定义解重心
+// 第二种定义解重心
 vector<int> calc_masscenter2(const vector<vector<int>>& edges) {
     e = 0;
     int n = edges.size() + 1;

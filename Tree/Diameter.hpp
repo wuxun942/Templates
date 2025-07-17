@@ -52,6 +52,7 @@ long long get_diameter(const vector<vector<int>>& edges) {
     };
     dfs(0, -1, 0);
     int start = end;
+    ans = 0;
     dfs(start, -1, 0);
     // 第二次 DFS 后 start - end 所在的路径就是直径
     return ans;

@@ -33,9 +33,7 @@ void add_edge(int x, int y) {
 vector<int> calc_masscenter1(const vector<vector<int>>& edges) {
     e = 0;
     int n = edges.size() + 1;
-    for (int i = 1; i <= n; ++i) {
-        head[i] = -1;
-    }
+    fill(head + 1, head + 1 + n, -1);
     for (auto& e: edges) {
         int x = e[0], y = e[1];
         add_edge(x, y);
@@ -73,9 +71,7 @@ vector<int> calc_masscenter1(const vector<vector<int>>& edges) {
 vector<int> calc_masscenter2(const vector<vector<int>>& edges) {
     e = 0;
     int n = edges.size() + 1;
-    for (int i = 1; i <= n; ++i) {
-        head[i] = -1;
-    }
+    fill(head + 1, head + 1 + n, -1);
     for (auto& e: edges) {
         int x = e[0], y = e[1];
         add_edge(x, y);
@@ -124,9 +120,7 @@ void add_edge(int x, int y, int w) {
 vector<int> calc_masscenter1(const vector<vector<int>>& edges) {
     e = 0;
     int n = edges.size() + 1;
-    for (int i = 1; i <= n; ++i) {
-        head[i] = -1;
-    }
+    fill(head + 1, head + 1 + n, -1);
     for (auto& e: edges) {
         int x = e[0], y = e[1], w = e[2];
         add_edge(x, y, w);
@@ -165,9 +159,7 @@ vector<int> calc_masscenter1(const vector<vector<int>>& edges) {
 vector<int> calc_masscenter2(const vector<vector<int>>& edges) {
     e = 0;
     int n = edges.size() + 1;
-    for (int i = 1; i <= n; ++i) {
-        head[i] = -1;
-    }
+    fill(head + 1, head + 1 + n, -1);
     for (auto& e: edges) {
         int x = e[0], y = e[1], w = e[2];
         add_edge(x, y, w);

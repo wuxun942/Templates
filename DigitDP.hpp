@@ -8,6 +8,7 @@ int digitDP(int low, int high, int target) {
     string high_s = to_string(high);
     int n = high_s.size();
     int diff_lh = n - low_s.size();
+    // limit_low, limit_high 不需要记忆
     vector memo(n, vector(target + 1, -1));
     auto dfs = [&](this auto&& dfs, int i, int cnt0, bool limit_low, bool limit_high) -> int {
         if (cnt0 > target) {
@@ -23,6 +24,7 @@ int digitDP(int low, int high, int target) {
         int hi = limit_high ? high_s[i] - '0' : 9;
         int res = 0;
         int d = lo;
+        // 这部分单独处理前导零问题
         if (limit_low && i < diff_lh) {
             res += dfs(i + 1, cnt0, true, false);
             d = 1;

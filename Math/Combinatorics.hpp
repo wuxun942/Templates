@@ -1,11 +1,12 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+// 阶乘逆元 + 带模组合数
 constexpr int MOD = 1'000'000'007;
 int qpow(long long x, long long n, int mod) {
     int ans = 1;
     x %= mod;
-    for (; n > 0; n >>= 1, x = (x * x) % mod) {
+    for (; n > 0; n >>= 1, x = x * x % mod) {
         if (n & 1) {
             ans = ans * x % mod;
         }
@@ -13,8 +14,6 @@ int qpow(long long x, long long n, int mod) {
     return ans;
 }
 
-// 阶乘逆元 + 带模组合数
-constexpr int MOD = 1'000'000'007;
 constexpr int MX = 200'001;
 long long fac[MX], inv_f[MX];
 auto init = []() {
@@ -30,11 +29,14 @@ auto init = []() {
 }();
 
 int comb(int n, int m, int mod) {
-    return fac[n] * inv_f[m] % mod * inv_f[n - m] % mod;
+    return n < m ? 0 : fac[n] * inv_f[m] % mod * inv_f[n - m] % mod;
 }
 
 // 不带模组合数
 long long comb(int n, int m) {
+    if (n < m) {
+        return 0;
+    }
     m = min(m, n - m);
     long long res = 1;
     for (int i = 1; i <= m; i++) {

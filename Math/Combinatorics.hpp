@@ -33,6 +33,8 @@ int comb(int n, int m, int mod) {
 }
 
 // 不带模组合数
+
+// 无预处理
 long long comb(int n, int m) {
     if (n < m) {
         return 0;
@@ -44,3 +46,18 @@ long long comb(int n, int m) {
     }
     return res;
 }
+
+// 有预处理
+constexpr int MX = 101;
+long long c[MX][MX];
+auto init = []() {
+    memset(c, 0, sizeof(c));
+    c[0][0] = 1;
+    for (int i = 1; i < MX; ++i) {
+        c[i][0] = c[i][i] = 1;
+        for (int j = 1; j < i; ++j) {
+            c[i][j] = c[i - 1][j - 1] + c[i - 1][j];
+        }
+    }
+    return 0;
+}();

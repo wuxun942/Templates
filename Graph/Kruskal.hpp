@@ -45,14 +45,14 @@ public:
 };
 
 long long kruskal(int n, vector<vector<int>>& edges) {
-    long long s = 0;
+    long long res = 0;
     UnionFind uf(n);
     ranges::sort(edges, {}, [](const auto& x) {return x[2];});
     for (int i = 0; i < edges.size() && uf.cc > 1; ++i) {
         auto& e = edges[i];
         if (uf.merge(e[0], e[1])) {
-            s += e[2];
+            res += e[2];
         }
     }
-    return s;
+    return res;
 }

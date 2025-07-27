@@ -30,7 +30,7 @@ void add_edge(int x, int y) {
 }
 
 // 第一种定义解重心
-vector<int> calc_masscenter1(const vector<vector<int>>& edges) {
+vector<int> calc_centroid1(const vector<vector<int>>& edges) {
     e = 0;
     int n = edges.size() + 1;
     fill(head + 1, head + 1 + n, -1);
@@ -68,7 +68,7 @@ vector<int> calc_masscenter1(const vector<vector<int>>& edges) {
 }
 
 // 第二种定义解重心
-vector<int> calc_masscenter2(const vector<vector<int>>& edges) {
+vector<int> calc_centroid2(const vector<vector<int>>& edges) {
     e = 0;
     int n = edges.size() + 1;
     fill(head + 1, head + 1 + n, -1);
@@ -117,7 +117,7 @@ void add_edge(int x, int y, int w) {
 }
 
 // 第一种定义解重心
-vector<int> calc_masscenter1(const vector<vector<int>>& edges) {
+vector<int> calc_centroid1(const vector<vector<int>>& edges) {
     e = 0;
     int n = edges.size() + 1;
     fill(head + 1, head + 1 + n, -1);
@@ -156,7 +156,7 @@ vector<int> calc_masscenter1(const vector<vector<int>>& edges) {
 }
 
 // 第二种定义解重心
-vector<int> calc_masscenter2(const vector<vector<int>>& edges) {
+vector<int> calc_centroid2(const vector<vector<int>>& edges) {
     e = 0;
     int n = edges.size() + 1;
     fill(head + 1, head + 1 + n, -1);

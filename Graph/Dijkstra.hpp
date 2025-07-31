@@ -2,8 +2,6 @@
 using namespace std;
 
 // 堆优化 Dijkstra，无向图 + 从 0 开始编号
-template<typename T>
-using min_heap = priority_queue<T, vector<T>, greater<T>>;
 vector<long long> dijkstra(int n, const vector<vector<int>>& edges, int source) {
     vector<vector<pair<int, int>>> g(n);
     for (auto& e: edges) {
@@ -12,18 +10,19 @@ vector<long long> dijkstra(int n, const vector<vector<int>>& edges, int source) 
     }
     vector dis(n, LLONG_MAX);
     dis[source] = 0;
-    min_heap<pair<long long, int>> h;
-    h.emplace(0, source);
-    while (!h.empty()) {
-        auto [dx, x] = h.top();
-        h.pop();
+    using T = pair<long long, int>;
+    priority_queue<T, vector<T>, greater<T>> pq;
+    pq.emplace(0, source);
+    while (!pq.empty()) {
+        auto [dx, x] = pq.top();
+        pq.pop();
         if (dx > dis[x]) {
             continue;
         }
         for (auto& [y, w]: g[x]) {
             if (int new_d = dx + w; new_d < dis[y]) {
                 dis[y] = new_d;
-                h.emplace(new_d, y);
+                pq.emplace(new_d, y);
             }
         }
     }

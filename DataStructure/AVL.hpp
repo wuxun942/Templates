@@ -1,7 +1,9 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-// 平衡树最大节点数量
+// AVL 树
+
+// 最大节点数量
 constexpr int MX = 100'001;
 
 // 空间使用计数
@@ -64,7 +66,7 @@ int maintain(int i) {
     int lh = height[lch[i]], rh = height[rch[i]];
     if (lh - rh > 1) {
         // LL 型违规
-        if (height[lch[lch[i]]] >= height[lch[rch[i]]]) {
+        if (height[lch[lch[i]]] >= height[rch[lch[i]]]) {
             i = right_rotate(i);
         // LR 型违规
         } else {
@@ -73,7 +75,7 @@ int maintain(int i) {
         }
     } else if (rh - lh > 1) {
         // RR 型违规
-        if (height[rch[rch[i]]] >= height[rch[lch[i]]]) {
+        if (height[rch[rch[i]]] >= height[lch[rch[i]]]) {
             i = left_rotate(i);
         // RL 型违规
         } else {
@@ -129,7 +131,7 @@ int get_rank(int i, int x) {
 }
 
 int get_rank(int x) {
-    return get_rank(x);
+    return get_rank(head, x);
 }
 
 // 删除右子树的最左节点
@@ -145,9 +147,9 @@ int remove_most_left(int i, int most_left) {
 // 删除节点
 int remove(int i, int x) {
     if (key[i] < x) {
-        lch[i] = remove(lch[i], x);
-    } else if (key[i] > x) {
         rch[i] = remove(rch[i], x);
+    } else if (key[i] > x) {
+        lch[i] = remove(lch[i], x);
     } else {
         if (key_count[i] > 1) {
             --key_count[i];

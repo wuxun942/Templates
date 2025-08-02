@@ -317,7 +317,7 @@ class AVL {
     }
 
     // 增加节点：找位置 + 保持平衡性
-    int add(int i, int x) {
+    int add(int i, T x) {
         if (i == 0) {
             key[++cnt] = x;
             key_count[cnt] = sz[cnt] = height[cnt] = 1;
@@ -344,7 +344,7 @@ class AVL {
     */
 
     // 查找排名：有几个数比 x 小
-    int get_rank(int i, int x) {
+    int get_rank(int i, T x) {
         if (i == 0) {
             return 0;
         }
@@ -367,7 +367,7 @@ class AVL {
     }
 
     // 删除节点
-    int remove(int i, int x) {
+    int remove(int i, T x) {
         if (key[i] < x) {
             rch[i] = remove(rch[i], x);
         } else if (key[i] > x) {
@@ -401,7 +401,7 @@ class AVL {
     }
 
     // 查询第 k 大的数字（超过 k 则抛出异常）
-    int index(int i, int k) {
+    T index(int i, int k) {
         if (i == 0) {
             throw overflow_error("AVL Overflow");
         }
@@ -416,7 +416,7 @@ class AVL {
     }
 
     // 查找 x 的前驱（小于 x 中最大的数），相当于 prev(lower_bound(x))
-    int prefix(int i, int x) {
+    T prefix(int i, int x) {
         // 没有前驱
         if (i == 0) {
             return INT_MIN;
@@ -424,12 +424,12 @@ class AVL {
         if (key[i] >= x) {
             return prefix(lch[i], x);
         }
-        int res = prefix(rch[i], x);
+        T res = prefix(rch[i], x);
         return res != INT_MIN ? res : key[i];
     }
 
     // 查找 x 的后继（大于 x 中最小的数），相当于 upper_bound(x)
-    int suffix(int i, int x) {
+    T suffix(int i, int x) {
         // 没有后继
         if (i == 0) {
             return INT_MAX;
@@ -437,7 +437,7 @@ class AVL {
         if (key[i] <= x) {
             return suffix(rch[i], x);
         }
-        int res = suffix(lch[i], x);
+        T res = suffix(lch[i], x);
         return res != INT_MAX ? res : key[i];
     }
 
@@ -452,29 +452,29 @@ public:
         sz.resize(n + 1);
     }
 
-    void add(int x) {
+    void add(T x) {
         head = add(head, x);
     }
 
-    int get_rank(int x) {
+    int get_rank(T x) {
         return get_rank(head, x);
     }
 
-    void remove(int x) {
+    void remove(T x) {
         if (get_rank(x) != get_rank(x + 1)) {
             head = remove(head, x);
         }
     }
 
-    int index(int k) {
+    T index(int k) {
         return index(head, k);
     }
 
-    int prefix(int x) {
+    T prefix(int x) {
         return prefix(head, x);
     }
 
-    int suffix(int x) {
+    T suffix(int x) {
         return suffix(head, x);
     }
 };

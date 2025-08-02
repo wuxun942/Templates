@@ -29,6 +29,7 @@ int key_count[MX];
 int sz[MX]{};
 
 void init(int n) {
+    head = cnt = 0;
     fill(height, height + n, 0);
     fill(lch, lch + n, 0);
     fill(rch, rch + n, 0);

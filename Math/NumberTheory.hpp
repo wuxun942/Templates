@@ -3,7 +3,7 @@ using namespace std;
 
 // 埃氏筛筛质数
 constexpr int MX = 100'001;
-bool is_prime[MX]{};
+bool is_prime[MX];
 vector<int> primes;
 auto init = []() {
     ranges::fill(is_prime, true);
@@ -37,9 +37,9 @@ auto init = []() {
                 lpf[i * p] = p;
             }
             // lpf[i * p] = p;
-            // if (i % p == 0) {
-            //     break;
-            // }
+            if (i % p == 0) {
+                break;
+            }
         }
     }
     return 0;

@@ -18,23 +18,21 @@ int cnt = 0;
 int key[MAXN];
 
 // 节点 key 的计数
-int key_count[MAXN];
+int key_count[MAXN]{};
 
 // 节点层数
 int level[MAXN];
 
 // 每层节点的下一跳
-int next_node[MAXN][MAXL + 1];
+int next_node[MAXN][MAXL + 1]{};
 
 // 每层节点一跳的长度
-int len[MAXN][MAXL + 1];
+int len[MAXN][MAXL + 1]{};
 
 // 清空跳表
 void init(int n = MAXN) {
     cnt = 0;
-    fill(key, key + n + 1, 0);
     fill(key_count, key_count + n + 1, 0);
-    fill(level, level + n + 1, 0);
     for (int i = 1; i <= n; ++i) {
         memset(next_node[i], 0, sizeof(next_node[i]));
         memset(len[i], 0, sizeof(len[i]));
@@ -48,7 +46,7 @@ void build(int n) {
     level[cnt] = MAXL;
 }
 
-// 随机层数生成
+// 生成随机层数
 int random_level() {
     int ans = 1;
     while (ans <= MAXL && rand() / (double) RAND_MAX < 0.5) {
@@ -79,26 +77,29 @@ int find(int i, int h, int x) {
 2. 如果数字不存在，那么添加节点
 */
 
-// 增加次数：执行前保证 x 一定存在
+// 增加次数：在 i 号节点的 h 层，x 出现次数加一
+// 执行前保证 x 一定存在
 void add_count(int i, int h, int x) {
     while (next_node[i][h] != 0 && key[next_node[i][h]] < x) {
         i = next_node[i][h];
     }
     if (h == 1) {
-        ++key_count[next_node[i][h]];
+        ++key_count[next_node[i][h]]; // 下一个 key 一定是 x
     } else {
         add_count(i, h - 1, x);
     }
     ++len[i][h];
 }
 
-// 添加节点
+// 添加节点：在 i 号节点的 h 层，插入空间编号为 j 的节点
+// 返回从 i 号节点出发，直到把空间编号为 j 的节点插入，底层总共跨过多少数字
 int add_node(int i, int h, int j) {
     int right_cnt = 0;
     while (next_node[i][h] != 0 && key[next_node[i][h]] < key[j]) {
         right_cnt += len[i][h];
         i = next_node[i][h];
     }
+    // 到达第一层，插入节点
     if (h == 1) {
         next_node[j][h] = next_node[i][h];
         next_node[i][h] = j;
@@ -106,8 +107,9 @@ int add_node(int i, int h, int j) {
         len[i][h] = key_count[next_node[i][h]];
         return right_cnt;
     }
+    // 没到第一层
     int down_cnt = add_node(i, h - 1, j);
-    if (h > level[j]) {
+    if (h > level[j]) { // 层数太高，不需要插入
         ++len[i][h];
     } else {
         next_node[j][h] = next_node[i][h];
@@ -129,29 +131,30 @@ void add(int i, int h, int x) {
     }
 }
 
-// 减少次数
-void remove_count(int i, int h, int num) {
-    while (next_node[i][h] != 0 && key[next_node[i][h]] < num) {
+// 删除节点：如果有多个，只删除一个
+// 减少次数：当前在 i 号节点的 h 层，x 减少一个词频
+void remove_count(int i, int h, int x) {
+    while (next_node[i][h] != 0 && key[next_node[i][h]] < x) {
         i = next_node[i][h];
     }
     if (h == 1) {
-        key_count[next_node[i][h]]--;
+        --key_count[next_node[i][h]];
     } else {
-        remove_count(i, h - 1, num);
+        remove_count(i, h - 1, x);
     }
-    len[i][h]--;
+    --len[i][h];
 }
 
-// 移除节点
+// 移除节点：当前在 i 号节点的 h 层，删除空间编号为 j 的节点
 void remove_node(int i, int h, int j) {
-    if (h < 1) {
+    if (h == 0) {
         return;
     }
     while (next_node[i][h] != 0 && key[next_node[i][h]] < key[j]) {
         i = next_node[i][h];
     }
-    if (h > level[j]) {
-        len[i][h]--;
+    if (h > level[j]) { // 层数太高
+        --len[i][h];
     } else {
         next_node[i][h] = next_node[j][h];
         len[i][h] += len[j][h] - 1;
@@ -159,11 +162,12 @@ void remove_node(int i, int h, int j) {
     remove_node(i, h - 1, j);
 }
 
-void remove(int num) {
-    int j = find(1, MAXL, num);
+void remove(int x) {
+    int j = find(1, MAXL, x);
+    // 节点存在
     if (j != 0) {
         if (key_count[j] > 1) {
-            remove_count(1, MAXL, num);
+            remove_count(1, MAXL, x);
         } else {
             remove_node(1, MAXL, j);
         }
@@ -171,25 +175,27 @@ void remove(int num) {
 }
 
 // 查找排名：有几个数比 x 小
-int get_rank(int i, int h, int num) {
-    int rightCnt = 0;
-    while (next_node[i][h] != 0 && key[next_node[i][h]] < num) {
-        rightCnt += len[i][h];
+int get_rank(int i, int h, int x) {
+    if (h == 0) {
+        return 0;
+    }
+    int right_cnt = 0;
+    while (next_node[i][h] != 0 && key[next_node[i][h]] < x) {
+        right_cnt += len[i][h];
         i = next_node[i][h];
     }
-    if (h == 1) {
-        return rightCnt;
-    } else {
-        return rightCnt + get_rank(i, h - 1, num);
-    }
+    return right_cnt + get_rank(i, h - 1, x);
 }
 
-int get_rank(int num) {
-    return get_rank(1, MAXL, num) + 1;
+int get_rank(int x) {
+    return get_rank(1, MAXL, x) + 1;
 }
 
-// 查询第 k 大的数字（需要保证存在）
+// 查询第 k 大的数字（超过 size 则抛出异常）
 int index(int i, int h, int x) {
+    if (h == 0) {
+        throw overflow_error("SkipList Overflow");
+    }
     int c = 0;
     while (next_node[i][h] != 0 && c + len[i][h] < x) {
         c += len[i][h];
@@ -197,9 +203,8 @@ int index(int i, int h, int x) {
     }
     if (h == 1) {
         return key[next_node[i][h]];
-    } else {
-        return index(i, h - 1, x - c);
     }
+    return index(i, h - 1, x - c);
 }
 
 int index(int x) {
@@ -207,44 +212,46 @@ int index(int x) {
 }
 
 // 查找 x 的前驱（小于 x 中最大的数），相当于 prev(lower_bound(x))
-int prefix(int i, int h, int num) {
-    while (next_node[i][h] != 0 && key[next_node[i][h]] < num) {
+int prefix(int i, int h, int x) {
+    while (next_node[i][h] != 0 && key[next_node[i][h]] < x) {
         i = next_node[i][h];
     }
+    // 到最底层
     if (h == 1) {
-        return i == 1 ? INT_MIN : key[i];
-    } else {
-        return prefix(i, h - 1, num);
+        return key[i];
     }
+    return prefix(i, h - 1, x);
 }
 
-int prefix(int num) {
-    return prefix(1, MAXL, num);
+int prefix(int x) {
+    return prefix(1, MAXL, x);
 }
 
 // 查找 x 的后继（大于 x 中最小的数），相当于 upper_bound(x)
-int suffix(int i, int h, int num) {
-    while (next_node[i][h] != 0 && key[next_node[i][h]] < num) {
+int suffix(int i, int h, int x) {
+    while (next_node[i][h] != 0 && key[next_node[i][h]] < x) {
         i = next_node[i][h];
     }
     if (h == 1) {
+        // 找不到
         if (next_node[i][h] == 0) {
             return INT_MAX;
         }
-        if (key[next_node[i][h]] > num) {
+        if (key[next_node[i][h]] > x) {
             return key[next_node[i][h]];
         }
+        // 下一个就是 x
         i = next_node[i][h];
+        // 找不到
         if (next_node[i][h] == 0) {
             return INT_MAX;
-        } else {
-            return key[next_node[i][h]];
         }
-    } else {
-        return suffix(i, h - 1, num);
+        return key[next_node[i][h]];
+        
     }
+    return suffix(i, h - 1, x);
 }
 
-int suffix(int num) {
-    return suffix(1, MAXL, num);
+int suffix(int x) {
+    return suffix(1, MAXL, x);
 }

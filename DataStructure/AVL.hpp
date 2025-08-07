@@ -21,8 +21,8 @@ int key[MX];
 int height[MX]{};
 
 // 左右儿子
-int lch[MX]{};
-int rch[MX]{};
+int left_child[MX]{};
+int right_child[MX]{};
 
 // 节点 key 的计数
 int key_count[MX];
@@ -32,23 +32,23 @@ int sz[MX]{};
 
 void init(int n) {
     head = cnt = 0;
-    fill(height, height + n, 0);
-    fill(lch, lch + n, 0);
-    fill(rch, rch + n, 0);
-    fill(sz, sz + n, 0);
+    fill(height, height + n + 1, 0);
+    fill(left_child, left_child + n + 1, 0);
+    fill(right_child, right_child + n + 1, 0);
+    fill(sz, sz + n + 1, 0);
 }
 
 // 更新节点信息
 void up(int i) {
-    sz[i] = sz[lch[i]] + sz[rch[i]] + key_count[i];
-    height[i] = max(height[lch[i]], height[rch[i]]) + 1;
+    sz[i] = sz[left_child[i]] + sz[right_child[i]] + key_count[i];
+    height[i] = max(height[left_child[i]], height[right_child[i]]) + 1;
 }
 
 // 左旋
 int left_rotate(int i) {
-    int r = rch[i];
-    rch[i] = lch[r];
-    lch[r] = i;
+    int r = right_child[i];
+    right_child[i] = left_child[r];
+    left_child[r] = i;
     up(i);
     up(r);
     return r;
@@ -56,9 +56,9 @@ int left_rotate(int i) {
 
 // 右旋
 int right_rotate(int i) {
-    int l = lch[i];
-    lch[i] = rch[l];
-    rch[l] = i;
+    int l = left_child[i];
+    left_child[i] = right_child[l];
+    right_child[l] = i;
     up(i);
     up(l);
     return l;
@@ -66,23 +66,23 @@ int right_rotate(int i) {
 
 // 维护子树平衡性
 int maintain(int i) {
-    int lh = height[lch[i]], rh = height[rch[i]];
+    int lh = height[left_child[i]], rh = height[right_child[i]];
     if (lh - rh > 1) {
         // LL 型违规
-        if (height[lch[lch[i]]] >= height[rch[lch[i]]]) {
+        if (height[left_child[left_child[i]]] >= height[right_child[left_child[i]]]) {
             i = right_rotate(i);
         // LR 型违规
         } else {
-            lch[i] = left_rotate(lch[i]);
+            left_child[i] = left_rotate(left_child[i]);
             i = right_rotate(i);
         }
     } else if (rh - lh > 1) {
         // RR 型违规
-        if (height[rch[rch[i]]] >= height[lch[rch[i]]]) {
+        if (height[right_child[right_child[i]]] >= height[left_child[right_child[i]]]) {
             i = left_rotate(i);
         // RL 型违规
         } else {
-            rch[i] = right_rotate(rch[i]);
+            right_child[i] = right_rotate(right_child[i]);
             i = left_rotate(i);
         }
     }
@@ -99,9 +99,9 @@ int add(int i, int x) {
     if (key[i] == x) {
         ++key_count[i];
     } else if (key[i] > x) {
-        lch[i] = add(lch[i], x);
+        left_child[i] = add(left_child[i], x);
     } else {
-        rch[i] = add(rch[i], x);
+        right_child[i] = add(right_child[i], x);
     }
     up(i);
     return maintain(i);
@@ -127,10 +127,10 @@ int get_rank(int i, int x) {
     }
     // x 太小了，只能往左找
     if (key[i] >= x) {
-        return get_rank(lch[i], x);
+        return get_rank(left_child[i], x);
     }
     // x 足够大，根节点和左子树都更小，还要往右找
-    return sz[lch[i]] + key_count[i] + get_rank(rch[i], x);
+    return sz[left_child[i]] + key_count[i] + get_rank(right_child[i], x);
 }
 
 int get_rank(int x) {
@@ -140,24 +140,24 @@ int get_rank(int x) {
 // 删除右子树的最左节点
 int remove_most_left(int i, int most_left) {
     if (i == most_left) {
-        return rch[i];
+        return right_child[i];
     }
-    lch[i] = remove_most_left(lch[i], most_left);
+    left_child[i] = remove_most_left(left_child[i], most_left);
     up(i);
     return maintain(i);
 }
 
-// 删除节点
+// 删除节点：如果有多个，只删除一个
 int remove(int i, int x) {
     if (key[i] < x) {
-        rch[i] = remove(rch[i], x);
+        right_child[i] = remove(right_child[i], x);
     } else if (key[i] > x) {
-        lch[i] = remove(lch[i], x);
+        left_child[i] = remove(left_child[i], x);
     } else {
         if (key_count[i] > 1) {
             --key_count[i];
         } else {
-            int l = lch[i], r = rch[i];
+            int l = left_child[i], r = right_child[i];
             if (l == 0 && r == 0) {
                 return 0;
             }
@@ -167,12 +167,12 @@ int remove(int i, int x) {
                 i = r;
             } else {
                 int most_left = r;
-                while (lch[most_left] != 0) {
-                    most_left = lch[most_left];
+                while (left_child[most_left] != 0) {
+                    most_left = left_child[most_left];
                 }
-                rch[i] = remove_most_left(rch[i], most_left);
-                lch[most_left] = lch[i];
-                rch[most_left] = rch[i];
+                right_child[i] = remove_most_left(right_child[i], most_left);
+                left_child[most_left] = left_child[i];
+                right_child[most_left] = right_child[i];
                 i = most_left;
             }
         }
@@ -187,35 +187,35 @@ void remove(int x) {
     }
 }
 
-// 查询第 k 大的数字（超过 k 则抛出异常）
+// 查询第 k 大的数字（超过 size 则抛出异常）
 int index(int i, int k) {
-    if (i == 0) {
-        throw overflow_error("AVL Overflow");
-    }
-    int lsz = sz[lch[i]], c = key_count[i];
+    int lsz = sz[left_child[i]], c = key_count[i];
     if (lsz >= k) {
-        return index(lch[i], k);
+        return index(left_child[i], k);
     }
     if (lsz + c < k) {
-        return index(rch[i], k - lsz - c);
+        return index(right_child[i], k - lsz - c);
     }
     return key[i];
 }
 
 int index(int k) {
+    if (k > sz[head] || k <= 0) {
+        throw overflow_error("AVL Overflow");
+    }
     return index(head, k);
 }
 
 // 查找 x 的前驱（小于 x 中最大的数），相当于 prev(lower_bound(x))
 int prefix(int i, int x) {
-    // 没有前驱
+    // 找不到
     if (i == 0) {
         return INT_MIN;
     }
     if (key[i] >= x) {
-        return prefix(lch[i], x);
+        return prefix(left_child[i], x);
     }
-    int res = prefix(rch[i], x);
+    int res = prefix(right_child[i], x);
     return res != INT_MIN ? res : key[i];
 }
 
@@ -225,14 +225,14 @@ int prefix(int x) {
 
 // 查找 x 的后继（大于 x 中最小的数），相当于 upper_bound(x)
 int suffix(int i, int x) {
-    // 没有后继
+    // 找不到
     if (i == 0) {
         return INT_MAX;
     }
     if (key[i] <= x) {
-        return suffix(rch[i], x);
+        return suffix(right_child[i], x);
     }
-    int res = suffix(lch[i], x);
+    int res = suffix(left_child[i], x);
     return res != INT_MAX ? res : key[i];
 }
 
@@ -256,8 +256,8 @@ class AVL {
     vector<int> height;
 
     // 左右儿子
-    vector<int> lch[MX];
-    vector<int> rch[MX];
+    vector<int> left_child[MX];
+    vector<int> right_child[MX];
 
     // 节点 key 的计数
     vector<int> key_count[MX];
@@ -267,15 +267,15 @@ class AVL {
 
     // 更新节点信息
     void up(int i) {
-        sz[i] = sz[lch[i]] + sz[rch[i]] + key_count[i];
-        height[i] = max(height[lch[i]], height[rch[i]]) + 1;
+        sz[i] = sz[left_child[i]] + sz[right_child[i]] + key_count[i];
+        height[i] = max(height[left_child[i]], height[right_child[i]]) + 1;
     }
 
     // 左旋
     int left_rotate(int i) {
-        int r = rch[i];
-        rch[i] = lch[r];
-        lch[r] = i;
+        int r = right_child[i];
+        right_child[i] = left_child[r];
+        left_child[r] = i;
         up(i);
         up(r);
         return r;
@@ -283,9 +283,9 @@ class AVL {
 
     // 右旋
     int right_rotate(int i) {
-        int l = lch[i];
-        lch[i] = rch[l];
-        rch[l] = i;
+        int l = left_child[i];
+        left_child[i] = right_child[l];
+        right_child[l] = i;
         up(i);
         up(l);
         return l;
@@ -293,23 +293,23 @@ class AVL {
 
     // 维护子树平衡性
     int maintain(int i) {
-        int lh = height[lch[i]], rh = height[rch[i]];
+        int lh = height[left_child[i]], rh = height[right_child[i]];
         if (lh - rh > 1) {
             // LL 型违规
-            if (height[lch[lch[i]]] >= height[rch[lch[i]]]) {
+            if (height[left_child[left_child[i]]] >= height[right_child[left_child[i]]]) {
                 i = right_rotate(i);
             // LR 型违规
             } else {
-                lch[i] = left_rotate(lch[i]);
+                left_child[i] = left_rotate(left_child[i]);
                 i = right_rotate(i);
             }
         } else if (rh - lh > 1) {
             // RR 型违规
-            if (height[rch[rch[i]]] >= height[lch[rch[i]]]) {
+            if (height[right_child[right_child[i]]] >= height[left_child[right_child[i]]]) {
                 i = left_rotate(i);
             // RL 型违规
             } else {
-                rch[i] = right_rotate(rch[i]);
+                right_child[i] = right_rotate(right_child[i]);
                 i = left_rotate(i);
             }
         }
@@ -326,9 +326,9 @@ class AVL {
         if (key[i] == x) {
             ++key_count[i];
         } else if (key[i] > x) {
-            lch[i] = add(lch[i], x);
+            left_child[i] = add(left_child[i], x);
         } else {
-            rch[i] = add(rch[i], x);
+            right_child[i] = add(right_child[i], x);
         }
         up(i);
         return maintain(i);
@@ -350,18 +350,18 @@ class AVL {
         }
         // x 太小了，只能往左找
         if (key[i] >= x) {
-            return get_rank(lch[i], x);
+            return get_rank(left_child[i], x);
         }
         // x 足够大，根节点和左子树都更小，还要往右找
-        return sz[lch[i]] + key_count[i] + get_rank(rch[i], x);
+        return sz[left_child[i]] + key_count[i] + get_rank(right_child[i], x);
     }
 
     // 删除右子树的最左节点
     int remove_most_left(int i, int most_left) {
         if (i == most_left) {
-            return rch[i];
+            return right_child[i];
         }
-        lch[i] = remove_most_left(lch[i], most_left);
+        left_child[i] = remove_most_left(left_child[i], most_left);
         up(i);
         return maintain(i);
     }
@@ -369,14 +369,14 @@ class AVL {
     // 删除节点
     int remove(int i, T x) {
         if (key[i] < x) {
-            rch[i] = remove(rch[i], x);
+            right_child[i] = remove(right_child[i], x);
         } else if (key[i] > x) {
-            lch[i] = remove(lch[i], x);
+            left_child[i] = remove(left_child[i], x);
         } else {
             if (key_count[i] > 1) {
                 --key_count[i];
             } else {
-                int l = lch[i], r = rch[i];
+                int l = left_child[i], r = right_child[i];
                 if (l == 0 && r == 0) {
                     return 0;
                 }
@@ -386,12 +386,12 @@ class AVL {
                     i = r;
                 } else {
                     int most_left = r;
-                    while (lch[most_left] != 0) {
-                        most_left = lch[most_left];
+                    while (left_child[most_left] != 0) {
+                        most_left = left_child[most_left];
                     }
-                    rch[i] = remove_most_left(rch[i], most_left);
-                    lch[most_left] = lch[i];
-                    rch[most_left] = rch[i];
+                    right_child[i] = remove_most_left(right_child[i], most_left);
+                    left_child[most_left] = left_child[i];
+                    right_child[most_left] = right_child[i];
                     i = most_left;
                 }
             }
@@ -405,12 +405,12 @@ class AVL {
         if (i == 0) {
             throw overflow_error("AVL Overflow");
         }
-        int lsz = sz[lch[i]], c = key_count[i];
+        int lsz = sz[left_child[i]], c = key_count[i];
         if (lsz >= k) {
-            return index(lch[i], k);
+            return index(left_child[i], k);
         }
         if (lsz + c < k) {
-            return index(rch[i], k - lsz - c);
+            return index(right_child[i], k - lsz - c);
         }
         return key[i];
     }
@@ -422,9 +422,9 @@ class AVL {
             return INT_MIN;
         }
         if (key[i] >= x) {
-            return prefix(lch[i], x);
+            return prefix(left_child[i], x);
         }
-        T res = prefix(rch[i], x);
+        T res = prefix(right_child[i], x);
         return res != INT_MIN ? res : key[i];
     }
 
@@ -435,9 +435,9 @@ class AVL {
             return INT_MAX;
         }
         if (key[i] <= x) {
-            return suffix(rch[i], x);
+            return suffix(right_child[i], x);
         }
-        T res = suffix(lch[i], x);
+        T res = suffix(left_child[i], x);
         return res != INT_MAX ? res : key[i];
     }
 
@@ -446,8 +446,8 @@ public:
     AVL (int n) {
         key.resize(n + 1);
         height.resize(n + 1);
-        lch.resize(n + 1);
-        rch.resize(n + 1);
+        left_child.resize(n + 1);
+        right_child.resize(n + 1);
         key_count.resize(n + 1);
         sz.resize(n + 1);
     }

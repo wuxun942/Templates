@@ -120,7 +120,7 @@ int add_node(int i, int h, int j) {
     return right_cnt + down_cnt;
 }
 
-void add(int i, int h, int x) {
+void add(int x) {
     if (find(1, MAXL, x) != 0) {
         add_count(1, MAXL, x);
     } else {

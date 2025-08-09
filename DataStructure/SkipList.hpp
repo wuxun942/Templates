@@ -40,7 +40,7 @@ void init(int n = MAXN) {
 }
 
 // 建立跳表，即建立 -inf 节点
-void build(int n) {
+void build() {
     cnt = 1;
     key[cnt] = INT_MIN;
     level[cnt] = MAXL;

@@ -12,7 +12,7 @@ constexpr int MAXL = 20;
 constexpr int MAXN = 100'001;
 
 // 空间使用计数
-int cnt = 0;
+int cnt;
 
 // 节点的 key
 int key[MAXN];
@@ -29,21 +29,21 @@ int next_node[MAXN][MAXL + 1]{};
 // 每层节点一跳的长度
 int len[MAXN][MAXL + 1]{};
 
-// 清空跳表
-void init(int n = MAXN) {
-    cnt = 0;
-    fill(key_count, key_count + n + 1, 0);
-    for (int i = 1; i <= n; ++i) {
-        memset(next_node[i], 0, sizeof(next_node[i]));
-        memset(len[i], 0, sizeof(len[i]));
-    }
-}
-
 // 建立跳表，即建立 -inf 节点
 void build() {
     cnt = 1;
     key[cnt] = INT_MIN;
     level[cnt] = MAXL;
+}
+
+// 清空跳表
+void init(int n = MAXN) {
+    build();
+    fill(key_count, key_count + n + 1, 0);
+    for (int i = 1; i <= n; ++i) {
+        memset(next_node[i], 0, sizeof(next_node[i]));
+        memset(len[i], 0, sizeof(len[i]));
+    }
 }
 
 // 生成随机层数

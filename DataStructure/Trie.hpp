@@ -1,9 +1,9 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-// 静态数组实现字典树
+// 字典树，做题时更推荐使用静态数组实现
 
-// 一般字典树
+// 只考虑26个字母的字典树的静态数组实现
 constexpr int MX = 5'000'001;
 int tree[MX][27]; // 末位表示 end
 int cnt;
@@ -50,6 +50,51 @@ bool search_prefix(string& s) {
     return true;
 }
 
+// 结构体封装字典树 + vector 实现
+struct Trie {
+    vector<array<int, 27>> tree; // 末位表示 end
+
+    Trie(int n) {
+        tree.resize(n);
+    }
+
+    void insert(string& s) {
+        int cur = 0;
+        for (char c: s) {
+            int &son = tree[cur][c - 'a'];
+            if (son == 0) {
+                son = ++cnt;
+            }
+            cur = son;
+        }
+        tree[cur][26] = 1;
+    }
+
+    bool search_word(string& s) {
+        int cur = 0;
+        for (char c: s) {
+            int son = tree[cur][c - 'a'];
+            if (son == 0) {
+                return false;
+            }
+            cur = son;
+        }
+        return tree[cur][26];
+    }
+
+    bool search_prefix(string& s) {
+        int cur = 0;
+        for (char c: s) {
+            int son = tree[cur][c - 'a'];
+            if (son == 0) {
+                return false;
+            }
+            cur = son;
+        }
+        return true;
+    }
+};
+
 // 0-1 字典树
 constexpr int MX = 5'000'001;
 int tree[MX][3];
@@ -77,7 +122,7 @@ void insert(int x, int k) {
     }
 }
 
-// 以找最大值为例
+// 以找异或最大值为例
 int search(int x, int k) {
     int res = 0, cur = 0;
     for (int i = k - 1; i >= 0; --i) {
@@ -93,6 +138,7 @@ int search(int x, int k) {
     return res;
 }
 
+// 删除节点
 void remove(int x, int k) {
     int cur = 0;
     for (int i = k - 1; i >= 0; --i) {

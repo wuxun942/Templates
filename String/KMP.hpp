@@ -2,7 +2,7 @@
 using namespace std;
 
 // KMP: 查找所有匹配位置，以匹配首字母为基准
-vector<int> kmp(string text, string pattern) {
+vector<int> kmp(const string& text, const string& pattern) {
     int m = pattern.size();
     int pi[m]{};
     for (int i = 1, j = 0; i < m; i++) {

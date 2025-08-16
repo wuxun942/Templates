@@ -14,7 +14,7 @@ void init(int n) {
     }
 }
 
-void insert(string& s) {
+void insert(const string& s) {
     int cur = 0;
     for (char c: s) {
         int &son = tree[cur][c - 'a'];
@@ -26,7 +26,7 @@ void insert(string& s) {
     tree[cur][26] = 1;
 }
 
-bool search_word(string& s) {
+bool search_word(const string& s) {
     int cur = 0;
     for (char c: s) {
         int son = tree[cur][c - 'a'];
@@ -38,7 +38,7 @@ bool search_word(string& s) {
     return tree[cur][26];
 }
 
-bool search_prefix(string& s) {
+bool search_prefix(const string& s) {
     int cur = 0;
     for (char c: s) {
         int son = tree[cur][c - 'a'];
@@ -54,11 +54,12 @@ bool search_prefix(string& s) {
 struct Trie {
     vector<array<int, 27>> tree; // 末位表示 end
 
-    Trie(int n) {
-        tree.resize(n);
+    // 输入字符串长度总和
+    Trie(int sum_len) {
+        tree.resize(sum_len);
     }
 
-    void insert(string& s) {
+    void insert(const string& s) {
         int cur = 0;
         for (char c: s) {
             int &son = tree[cur][c - 'a'];
@@ -70,7 +71,7 @@ struct Trie {
         tree[cur][26] = 1;
     }
 
-    bool search_word(string& s) {
+    bool search_word(const string& s) {
         int cur = 0;
         for (char c: s) {
             int son = tree[cur][c - 'a'];
@@ -82,7 +83,7 @@ struct Trie {
         return tree[cur][26];
     }
 
-    bool search_prefix(string& s) {
+    bool search_prefix(const string& s) {
         int cur = 0;
         for (char c: s) {
             int son = tree[cur][c - 'a'];

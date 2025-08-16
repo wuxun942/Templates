@@ -1,8 +1,8 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-// Z 函数: 每个位置的 LCP
-vector<int> calc_z(string s) {
+// Z 函数: 每个后缀与原串的 LCP
+vector<int> calc_z(const string& s) {
     int n = s.size();
     vector z(n, 0);
     for (int i = 1, box_l = 0, box_r = 0; i < n; i++) {

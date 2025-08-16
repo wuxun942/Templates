@@ -4,11 +4,11 @@ using namespace std;
 // 字典树，做题时更推荐使用静态数组实现
 
 // 只考虑26个字母的字典树的静态数组实现
-constexpr int MX = 5'000'001;
-int tree[MX][27]; // 末位表示 end
-int cnt;
+constexpr int MAXL = 5'000'001;
+int tree[MAXL][26]; // 末位表示 end
+int cnt_v;
 void init(int n) {
-    cnt = 0;
+    cnt_v = 0;
     for (int i = 0; i <= n; ++i) {
         memset(tree[i], 0, sizeof(tree[i]));
     }
@@ -19,7 +19,7 @@ void insert(const string& s) {
     for (char c: s) {
         int &son = tree[cur][c - 'a'];
         if (son == 0) {
-            son = ++cnt;
+            son = ++cnt_v;
         }
         cur = son;
     }
@@ -52,7 +52,11 @@ bool search_prefix(const string& s) {
 
 // 结构体封装字典树 + vector 实现
 struct Trie {
-    vector<array<int, 27>> tree; // 末位表示 end
+    struct Node {
+        int son[26]{};
+        bool end = false;
+    };
+    vector<Node> tree; // 末位表示 end
 
     // 输入字符串长度总和
     Trie(int sum_len) {
@@ -62,31 +66,31 @@ struct Trie {
     void insert(const string& s) {
         int cur = 0;
         for (char c: s) {
-            int &son = tree[cur][c - 'a'];
+            int &son = tree[cur].son[c - 'a'];
             if (son == 0) {
-                son = ++cnt;
+                son = ++cnt_v;
             }
             cur = son;
         }
-        tree[cur][26] = 1;
+        tree[cur].end = true;
     }
 
     bool search_word(const string& s) {
         int cur = 0;
         for (char c: s) {
-            int son = tree[cur][c - 'a'];
+            int son = tree[cur].son[c - 'a'];
             if (son == 0) {
                 return false;
             }
             cur = son;
         }
-        return tree[cur][26];
+        return tree[cur].end;
     }
 
     bool search_prefix(const string& s) {
         int cur = 0;
         for (char c: s) {
-            int son = tree[cur][c - 'a'];
+            int son = tree[cur].son[c - 'a'];
             if (son == 0) {
                 return false;
             }
@@ -97,12 +101,12 @@ struct Trie {
 };
 
 // 0-1 字典树
-constexpr int MX = 5'000'001;
-int tree[MX][3];
-int cnt;
+constexpr int MAXL = 5'000'001; // 最长比特位 * 数量
+int tree[MAXL][3];
+int cnt_v;
 
 void init(int n) {
-    cnt = 0;
+    cnt_v = 0;
     for (int i = 0; i <= n; ++i) {
         tree[i][0] = 0;
         tree[i][1] = 0;
@@ -116,7 +120,7 @@ void insert(int x, int k) {
     for (int i = k - 1; i >= 0; --i) {
         int bit = x >> i & 1, &son = tree[cur][bit];
         if (son == 0) {
-            son = ++cnt;
+            son = ++cnt_v;
         }
         cur = son;
         ++tree[cur][2];

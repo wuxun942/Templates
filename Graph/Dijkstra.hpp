@@ -19,7 +19,7 @@ vector<long long> dijkstra(int n, const vector<vector<int>>& edges, int source) 
         if (dx > dis[x]) {
             continue;
         }
-        for (auto& [y, w]: g[x]) {
+        for (auto& [y, w] : g[x]) {
             if (int new_d = dx + w; new_d < dis[y]) {
                 dis[y] = new_d;
                 pq.emplace(new_d, y);

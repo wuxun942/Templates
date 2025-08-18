@@ -14,9 +14,17 @@ void init(int n) {
     }
 }
 
+void init(const vector<string>& a) {
+    int sum_len = 0;
+    for (auto& s : a) {
+        sum_len += s.size();
+    }
+    init(sum_len);
+}
+
 void insert(const string& s) {
     int cur = 0;
-    for (char c: s) {
+    for (char c : s) {
         int &son = tree[cur][c - 'a'];
         if (son == 0) {
             son = ++cnt_v;
@@ -28,7 +36,7 @@ void insert(const string& s) {
 
 bool search_word(const string& s) {
     int cur = 0;
-    for (char c: s) {
+    for (char c : s) {
         int son = tree[cur][c - 'a'];
         if (son == 0) {
             return false;
@@ -40,7 +48,7 @@ bool search_word(const string& s) {
 
 bool search_prefix(const string& s) {
     int cur = 0;
-    for (char c: s) {
+    for (char c : s) {
         int son = tree[cur][c - 'a'];
         if (son == 0) {
             return false;
@@ -66,7 +74,7 @@ struct Trie {
 
     void insert(const string& s) {
         int cur = 0;
-        for (char c: s) {
+        for (char c : s) {
             int &son = tree[cur].son[c - 'a'];
             if (son == 0) {
                 son = ++cnt_v;
@@ -78,7 +86,7 @@ struct Trie {
 
     bool search_word(const string& s) {
         int cur = 0;
-        for (char c: s) {
+        for (char c : s) {
             int son = tree[cur].son[c - 'a'];
             if (son == 0) {
                 return false;
@@ -90,7 +98,7 @@ struct Trie {
 
     bool search_prefix(const string& s) {
         int cur = 0;
-        for (char c: s) {
+        for (char c : s) {
             int son = tree[cur].son[c - 'a'];
             if (son == 0) {
                 return false;
@@ -113,6 +121,14 @@ void init(int n) {
         tree[i][1] = 0;
         tree[i][2] = 0; // 经过次数，用于删除节点
     }
+}
+
+void init(const vector<int>& a) {
+    int mx = 0;
+    for (int x : a) {
+        mx = max(mx, bit_width((unsigned) x));
+    }
+    init(mx * a.size());
 }
 
 // k: 比特位长度，不要减一

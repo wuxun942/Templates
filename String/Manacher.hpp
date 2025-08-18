@@ -4,7 +4,7 @@ using namespace std;
 // Manacher: 查找以每个位置为中心的最长回文子串
 vector<int> manacher(const string& s) {
     string t = "^";
-    for (char c: s) {
+    for (char c : s) {
         t += '#';
         t += c;
     }

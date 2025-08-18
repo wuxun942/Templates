@@ -13,7 +13,7 @@ int q[MAXL];
 void build(const vector<string>& a) {
     // 初始化
     int sum_len = 0;
-    for (auto &s: a) {
+    for (auto &s : a) {
         sum_len += s.size();
     }
     for (int i = 0; i <= sum_len; ++i) {
@@ -23,9 +23,9 @@ void build(const vector<string>& a) {
 
     // 插入（同字典树）
     cnt_v = 0;
-    for (auto &s: a) {
+    for (auto &s : a) {
         int cur = 0;
-        for (char c: s) {
+        for (char c : s) {
             int &son = tree[cur][c - 'a'];
             if (son == 0) {
                 son = ++cnt_v;
@@ -59,7 +59,7 @@ void build(const vector<string>& a) {
 // 读文章，命中时报警
 bool search(const string& s) {
     int cur = 0;
-    for (char c: s) {
+    for (char c : s) {
         cur = tree[cur][c - 'a'];
         for (int ptr = cur; ptr > 0; ptr = last[ptr]) {
             if (tree[ptr][26]) {
@@ -83,16 +83,16 @@ struct AhoCorasick {
 
     AhoCorasick(const vector<string>& a) {
         int sum_len = 0;
-        for (auto &s: a) {
+        for (auto &s : a) {
             sum_len += s.size();
         }
         tree.resize(sum_len);
         
         // 插入（同字典树）
         cnt = 0;
-        for (auto &s: a) {
+        for (auto &s : a) {
             int cur = 0;
-            for (char c: s) {
+            for (char c : s) {
                 int &son = tree[cur].son[c - 'a'];
                 if (son == 0) {
                     son = ++cnt;
@@ -127,7 +127,7 @@ struct AhoCorasick {
     // 读文章，命中时报警
     bool search(const string& s) {
         int cur = 0;
-        for (char c: s) {
+        for (char c : s) {
             cur = tree[cur].son[c - 'a'];
             for (int ptr = cur; ptr > 0; ptr = tree[ptr].last) {
                 if (tree[ptr].end) {
@@ -148,7 +148,7 @@ int cnt_v;
 void build(const vector<string>& a) {
     // 初始化
     int sum_len = 0;
-    for (auto &s: a) {
+    for (auto &s : a) {
         sum_len += s.size();
     }
     for (int i = 0; i <= sum_len; ++i) {
@@ -158,9 +158,9 @@ void build(const vector<string>& a) {
 
     // 插入（同字典树）
     cnt_v = 0;
-    for (auto &s: a) {
+    for (auto &s : a) {
         int cur = 0;
-        for (char c: s) {
+        for (char c : s) {
             int &son = tree[cur][c - 'a'];
             if (son == 0) {
                 son = ++cnt_v;
@@ -194,7 +194,7 @@ void build(const vector<string>& a) {
 // 读文章，命中时报警
 bool search(const string& s) {
     int cur = 0;
-    for (char c: s) {
+    for (char c : s) {
         cur = tree[cur][c - 'a'];
         if (tree[cur][26]) {
             return true;
@@ -219,7 +219,7 @@ int n;
 void build(const vector<string>& a) {
     // 初始化
     int sum_len = 0;
-    for (auto &s: a) {
+    for (auto &s : a) {
         sum_len += s.size();
     }
     for (int i = 0; i <= sum_len; ++i) {
@@ -235,7 +235,7 @@ void build(const vector<string>& a) {
     for (int i = 0; i < n; ++i) {
         auto &s = a[i];
         int cur = 0;
-        for (char c: s) {
+        for (char c : s) {
             int &son = tree[cur][c - 'a'];
             if (son == 0) {
                 son = ++cnt_v;
@@ -284,7 +284,7 @@ void dfs(int x) {
 
 vector<int> scan(const string& s) {
     int cur = 0;
-    for (char c: s) {
+    for (char c : s) {
         cur = tree[cur][c - 'a'];
         ++cnt[cur];
     }

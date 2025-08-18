@@ -11,7 +11,7 @@ long long prim(int n, const vector<vector<int>>& edges, int source) {
     vector vis(n, false);
     using T = pair<int, int>;
     priority_queue<T, vector<T>, greater<T>> pq;
-    for (auto& [x, w]: g[source]) {
+    for (auto& [x, w] : g[source]) {
         pq.emplace(w, x);
     }
     long long res = 0;
@@ -25,7 +25,7 @@ long long prim(int n, const vector<vector<int>>& edges, int source) {
         ++cnt;
         res += w;
         vis[x] = true;
-        for (auto& [y, w]: g[x]) {
+        for (auto& [y, w] : g[x]) {
             if (!vis[y]) {
                 pq.emplace(w, y);
             }

@@ -5,7 +5,7 @@ using namespace std;
 vector<int> calc_z(const string& s) {
     int n = s.size();
     vector z(n, 0);
-    for (int i = 1, box_l = 0, box_r = 0; i < n; i++) {
+    for (int i = 1, box_l = 0, box_r = 0; i < n; ++i) {
         if (i <= box_r) {
             z[i] = min(z[i - box_l], box_r - i + 1);
         }

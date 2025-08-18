@@ -5,7 +5,7 @@ using namespace std;
 
 // 只考虑26个字母的字典树的静态数组实现
 constexpr int MAXL = 5'000'001;
-int tree[MAXL][26]; // 末位表示 end
+int tree[MAXL][27]; // 末位表示 end
 int cnt_v;
 void init(int n) {
     cnt_v = 0;
@@ -56,6 +56,7 @@ struct Trie {
         int son[26]{};
         bool end = false;
     };
+    int cnt_v = 0;
     vector<Node> tree; // 末位表示 end
 
     // 输入字符串长度总和

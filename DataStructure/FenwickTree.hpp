@@ -4,6 +4,8 @@ using namespace std;
 // 树状数组，需要注意查询和修改都是 1-index
 
 // 单点更新区间查询（原始） / 区间更新单点查询（直接当差分用）
+
+// 泛型模板类封装
 template<typename T>
 class FenwickTree {
     vector<T> tree;
@@ -15,7 +17,7 @@ public:
         for (int i = 1; i <= n; i++) {
             tree[i] += a[i - 1];
             if (int nxt = i + (i & -i); nxt <= n) {
-                tree[nxt] += tree[i - 1];
+                tree[nxt] += tree[i];
             }
         }
     }
@@ -41,6 +43,47 @@ public:
         return query(r) - query(l - 1);
     }
 };
+
+// 静态数组实现
+constexpr int MAXN = 100'001;
+using T = int;
+int n; // 原数组的大小
+T a[MAXN];
+T tree[MAXN];
+
+void build(T* a) {
+    for (int i = 1; i <= n; i++) {
+        tree[i] += a[i - 1];
+        if (int nxt = i + (i & -i); nxt <= n) {
+            tree[nxt] += tree[i];
+        }
+    }
+}
+
+void build() {
+    fill(a, a + n + 1, 0);
+}
+
+void update(int i, T val) {
+    for (; i <= n; i += i & -i) {
+        tree[i] += val;
+    }
+}
+
+T query(int i) {
+    T res = 0;
+    for (; i > 0; i &= i - 1) {
+        res += tree[i];
+    }
+    return res;
+}
+
+T query(int l, int r) {
+    if (l > r) {
+        return 0;
+    }
+    return query(r) - query(l - 1);
+}
 
 // 区间更新区间查询
 template<typename T>
@@ -103,3 +146,64 @@ public:
         return query(info1, r) * r - query(info1, l - 1) * (l - 1) - query(info2, r) + query(info2, l - 1);
     }
 };
+
+// 静态数组实现
+using T = int;
+constexpr int MAXN = 100'001;
+int n;
+T info1[MAXN], info2[MAXN];
+T diff1[MAXN], diff2[MAXN];
+// 传统初始化方法
+void build(T* tree, T* a) {
+    for (int i = 1; i <= n; i++) {
+        tree[i] += a[i - 1];
+        if (int nxt = i + (i & -i); nxt <= n) {
+            tree[nxt] += tree[i];
+        }
+    }
+}
+
+// 传统单点更新
+void update(T* tree, int i, T val) {
+    for (; i <= n; i += i & -i) {
+        tree[i] += val;
+    }
+}
+
+// 传统单点查询
+T query(T* tree, int i) {
+    T res = 0;
+    for (; i > 0; i &= i - 1) {
+        res += tree[i];
+    }
+    return res;
+}
+
+void build() {
+    fill(info1, info1 + n + 1, 0);
+    fill(info2, info2 + n + 1, 0);
+}
+
+void build(T* a) {
+    diff1[0] = a[0];
+    diff2[0] = 0;
+    for (int i = 1; i < n; ++i) {
+        diff1[i] = a[i] - a[i - 1];
+        diff2[i] = i * diff1[i];
+    }
+    build(info1, diff1);
+    build(info2, diff2);
+}
+
+// 区间更新
+void update(int l, int r, T val) {
+    update(info1, l, val);
+    update(info1, r + 1, -val);
+    update(info2, l, (l - 1) * val);
+    update(info2, r + 1, -r * val);
+}
+
+// 区间查询
+T query(int l, int r) {
+    return query(info1, r) * r - query(info1, l - 1) * (l - 1) - query(info2, r) + query(info2, l - 1);
+}

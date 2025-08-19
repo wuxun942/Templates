@@ -3,7 +3,7 @@ using namespace std;
 
 // 线段树，单点更新 + 区间查询，以找区间最大值为例
 
-// 泛型模板封装
+// 泛型模板类封装
 template<typename T>
 class SegmentTree {
     int n;
@@ -93,19 +93,19 @@ void maintain(int o) {
     tree[o] = merge_val(tree[o * 2], tree[o * 2 + 1]);
 }
 
-void build(int o, int l, int r) {
+void build(T* a, int o, int l, int r) {
     if (l == r) {
         tree[o] = a[l];
         return;
     }
     int m = (l + r) / 2;
-    build(o * 2, l, m);
-    build(o * 2 + 1, m + 1, r);
+    build(a, o * 2, l, m);
+    build(a, o * 2 + 1, m + 1, r);
     maintain(o);
 }
 
-void build() {
-    build(1, 0, n - 1);
+void build(T* a) {
+    build(a, 1, 0, n - 1);
 }
 
 void update(int o, int l, int r, int i, T val) {

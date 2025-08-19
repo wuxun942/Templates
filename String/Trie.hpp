@@ -58,57 +58,6 @@ bool search_prefix(const string& s) {
     return true;
 }
 
-// 结构体封装字典树 + vector 实现
-struct Trie {
-    struct Node {
-        int son[26]{};
-        bool end = false;
-    };
-    int cnt_v = 0;
-    vector<Node> tree; // 末位表示 end
-
-    // 输入字符串长度总和
-    Trie(int sum_len) {
-        tree.resize(sum_len);
-    }
-
-    void insert(const string& s) {
-        int cur = 0;
-        for (char c : s) {
-            int &son = tree[cur].son[c - 'a'];
-            if (son == 0) {
-                son = ++cnt_v;
-            }
-            cur = son;
-        }
-        tree[cur].end = true;
-    }
-
-    bool search_word(const string& s) {
-        int cur = 0;
-        for (char c : s) {
-            int son = tree[cur].son[c - 'a'];
-            if (son == 0) {
-                return false;
-            }
-            cur = son;
-        }
-        return tree[cur].end;
-    }
-
-    bool search_prefix(const string& s) {
-        int cur = 0;
-        for (char c : s) {
-            int son = tree[cur].son[c - 'a'];
-            if (son == 0) {
-                return false;
-            }
-            cur = son;
-        }
-        return true;
-    }
-};
-
 // 0-1 字典树
 constexpr int MAXL = 5'000'001; // 最长比特位 * 数量
 int tree[MAXL][3];

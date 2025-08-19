@@ -93,7 +93,7 @@ void maintain(int o) {
     tree[o] = merge_val(tree[o * 2], tree[o * 2 + 1]);
 }
 
-void build(T* a, int o, int l, int r) {
+void build(const T* a, int o, int l, int r) {
     if (l == r) {
         tree[o] = a[l];
         return;
@@ -104,7 +104,8 @@ void build(T* a, int o, int l, int r) {
     maintain(o);
 }
 
-void build(T* a) {
+void build(const T* a, int a_size) {
+    n = a_size;
     build(a, 1, 0, n - 1);
 }
 

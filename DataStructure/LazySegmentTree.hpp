@@ -155,7 +155,7 @@ void maintain(int o) {
     tree[o].val = merge_val(tree[o * 2].val, tree[o * 2 + 1].val);
 }
 
-void build(T* a, int o, int l, int r) {
+void build(const T* a, int o, int l, int r) {
     Node &cur = tree[o];
     cur.todo = TODO_INIT;
     if (l == r) {
@@ -168,7 +168,8 @@ void build(T* a, int o, int l, int r) {
     maintain(o);
 }
 
-void build(T* a) {
+void build(const T* a, int a_size) {
+    n = a_size;
     build(a, 1, 0, n - 1);
 }
 

@@ -47,30 +47,34 @@ public:
 // 静态数组实现
 constexpr int MAXN = 100'001;
 using T = int;
-int n; // 原数组的大小
-T a[MAXN];
 T tree[MAXN];
+int tree_size;
 
-void build(T* a) {
-    for (int i = 1; i <= n; i++) {
+void build(const T* a, int n) {
+    tree_size = n + 1;
+    for (int i = 1; i < tree_size; i++) {
         tree[i] += a[i - 1];
-        if (int nxt = i + (i & -i); nxt <= n) {
+        if (int nxt = i + (i & -i); nxt < tree_size) {
             tree[nxt] += tree[i];
         }
     }
 }
 
-void build() {
-    fill(a, a + n + 1, 0);
+void build(int n) {
+    tree_size = n + 1;
+    fill(tree, tree + tree_size, 0);
 }
 
 void update(int i, T val) {
-    for (; i <= n; i += i & -i) {
+    for (; i < tree_size; i += i & -i) {
         tree[i] += val;
     }
 }
 
 T query(int i) {
+    if (i >= tree_size) {
+        throw overflow_error("FenwickTree Overflow");
+    }
     T res = 0;
     for (; i > 0; i &= i - 1) {
         res += tree[i];
@@ -150,14 +154,15 @@ public:
 // 静态数组实现
 using T = int;
 constexpr int MAXN = 100'001;
-int n;
 T info1[MAXN], info2[MAXN];
 T diff1[MAXN], diff2[MAXN];
+int tree_size;
+
 // 传统初始化方法
-void build(T* tree, T* a) {
-    for (int i = 1; i <= n; i++) {
+void build(T* tree, const T* a) {
+    for (int i = 1; i < tree_size; i++) {
         tree[i] += a[i - 1];
-        if (int nxt = i + (i & -i); nxt <= n) {
+        if (int nxt = i + (i & -i); nxt < tree_size) {
             tree[nxt] += tree[i];
         }
     }
@@ -165,13 +170,16 @@ void build(T* tree, T* a) {
 
 // 传统单点更新
 void update(T* tree, int i, T val) {
-    for (; i <= n; i += i & -i) {
+    for (; i < tree_size; i += i & -i) {
         tree[i] += val;
     }
 }
 
 // 传统单点查询
-T query(T* tree, int i) {
+T query(const T* tree, int i) {
+    if (i >= tree_size) {
+        throw overflow_error("FenwickTree Overflow");
+    }
     T res = 0;
     for (; i > 0; i &= i - 1) {
         res += tree[i];
@@ -179,18 +187,20 @@ T query(T* tree, int i) {
     return res;
 }
 
-void build() {
-    fill(info1, info1 + n + 1, 0);
-    fill(info2, info2 + n + 1, 0);
+void build(int n) {
+    tree_size = n + 1;
+    fill(info1, info1 + tree_size, 0);
+    fill(info2, info2 + tree_size, 0);
 }
 
-void build(T* a) {
+void build(const T* a, int n) {
     diff1[0] = a[0];
     diff2[0] = 0;
     for (int i = 1; i < n; ++i) {
         diff1[i] = a[i] - a[i - 1];
         diff2[i] = i * diff1[i];
     }
+    tree_size = n + 1;
     build(info1, diff1);
     build(info2, diff2);
 }

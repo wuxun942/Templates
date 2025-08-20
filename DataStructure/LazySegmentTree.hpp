@@ -3,7 +3,7 @@ using namespace std;
 
 // Lazy 线段树，以区间增加+维护区间和为例
 
-// 泛型模板类封装
+// 泛型模板类封装，0-index
 template<typename T, typename F>
 class LazySegmentTree {
     const F TODO_INIT = 0;
@@ -111,7 +111,7 @@ public:
     }
 };
 
-// 静态数组实现
+// 静态数组实现，1-index
 constexpr int MAXN = 100'001;
 int n;
 using T = int;
@@ -168,11 +168,6 @@ void build(const T* a, int o, int l, int r) {
     maintain(o);
 }
 
-void build(const T* a, int a_size) {
-    n = a_size;
-    build(a, 1, 0, n - 1);
-}
-
 void update(int o, int l, int r, int ql, int qr, F f) {
     if (ql <= l && r <= qr) {
         apply(o, l, r, f);
@@ -187,13 +182,6 @@ void update(int o, int l, int r, int ql, int qr, F f) {
         update(o * 2 + 1, m + 1, r, ql, qr, f);
     }
     maintain(o);
-}
-
-void update(int ql, int qr, F f) {
-    if (ql > qr) {
-        return;
-    }
-    update(1, 0, n - 1, ql, qr, f);
 }
 
 T query(int o, int l, int r, int ql, int qr) {
@@ -213,6 +201,23 @@ T query(int o, int l, int r, int ql, int qr) {
     return merge_val(l_res, r_res);
 }
 
+void build(const T* a, int a_size) {
+    n = a_size;
+    build(a, 1, 1, n);
+}
+
+void build(int sz, T init_val) {
+    n = sz;
+    fill(tree, tree + (2 << bit_width((unsigned) n - 1)) + 1, Node(init_val, TODO_INIT));
+}
+
+void update(int ql, int qr, F f) {
+    if (ql > qr) {
+        return;
+    }
+    update(1, 1, n, ql, qr, f);
+}
+
 T query(int ql, int qr) {
-    return query(1, 0, n - 1, ql, qr);
+    return query(1, 1, n, ql, qr);
 }

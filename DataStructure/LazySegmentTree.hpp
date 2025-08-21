@@ -120,7 +120,10 @@ T a[MAXN];
 struct Node {
     T val;
     F todo;
-} tree[MAXN * 4];
+    Node() = default;
+    Node(T val, F todo) : val(val), todo(todo) {}
+    Node& operator=(const Node&) = default;
+} tree[MAXN << 2];
 
 constexpr F TODO_INIT = 0;
 
@@ -208,7 +211,7 @@ void build(const T* a, int a_size) {
 
 void build(int sz, T init_val) {
     n = sz;
-    fill(tree, tree + (2 << bit_width((unsigned) n - 1)) + 1, Node(init_val, TODO_INIT));
+    fill(tree, tree + (n << 2) + 1, Node(init_val, TODO_INIT));
 }
 
 void update(int ql, int qr, F f) {

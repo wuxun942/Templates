@@ -83,7 +83,7 @@ constexpr int MAXN = 400'001;
 using T = int;
 int n;
 T a[MAXN];
-T tree[MAXN * 4];
+T tree[MAXN << 2];
 
 T merge_val(T a, T b) {
     return max(a, b);
@@ -141,7 +141,7 @@ void build(const T* a, int a_size) {
 
 void build(int sz, T init_val) {
     n = sz;
-    fill(tree, tree + (2 << bit_width((unsigned) sz - 1) + 1), init_val);
+    fill(tree, tree + (n << 2) + 1, init_val);
 }
 
 void update(int i, T val) {

@@ -208,10 +208,8 @@ void build(const T* a, int a_size) {
 
 void build(int sz, T init_val) {
     n = sz;
-    Node tmp;
-    tmp.val = init_val;
-    tmp.todo = TODO_INIT;
-    fill(tree, tree + (n << 2) + 1, tmp);
+    fill(a, a + n + 1, init_val);
+    build(a, 1, 1, n);
 }
 
 void update(int ql, int qr, F f) {

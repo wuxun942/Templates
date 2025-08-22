@@ -17,12 +17,13 @@ struct Node {
 } tree[MAXN];
 Node& root = tree[1];
 int cnt = 0;
-int n;
+int n, init_val;
 
 void add_node(int& o) {
     if (o == 0) {
         o = ++cnt;
     }
+    tree[o].val = init_val;
 }
 
 void apply(Node& cur, int l, int r, F f) {
@@ -36,8 +37,8 @@ void spread(Node& cur, int l, int r) {
     }
     int m = (l + r) / 2;
     add_node(cur.left);
-    apply(tree[cur.left], l, m, cur.to_add);
     add_node(cur.right);
+    apply(tree[cur.left], l, m, cur.to_add);
     apply(tree[cur.right], m + 1, r, cur.to_add);
     cur.to_add = 0;
 }
@@ -94,10 +95,11 @@ T query(Node& cur, int l, int r, int ql, int qr) {
     return l_res + r_res;
 }
 
-void build(int mx, int init_val) {
+void build(int mx, int val) {
     n = mx;
-    // tree[o].val = 0;
-    tree[++cnt].val = init_val;
+    cnt = 0;
+    root.val = init_val = val;
+    // tree[0].val = val;
 }
 
 void update(int ql, int qr, F f) {

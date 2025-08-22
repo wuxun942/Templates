@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-// Lazy 线段树，以区间增加+维护区间和为例
+// Lazy 线段树，以 区间增加 + 维护区间和为例
 
 // 泛型模板类封装，0-index
 template<typename T, typename F>

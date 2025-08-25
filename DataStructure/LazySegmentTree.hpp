@@ -196,9 +196,7 @@ T query(int o, int l, int r, int ql, int qr) {
     if (ql > m) {
         return query(o * 2 + 1, m + 1, r, ql, qr);
     }
-    T l_res = query(o * 2, l, m, ql, qr);
-    T r_res = query(o * 2 + 1, m + 1, r, ql, qr);
-    return merge_val(l_res, r_res);
+    return merge_val(query(o * 2, l, m, ql, qr), query(o * 2 + 1, m + 1, r, ql, qr));
 }
 
 void build(const T* a, int a_size) {

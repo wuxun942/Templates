@@ -4,7 +4,7 @@ using namespace std;
 // 乘法快速幂
 
 // 不取模
-long long qpow(unsigned long long x, int n) {
+long long qpow(long long x, long long n) {
     long long ans = 1;
     for (; n > 0; n >>= 1, x *= x) {
         if (n & 1) {
@@ -15,18 +15,16 @@ long long qpow(unsigned long long x, int n) {
 }
 
 // 取模
-int qpow(long long x, long long n, int mod) {
+long long qpow(long long x, long long n, int mod) {
     int ans = 1;
     x %= mod;
-    for (; n > 0; n >>= 1, x = (x * x) % mod) {
+    for (; n > 0; n >>= 1, x = x * x % mod) {
         if (n & 1) {
             ans = ans * x % mod;
         }
     }
     return ans;
 }
-
-// 矩阵快速幂
 
 // 矩阵乘法
 vector<vector<int>> multiply(vector<vector<int>>& mat1, vector<vector<int>>& mat2) {
@@ -45,6 +43,8 @@ vector<vector<int>> multiply(vector<vector<int>>& mat1, vector<vector<int>>& mat
     }
     return res;
 }
+
+// 矩阵快速幂：只有方阵才有乘方
 
 // 不取模
 constexpr int SIZE = 100;

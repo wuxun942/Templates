@@ -3,7 +3,7 @@ using namespace std;
 
 // 阶乘逆元 + 带模组合数
 constexpr int MOD = 1'000'000'007;
-int qpow(long long x, long long n, int mod) {
+long long qpow(long long x, long long n, int mod) {
     int ans = 1;
     x %= mod;
     for (; n > 0; n >>= 1, x = x * x % mod) {

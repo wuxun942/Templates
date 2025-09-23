@@ -3,12 +3,13 @@ using namespace std;
 
 // Manacher: 查找以每个位置为中心的最长回文子串
 vector<int> manacher(const string& s) {
-    string t = "^";
-    for (char c : s) {
-        t += '#';
-        t += c;
+    int m = s.size();
+    string t(2 * m + 3, '#');
+    t[0] = '^';
+    t[2 * m + 2] = '$';
+    for (int i = 0; i < m; ++i) {
+        t[2 * i + 2] = s[i];
     }
-    t += '$';
     int n = t.size();
     vector half_len(n - 2, 0);
     half_len[1] = 1;

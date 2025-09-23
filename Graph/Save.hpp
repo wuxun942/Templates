@@ -7,8 +7,7 @@ int to[MAXM];
 // int weight[MAXM];
 int cnt_e = 0;
 void add_e(int x, int y, int w = 0) {
-    ++cnt_e;
-    nxt[cnt_e] = head[x];
+    nxt[++cnt_e] = head[x];
     to[cnt_e] = y;
     // weight[cnt_e] = w;
     head[x] = cnt_e;

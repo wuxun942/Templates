@@ -26,13 +26,11 @@ public:
         if (x == y) {
             return false;
         }
-        if (sz[x] > sz[y]) {
-            fa[y] = x;
-            sz[x] += sz[y];
-        } else {
-            fa[x] = y;
-            sz[y] += sz[x];
+        if (sz[x] < sz[y]) {
+            swap(x, y);
         }
+        fa[y] = x;
+        sz[x] += sz[y];
         cc--;
         return true;
     }
@@ -48,8 +46,7 @@ public:
 
 // 静态数组实现
 constexpr int MAXN = 100'000;
-int fa[MAXN], sz[MAXN];
-int cc;
+int fa[MAXN], sz[MAXN], cc;
 void build(int n) {
     iota(fa, fa + n, 0);
     fill(sz, sz + n, 1);
@@ -69,13 +66,11 @@ bool merge(int x, int y) {
     if (x == y) {
         return false;
     }
-    if (sz[x] > sz[y]) {
-        fa[y] = x;
-        sz[x] += sz[y];
-    } else {
-        fa[x] = y;
-        sz[y] += sz[x];
+    if (sz[x] < sz[y]) {
+        swap(x, y);
     }
+    fa[y] = x;
+    sz[x] += sz[y];
     cc--;
     return true;
 }

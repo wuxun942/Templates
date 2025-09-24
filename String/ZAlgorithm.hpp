@@ -11,14 +11,15 @@ vector<int> calc_z(const string& s) {
         if (i < box_r) {
             lcp = min(z[i - box_l], box_r - i);
         }
-        while (i + lcp < n && s[z[i]] == s[i + lcp]) {
+        while (i + lcp < n && s[lcp] == s[i + lcp]) {
             ++lcp;
+            // box 向右扩展
+            if (i + lcp > box_r) {
+                box_l = i;
+                box_r = i + lcp;
+            }
         }
         z[i] = lcp;
-        if (i + lcp > box_r) {
-            box_l = i;
-            box_r = i + lcp;
-        }
     }
     z[0] = n;
     return z;

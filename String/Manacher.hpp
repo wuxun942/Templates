@@ -14,7 +14,7 @@ vector<int> manacher(const string& s) {
     int m = t.size();
     vector half_len(m - 2, 0);
     vector<pair<int, int>> ans;
-    // (2 * box_m - box_r, box_r) 是镜像的
+    // (2 * box_m - box_r, box_r) 关于 box_m 镜像
     for (int i = 1, box_m = 0, box_r = 0; i < m - 1; ++i) {
         // hl: t[i] 的最大回文半径，实际回文串长度等于 hl - 1
         int hl = 1;
@@ -23,12 +23,13 @@ vector<int> manacher(const string& s) {
         }
         while (t[i + hl] == t[i - hl]) {
             ++hl;
+            // box 向右扩展
+            if (i + hl > box_r) {
+                box_m = i;
+                box_r = i + hl;
+            }
         }
         half_len[i] = hl;
-        if (i + hl > box_r) {
-            box_m = i;
-            box_r = i + hl;
-        }
         /*
         在 t 中最后得到的回文子串左右端点一定是 #，映射回 s 时需要删掉
         左端点 t[i - hl + 1]，对应 s[(i - hl) / 2]；

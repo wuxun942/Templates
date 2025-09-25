@@ -15,11 +15,11 @@ size_t h[MAXN], p[MAXN];
 
 void build(const string& s, int base = 1'000'000'007) {
     int n = s.size();
-    h[1] = s[0];
+    h[0] = 0;
     p[0] = 1;
-    for (int i = 1; i < n; ++i) {
+    for (int i = 0; i < n; ++i) {
         h[i + 1] = h[i] * base + s[i];
-        p[i] = p[i - 1] * base;
+        p[i + 1] = p[i] * base;
     }
 }
 

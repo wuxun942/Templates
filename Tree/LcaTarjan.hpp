@@ -14,19 +14,19 @@ class LcaTarjan {
         return fa[x];
     }
 public:
-    LcaTarjan(vector<vector<int>>& edges, int s) {
+    LcaTarjan(vector<vector<int>> &edges, int s) {
         n = edges.size() + 1;
         root = s;
         g.resize(n);
         fa.resize(n);
         ranges::iota(fa, 0);
-        for (auto& e: edges) {
+        for (auto &e: edges) {
             g[e[0]].push_back(e[1]);
             g[e[1]].push_back(e[0]);
         }
     }
 
-    vector<int> get_lca(vector<vector<int>>& queries) {
+    vector<int> get_lca(vector<vector<int>> &queries) {
         // 分组查询，内存紧张时可以改成链式前向星
         vector<vector<pair<int, int>>> groups(n);
         for (int i = 0, qn = queries.size(); i < qn; ++i) {
@@ -35,7 +35,7 @@ public:
         }
         vector vis(n, false);
         vector ans(queries.size(), 0);
-        auto dfs = [&](auto&& dfs, int x, int f) -> void {
+        auto dfs = [&](auto &&dfs, int x, int f) -> void {
             vis[x] = true;
             for (int y: g[x]) {
                 if (y != f) {
@@ -44,7 +44,7 @@ public:
                     fa[y] = x;
                 }
             }
-            for (auto [y, idx]: groups[x]) {
+            for (auto &[y, idx]: groups[x]) {
                 // 访问过的点才能查询
                 if (vis[y]) {
                     ans[idx] = find(y);

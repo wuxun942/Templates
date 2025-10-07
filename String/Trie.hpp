@@ -14,7 +14,7 @@ void init(int n) {
     }
 }
 
-void init(const vector<string>& a) {
+void init(const vector<string> &a) {
     int sum_len = 0;
     for (auto& s : a) {
         sum_len += s.size();
@@ -22,7 +22,7 @@ void init(const vector<string>& a) {
     init(sum_len);
 }
 
-void insert(const string& s) {
+void insert(const string &s) {
     int cur = 0;
     for (char c : s) {
         int &son = tree[cur][c - 'a'];
@@ -34,7 +34,7 @@ void insert(const string& s) {
     tree[cur][26] = 1;
 }
 
-bool search_word(const string& s) {
+bool search_word(const string &s) {
     int cur = 0;
     for (char c : s) {
         int son = tree[cur][c - 'a'];
@@ -46,7 +46,7 @@ bool search_word(const string& s) {
     return tree[cur][26];
 }
 
-bool search_prefix(const string& s) {
+bool search_prefix(const string &s) {
     int cur = 0;
     for (char c : s) {
         int son = tree[cur][c - 'a'];
@@ -72,7 +72,7 @@ void init(int n) {
     }
 }
 
-void init(const vector<int>& a) {
+void init(const vector<int> &a) {
     int mx = 0;
     for (int x : a) {
         mx = max(mx, bit_width((unsigned) x));

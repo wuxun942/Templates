@@ -10,7 +10,7 @@ int digitDP(int low, int high, int target) {
     int diff_lh = n - low_s.size();
     // limit_low, limit_high 不需要记忆
     vector memo(n, vector(target + 1, -1));
-    auto dfs = [&](this auto&& dfs, int i, int cnt0, bool limit_low, bool limit_high) -> int {
+    auto dfs = [&](this auto &&dfs, int i, int cnt0, bool limit_low, bool limit_high) -> int {
         if (cnt0 > target) {
             return 0;
         }

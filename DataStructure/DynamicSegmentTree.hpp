@@ -19,7 +19,7 @@ struct Node {
 int cnt = 0;
 int n, init_val;
 
-void add_node(int& o) {
+void add_node(int &o) {
     if (o == 0) {
         o = ++cnt;
         tree[o].val = init_val;

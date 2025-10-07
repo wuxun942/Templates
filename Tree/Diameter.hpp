@@ -74,18 +74,18 @@ void add_edge(int x, int y, int w) {
     head[x] = e++;
 }
 
-long long get_diameter(const vector<vector<int>>& edges) {
+long long get_diameter(const vector<vector<int>> &edges) {
     e = 0;
     ans = 0;
     int n = edges.size() + 1;
     fill(head, head + n, -1);
-    for (auto& e: edges) {
+    for (auto &e: edges) {
         int x = e[0], y = e[1], w = e[2];
         add_edge(x, y, w);
         add_edge(y, x, w);
     }
     long long ans = 0;
-    auto dfs = [&](this auto&& dfs, int x, int fa) -> long long {
+    auto dfs = [&](this auto &&dfs, int x, int fa) -> long long {
         long long mx = 0;
         for (int e = head[x]; e >= 0; e = nxt[e]) {
             if (int y = to[e]; y != fa) {

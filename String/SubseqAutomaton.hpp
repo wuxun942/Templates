@@ -3,7 +3,7 @@ using namespace std;
 
 // 子序列自动机：字符集较小的情况，直接将字符集作为维度
 vector<array<int, 26>> r, l;
-void build(const string& s) {
+void build(const string &s) {
     int n = s.size();
     r.resize(n);
     l.resize(n);

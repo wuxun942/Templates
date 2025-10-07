@@ -2,7 +2,7 @@
 using namespace std;
 
 // Manacher: 查找以每个位置为中心的最长回文子串
-vector<int> manacher(const string& s) {
+vector<int> manacher(const string &s) {
     int n = s.size();
     // s[i] = t[2 * i + 2]
     string t(2 * n + 3, '#');

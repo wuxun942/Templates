@@ -76,7 +76,7 @@ int tree[MAXL][27]; // 末位表示 end
 int fail[MAXL];
 int q[MAXL];
 int cnt_v;
-void build(const vector<string>& a) {
+void build(const vector<string> &a) {
     // 初始化
     int sum_len = 0;
     for (auto &s : a) {
@@ -123,7 +123,7 @@ void build(const vector<string>& a) {
 }
 
 // 读文章，命中时报警
-bool search(const string& s) {
+bool search(const string &s) {
     int cur = 0;
     for (char c : s) {
         cur = tree[cur][c - 'a'];
@@ -147,7 +147,7 @@ int cnt[MAXL];
 constexpr int MAXN = 1'000'001; // 模式串个数
 int end_node[MAXN];
 int n;
-void build(const vector<string>& a) {
+void build(const vector<string> &a) {
     // 初始化
     int sum_len = 0;
     for (auto &s : a) {
@@ -213,7 +213,7 @@ void dfs(int x) {
     }
 }
 
-vector<int> scan(const string& s) {
+vector<int> scan(const string &s) {
     int cur = 0;
     for (char c : s) {
         cur = tree[cur][c - 'a'];

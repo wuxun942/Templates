@@ -8,7 +8,7 @@ class LcaBinaryLifting {
     vector<int> depth;
     vector<T> dis; // 无权图用 depth 代替
 public:
-    LcaBinaryLifting(const vector<vector<int>>& edges) {
+    LcaBinaryLifting(const vector<vector<int>> &edges) {
         int n = edges.size() + 1;
         vector<vector<pair<int, int>>> g(n);
         for (auto& e: edges) {
@@ -21,7 +21,7 @@ public:
         dis.resize(n);
         auto dfs = [&](auto &&dfs, int x, int fa) -> void {
             pa[0][x] = fa;
-            for (auto& [y, w]: g[x]) {
+            for (auto &[y, w]: g[x]) {
                 if (y != fa) {
                     depth[y] = depth[x] + 1;
                     dis[y] = dis[x] + w;

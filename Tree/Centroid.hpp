@@ -30,22 +30,22 @@ void add_edge(int x, int y) {
 }
 
 // 第一种定义解重心
-vector<int> calc_centroid1(const vector<vector<int>>& edges) {
+vector<int> calc_centroid1(const vector<vector<int>> &edges) {
     e = 0;
     int n = edges.size() + 1;
     fill(head + 1, head + 1 + n, -1);
-    for (auto& e: edges) {
+    for (auto &e: edges) {
         int x = e[0], y = e[1];
         add_edge(x, y);
         add_edge(y, x);
     }
     int cnt = INT_MAX;
     int ans1 = 0, ans2 = 0;
-    auto dfs = [&](auto&& dfs, int x, int fa) -> int {
+    auto dfs = [&](this auto &&dfs, int x, int fa) -> int {
         int res = 1, maxsub = 0;
         for (int e = head[x]; e >= 0; e = nxt[e]) {
             if (int y = to[e]; y != fa) {
-                int cntsub = dfs(dfs, y, x);
+                int cntsub = dfs(y, x);
                 res += cntsub;
                 maxsub = max(maxsub, cntsub);
             }
@@ -60,7 +60,7 @@ vector<int> calc_centroid1(const vector<vector<int>>& edges) {
         }
         return res;
     };
-    dfs(dfs, 1, 0);
+    dfs(1, 0);
     if (ans2 == 0) {
         return {ans2};
     }
@@ -68,17 +68,17 @@ vector<int> calc_centroid1(const vector<vector<int>>& edges) {
 }
 
 // 第二种定义解重心
-vector<int> calc_centroid2(const vector<vector<int>>& edges) {
+vector<int> calc_centroid2(const vector<vector<int>> &edges) {
     e = 0;
     int n = edges.size() + 1;
     fill(head + 1, head + 1 + n, -1);
-    for (auto& e: edges) {
+    for (auto &e: edges) {
         int x = e[0], y = e[1];
         add_edge(x, y);
         add_edge(y, x);
     }
     int ans1 = 0, ans2 = 0;
-    auto dfs = [&](auto&& dfs, int x, int fa) -> int {
+    auto dfs = [&](auto &&dfs, int x, int fa) -> int {
         int res = 1;
         bool ok = true;
         for (int e = head[x]; e >= 0; e = nxt[e]) {
@@ -117,7 +117,7 @@ void add_edge(int x, int y, int w) {
 }
 
 // 第一种定义解重心
-vector<int> calc_centroid1(const vector<vector<int>>& edges) {
+vector<int> calc_centroid1(const vector<vector<int>> &edges) {
     e = 0;
     int n = edges.size() + 1;
     fill(head + 1, head + 1 + n, -1);
@@ -129,11 +129,11 @@ vector<int> calc_centroid1(const vector<vector<int>>& edges) {
     long long total_weight = accumulate(weight + 1, weight + 1 + n, 0LL);
     int cnt = INT_MAX;
     int ans1 = 0, ans2 = 0;
-    auto dfs = [&](auto&& dfs, int x, int fa) -> long long {
+    auto dfs = [&](this auto &&dfs, int x, int fa) -> long long {
         long long res = weight[x], maxsub = 0;
         for (int e = head[x]; e >= 0; e = nxt[e]) {
             if (int y = to[e]; y != fa) {
-                long long cntsub = dfs(dfs, y, x);
+                long long cntsub = dfs(y, x);
                 res += cntsub;
                 maxsub = max(maxsub, cntsub);
             }
@@ -148,7 +148,7 @@ vector<int> calc_centroid1(const vector<vector<int>>& edges) {
         }
         return res;
     };
-    dfs(dfs, 1, 0);
+    dfs(1, 0);
     if (ans2 == 0) {
         return {ans2};
     }
@@ -156,23 +156,23 @@ vector<int> calc_centroid1(const vector<vector<int>>& edges) {
 }
 
 // 第二种定义解重心
-vector<int> calc_centroid2(const vector<vector<int>>& edges) {
+vector<int> calc_centroid2(const vector<vector<int>> &edges) {
     e = 0;
     int n = edges.size() + 1;
     fill(head + 1, head + 1 + n, -1);
-    for (auto& e: edges) {
+    for (auto &e: edges) {
         int x = e[0], y = e[1], w = e[2];
         add_edge(x, y, w);
         add_edge(y, x, w);
     }
     long long total_weight = accumulate(weight + 1, weight + 1 + n, 0LL);
     int ans1 = 0, ans2 = 0;
-    auto dfs = [&](auto&& dfs, int x, int fa) -> long long {
+    auto dfs = [&](this auto &&dfs, int x, int fa) -> long long {
         long long res = weight[x];
         bool ok = true;
         for (int e = head[x]; e >= 0; e = nxt[e]) {
             if (int y = to[e]; y != fa) {
-                long long cntsub = dfs(dfs, y, x);
+                long long cntsub = dfs(y, x);
                 res += cntsub;
                 ok = ok && cntsub <= total_weight / 2;
             }
@@ -183,7 +183,7 @@ vector<int> calc_centroid2(const vector<vector<int>>& edges) {
         }
         return res;
     };
-    dfs(dfs, 1, 0);
+    dfs(1, 0);
     if (ans2 == 0) {
         return {ans2};
     }

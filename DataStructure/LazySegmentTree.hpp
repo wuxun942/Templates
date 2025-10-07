@@ -47,7 +47,7 @@ class LazySegmentTree {
         tree[o].val = merge_val(tree[o * 2].val, tree[o * 2 + 1].val);
     }
 
-    void build(const vector<T>& a, int o, int l, int r) {
+    void build(const vector<T> &a, int o, int l, int r) {
         Node &cur = tree[o];
         cur.todo = TODO_INIT;
         if (l == r) {
@@ -95,7 +95,7 @@ class LazySegmentTree {
 public:
     LazySegmentTree(int n, T init_val): LazySegmentTree(vector<T>(n, init_val)) {}
 
-    LazySegmentTree(const vector<T>& a): n(a.size()), tree(2 << bit_width(a.size() - 1)) {
+    LazySegmentTree(const vector<T> &a): n(a.size()), tree(2 << bit_width(a.size() - 1)) {
         build(a, 1, 0, n - 1);
     }
 
@@ -155,7 +155,7 @@ void maintain(int o) {
     tree[o].val = merge_val(tree[o * 2].val, tree[o * 2 + 1].val);
 }
 
-void build(const T* a, int o, int l, int r) {
+void build(const T *a, int o, int l, int r) {
     Node &cur = tree[o];
     cur.todo = TODO_INIT;
     if (l == r) {
@@ -199,7 +199,7 @@ T query(int o, int l, int r, int ql, int qr) {
     return merge_val(query(o * 2, l, m, ql, qr), query(o * 2 + 1, m + 1, r, ql, qr));
 }
 
-void build(const T* a, int a_size) {
+void build(const T *a, int a_size) {
     n = a_size;
     build(a, 1, 1, n);
 }

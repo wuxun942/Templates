@@ -12,7 +12,7 @@ class ST {
         return max(x, y);
     }
 public:
-    ST(const vector<int>& a) {
+    ST(const vector<int> &a) {
         int n = a.size(), m = bit_width((unsigned) n);
         st.resize(n, vector(m, 0)); // 初始值看题目修改
         for (int i = 0; i < n - 1; ++i) {
@@ -68,7 +68,7 @@ void build() {
     }
 }
 
-// 闭区间查询
+// 闭区间 [l, r] 查询
 T query(int l, int r) {
     if (l > r) {
         return 0;

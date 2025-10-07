@@ -15,7 +15,7 @@ using namespace std;
 constexpr int MAXN = 100'001;
 size_t h[MAXN], p[MAXN], q;
 
-void build(const string& s, int base = 1'000'000'007) {
+void build(const string &s, int base = 1'000'000'007) {
     mt19937_64 rng(chrono::steady_clock::now().time_since_epoch().count());
     q = uniform_int_distribution<>(8e8, 9e8)(rng); // 生成随机数，用于异或
     h[0] = 0;
@@ -39,7 +39,7 @@ long long h1[MAXN], p1[MAXN], h2[MAXN], p2[MAXN];
 int base1, base2;
 constexpr int MOD1 = 1'070'777'777, MOD2 = 1'000'000'007;
 
-void build(const string& s) {
+void build(const string &s) {
     mt19937_64 rng(chrono::steady_clock::now().time_since_epoch().count());
     base1 = uniform_int_distribution<>(8e8, 9e8)(rng);
     base2 = uniform_int_distribution<>(8e8, 9e8)(rng);

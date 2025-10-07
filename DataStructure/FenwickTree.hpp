@@ -12,7 +12,7 @@ class FenwickTree {
 public:
     FenwickTree(int n): tree(n + 1) {}
 
-    FenwickTree(const vector<T>& a): tree(a.size() + 1) {
+    FenwickTree(const vector<T> &a): tree(a.size() + 1) {
         int n = a.size();
         for (int i = 1; i <= n; i++) {
             tree[i] += a[i - 1];
@@ -50,7 +50,7 @@ using T = int;
 T tree[MAXN];
 int tree_size;
 
-void build(const T* a, int n) {
+void build(const T *a, int n) {
     tree_size = n + 1;
     for (int i = 1; i < tree_size; i++) {
         tree[i] += a[i - 1];
@@ -95,7 +95,7 @@ class FenwickTree {
     vector<T> info1, info2;
 
     // 传统初始化方法
-    void build(vector<T>& tree, const vector<T>& a) {
+    void build(vector<T> &tree, const vector<T> &a) {
         int n = a.size();
         for (int i = 1; i <= n; i++) {
             tree[i] += a[i - 1];
@@ -106,14 +106,14 @@ class FenwickTree {
     }
 
     // 传统单点更新
-    void update(vector<T>& tree, int i, T val) {
+    void update(vector<T> &tree, int i, T val) {
         for (; i < tree.size(); i += i & -i) {
             tree[i] += val;
         }
     }
 
     // 传统单点查询
-    T query(const vector<T>& tree, int i) {
+    T query(const vector<T> &tree, int i) {
         T res = 0;
         for (; i > 0; i &= i - 1) {
             res += tree[i];
@@ -124,7 +124,7 @@ class FenwickTree {
 public:
     FenwickTree(int n): info1(n + 1), info2(n + 1) {}
 
-    FenwickTree(const vector<T>& a): FenwickTree(a.size())  {
+    FenwickTree(const vector<T> &a): FenwickTree(a.size())  {
         int n = a.size();
         vector<T> diff1(n), diff2(n);
         diff1[0] = a[0];
@@ -159,7 +159,7 @@ T diff1[MAXN], diff2[MAXN];
 int tree_size;
 
 // 传统初始化方法
-void build(T* tree, const T* a) {
+void build(T *tree, const T *a) {
     for (int i = 1; i < tree_size; i++) {
         tree[i] += a[i - 1];
         if (int nxt = i + (i & -i); nxt < tree_size) {
@@ -169,14 +169,14 @@ void build(T* tree, const T* a) {
 }
 
 // 传统单点更新
-void update(T* tree, int i, T val) {
+void update(T *tree, int i, T val) {
     for (; i < tree_size; i += i & -i) {
         tree[i] += val;
     }
 }
 
 // 传统单点查询
-T query(const T* tree, int i) {
+T query(const T *tree, int i) {
     if (i >= tree_size) {
         throw overflow_error("FenwickTree Overflow");
     }
@@ -193,7 +193,7 @@ void build(int n) {
     fill(info2, info2 + tree_size, 0);
 }
 
-void build(const T* a, int n) {
+void build(const T *a, int n) {
     diff1[0] = a[0];
     diff2[0] = 0;
     for (int i = 1; i < n; ++i) {

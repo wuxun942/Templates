@@ -74,8 +74,8 @@ class LinearXorBasisGauss {
 
     LinearXorBasisGauss (const vector<T> &a) {
         basis = a;
-        int m = bit_width<uint64_t>(ranges::max(a)), n = a.size(), len = 0;
-        for (int i = m - 1; i >= 0; --i) {
+        int bitlen = bit_width<uint64_t>(ranges::max(a)), n = a.size(), len = 0;
+        for (int i = bitlen - 1; i >= 0; --i) {
             // 找第 i 位上是 1 的数字
             for (int j = len; j < n; ++j) {
                 if (basis[j] >> i & 1) {
@@ -121,48 +121,52 @@ class LinearXorBasisGauss {
 constexpr int MAXB = 64;
 using T = long long;
 T basis[MAXB];
-int bitlen;
+int b;
 bool has_zero;
 
 void build(T *a, int n) {
+    b = n;
     for (int i = 0; i < n; ++i) {
         basis[i] = a[i];
     }
-    int m = __lg(*max_element(basis, basis + bitlen)) + 1, len = 0;
-    for (int i = m - 1; i >= 0; --i) {
+    int bitlen = __lg(*max_element(basis, basis + b)) + 1, len = 0;
+    for (int i = bitlen - 1; i >= 0; --i) {
         // 找第 i 位上是 1 的数字
-        for (int j = len; j < bitlen; ++j) {
+        for (int j = len; j < b; ++j) {
             if (basis[j] >> i & 1) {
                 swap(basis[j], basis[len]);
                 break;
             }
-            // 找到了！
-            if (basis[len] >> i & 1) {
-                for (int j = 0; j < bitlen; ++j) {
-                    if (j != len && basis[j] >> i & 1) {
-                        basis[j] ^= basis[len];
-                    }
+        }
+        // 找到了！
+        if (basis[len] >> i & 1) {
+            for (int j = 0; j < b; ++j) {
+                if (j != len && basis[j] >> i & 1) {
+                    basis[j] ^= basis[len];
                 }
-                ++len;
             }
+            ++len;
         }
     }
-    has_zero = len != bitlen;
-    // 把 0 放到最后
-    for (int i = 0, j = 0; j < len; ++i) {
+    has_zero = len != b;
+    b = len;
+    // 把 0 放到最后 + 翻转
+    for (int i = 0, j = 0; j < b; ++i) {
         while (basis[i] == 0) {
             ++i;
         }
         basis[j++] = basis[i];
     }
-    bitlen = len;
+    for (int i = 0, j = b - 1; i < j; ++i, --j) {
+        swap(basis[i], basis[j]);
+    }
 }
 
 // 第 k 小的异或和
 T get_kth_xor(uint64_t k) {
     k -= has_zero;
-    if (k > 1 << bitlen) {
-        return -1;
+    if (k > 1 << b) {
+        return -1; // 超出范围
     }
     T ans = 0;
     for (; k; k &= k - 1) {

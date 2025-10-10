@@ -2,8 +2,6 @@
 using namespace std;
 
 // 朴素 AC 自动机
-
-// 静态数组实现
 constexpr int MAXL = 1'000'001;
 int tree[MAXL][27]; // 末位表示 end
 int fail[MAXL];

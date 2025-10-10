@@ -15,7 +15,7 @@ public:
             g[e[0]].emplace_back(e[1], e[2]);
             g[e[1]].emplace_back(e[0], e[2]);
         }
-        int m = bit_width((unsigned) n);
+        int m = bit_width<uint32_t>(n);
         pa.resize(m, vector(n, -1));
         depth.resize(n);
         dis.resize(n);
@@ -41,7 +41,7 @@ public:
 
     int get_kth_ancestor(int x, int k) {
         for (; k; k &= k - 1) {
-            x = pa[countr_zero((unsigned) k)][x];
+            x = pa[__builtin_ctz(k)][x];
         }
         return x;
     }
@@ -61,6 +61,7 @@ public:
         return pa[0][x];
     }
 
+    // 获取 x 与 y 的距离
     T get_dis(int x, int y) {
         return dis[x] + dis[y] - 2 * dis[get_lca(x, y)];
     }

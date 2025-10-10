@@ -59,6 +59,7 @@ bool search_prefix(const string &s) {
 }
 
 // 0-1 字典树
+using T = int;
 constexpr int MAXL = 5'000'001; // 最长比特位 * 数量
 int tree[MAXL][3];
 int cnt_v;
@@ -72,16 +73,16 @@ void init(int n) {
     }
 }
 
-void init(const vector<int> &a) {
+void init(const vector<T> &a) {
     int mx = 0;
-    for (int x : a) {
+    for (T x : a) {
         mx = max(mx, bit_width((unsigned) x));
     }
     init(mx * a.size());
 }
 
 // k: 比特位长度，不要减一
-void insert(int x, int k) {
+void insert(T x, int k) {
     int cur = 0;
     for (int i = k - 1; i >= 0; --i) {
         int bit = x >> i & 1, &son = tree[cur][bit];
@@ -94,8 +95,9 @@ void insert(int x, int k) {
 }
 
 // 以找异或最大值为例
-int search(int x, int k) {
-    int res = 0, cur = 0;
+T search(T x, int k) {
+    T res = 0;
+    int cur = 0;
     for (int i = k - 1; i >= 0; --i) {
         int bit = x >> i & 1;
         if (int son = tree[cur][bit ^ 1]; tree[son][2] > 0) {
@@ -110,7 +112,7 @@ int search(int x, int k) {
 }
 
 // 删除节点
-void remove(int x, int k) {
+void remove(T x, int k) {
     int cur = 0;
     for (int i = k - 1; i >= 0; --i) {
         cur = tree[cur][x >> i & 1];

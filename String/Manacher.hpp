@@ -15,7 +15,7 @@ vector<int> manacher(const string &s) {
     vector half_len(m - 2, 0);
     vector<pair<int, int>> ans;
     // (2 * box_m - box_r, box_r) 关于 box_m 镜像
-    for (int i = 1, box_m = 0, box_r = 0; i < m - 1; ++i) {
+    for (int i = 1, box_m = 0, box_r = 0; i < m - 2; ++i) {
         // hl: t[i] 的最大回文半径，实际回文串长度等于 hl - 1
         int hl = 1;
         if (i < box_r) {

@@ -33,18 +33,18 @@ class LinearXorBasisNormal {
     }
 };
 
-constexpr int MAXM = 64;
+constexpr int MAXB = 64;
 using T = long long;
-T basis[MAXM];
-int m;
+T basis[MAXB];
+int bitlen;
 bool has_zero;
-void build(int bit_len) {
+void build(int m) {
     has_zero = false;
-    m = bit_len;
+    bitlen = m;
 }
 
 void insert(T x) {
-    for (int i = m - 1; i >= 0; --i) {
+    for (int i = bitlen - 1; i >= 0; --i) {
         if (x >> i & 1) {
             if (basis[i] == 0) {
                 basis[i] = x;
@@ -53,12 +53,14 @@ void insert(T x) {
             x ^= basis[i];
         }
     }
-    has_zero = x == 0;
+    if (x == 0) {
+        has_zero = true;
+    }
 }
 
 T max_xor() {
     T ans = 0;
-    for (int i = m - 1; i >= 0; --i) {
+    for (int i = bitlen - 1; i >= 0; --i) {
         ans = max(ans, ans ^ basis[i]);
     }
     return ans;
@@ -102,6 +104,7 @@ class LinearXorBasisGauss {
         basis.resize(len);
     }
 
+    // 第 k 小的异或和
     T get_kth_xor(uint64_t k) {
         k -= has_zero;
         if (k > 1 << basis.size()) {
@@ -115,24 +118,27 @@ class LinearXorBasisGauss {
     }
 };
 
-constexpr int MAXN = 100'001;
+constexpr int MAXB = 64;
 using T = long long;
-T basis[MAXN];
-int n;
+T basis[MAXB];
+int bitlen;
 bool has_zero;
 
-void build() {
-    int m = __lg(*max_element(basis, basis + n)) + 1, len = 0;
+void build(T *a, int n) {
+    for (int i = 0; i < n; ++i) {
+        basis[i] = a[i];
+    }
+    int m = __lg(*max_element(basis, basis + bitlen)) + 1, len = 0;
     for (int i = m - 1; i >= 0; --i) {
         // 找第 i 位上是 1 的数字
-        for (int j = len; j < n; ++j) {
+        for (int j = len; j < bitlen; ++j) {
             if (basis[j] >> i & 1) {
                 swap(basis[j], basis[len]);
                 break;
             }
             // 找到了！
             if (basis[len] >> i & 1) {
-                for (int j = 0; j < n; ++j) {
+                for (int j = 0; j < bitlen; ++j) {
                     if (j != len && basis[j] >> i & 1) {
                         basis[j] ^= basis[len];
                     }
@@ -141,7 +147,7 @@ void build() {
             }
         }
     }
-    has_zero = len != n;
+    has_zero = len != bitlen;
     // 把 0 放到最后
     for (int i = 0, j = 0; j < len; ++i) {
         while (basis[i] == 0) {
@@ -149,12 +155,13 @@ void build() {
         }
         basis[j++] = basis[i];
     }
-    n = len;
+    bitlen = len;
 }
 
+// 第 k 小的异或和
 T get_kth_xor(uint64_t k) {
     k -= has_zero;
-    if (k > 1 << n) {
+    if (k > 1 << bitlen) {
         return -1;
     }
     T ans = 0;

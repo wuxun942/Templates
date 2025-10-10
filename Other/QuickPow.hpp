@@ -27,7 +27,7 @@ long long qpow(long long x, long long n, int mod) {
 }
 
 // 矩阵乘法
-vector<vector<int>> multiply(vector<vector<int>>& mat1, vector<vector<int>>& mat2) {
+vector<vector<int>> multiply(vector<vector<int>> &mat1, vector<vector<int>> &mat2) {
     int m = mat1.size(), p = mat1[0].size(), n = mat2[0].size();
     if (mat2.size() != p) {
         throw runtime_error("Invalid Input");
@@ -49,8 +49,10 @@ vector<vector<int>> multiply(vector<vector<int>>& mat1, vector<vector<int>>& mat
 // 不取模
 constexpr int SIZE = 100;
 using matrix = array<array<int, SIZE>, SIZE>;
-matrix multiply(matrix& mat1, matrix& mat2) {
-    matrix res{};
+void multiply(matrix &mat1, matrix &mat2, matrix &res) {
+    for (auto &row : res) {
+        row.fill(0);
+    }
     for (int i = 0; i < SIZE; ++i) {
         for (int k = 0; k < SIZE; ++k) {
             if (mat1[i][k] == 0) {
@@ -61,17 +63,17 @@ matrix multiply(matrix& mat1, matrix& mat2) {
             }
         }
     }
-    return res;
 }
 
 matrix qpow(matrix mat, int n) {
-    matrix ans{};
+    matrix ans{}, tmp;
     for (int i = 0; i < SIZE; ++i) {
         ans[i][i] = 1;
     }
-    for (; n > 0; n >>= 1, mat = multiply(mat, mat)) {
+    for (; n > 0; n >>= 1, multiply(mat, mat, tmp), mat = tmp) {
         if (n & 1) {
-            ans = multiply(ans, mat);
+            multiply(ans, mat, tmp);
+            ans = tmp;
         }
     }
     return ans;
@@ -80,8 +82,7 @@ matrix qpow(matrix mat, int n) {
 // 取模
 constexpr int SIZE = 100;
 using matrix = array<array<int, SIZE>, SIZE>;
-matrix multiply(matrix& mat1, matrix& mat2, int mod) {
-    matrix res{};
+void multiply(matrix &mat1, matrix &mat2, int mod, matrix &res) {
     for (int i = 0; i < SIZE; ++i) {
         for (int k = 0; k < SIZE; ++k) {
             if (mat1[i][k] == 0) {
@@ -92,17 +93,17 @@ matrix multiply(matrix& mat1, matrix& mat2, int mod) {
             }
         }
     }
-    return res;
 }
 
 matrix qpow(matrix mat, int n, int mod) {
-    matrix ans{};
+    matrix ans{}, tmp;
     for (int i = 0; i < SIZE; ++i) {
         ans[i][i] = 1;
     }
-    for (; n > 0; n >>= 1, mat = multiply(mat, mat, mod)) {
+    for (; n > 0; n >>= 1, multiply(mat, mat, mod, tmp), mat = tmp) {
         if (n & 1) {
-            ans = multiply(ans, mat, mod);
+            multiply(ans, mat, mod, tmp);
+            ans = tmp;
         }
     }
     return ans;

@@ -1,15 +1,14 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-// 异或线性基，时间复杂度 O(n * logU)
+// 异或空间线性基，时间复杂度 O(n * logU)
 
 // 普通消元
 template<typename T>
-class LinearXorBasisNormal {
+struct XorLinearBasisNormal {
     vector<T> basis;
     bool has_zero = false;
-
-    LinearXorBasisNormal (int m) : basis(m) {}
+    XorLinearBasisNormal (int m) : basis(m) {}
 
     void insert(T x) {
         for (int i = m - 1; i >= 0; --i) {
@@ -43,19 +42,18 @@ void build(int m) {
     bitlen = m;
 }
 
-void insert(T x) {
+bool insert(T x) {
     for (int i = bitlen - 1; i >= 0; --i) {
         if (x >> i & 1) {
             if (basis[i] == 0) {
                 basis[i] = x;
-                break;
+                return true;
             }
             x ^= basis[i];
         }
     }
-    if (x == 0) {
-        has_zero = true;
-    }
+    has_zero = true;
+    return false;
 }
 
 T max_xor() {
@@ -68,11 +66,10 @@ T max_xor() {
 
 // 高斯消元
 template<typename T>
-class LinearXorBasisGauss {
+struct XorLinearBasisGauss {
     vector<T> basis;
     bool has_zero = false;
-
-    LinearXorBasisGauss (const vector<T> &a) {
+    XorLinearBasisGauss (const vector<T> &a) {
         basis = a;
         int bitlen = bit_width<uint64_t>(ranges::max(a)), n = a.size(), len = 0;
         for (int i = bitlen - 1; i >= 0; --i) {

@@ -91,14 +91,17 @@ struct XorLinearBasisGauss {
             }
         }
         has_zero = len != n;
-        // 把 0 放到最后
+        basis.resize(len);
+        // 把 0 放到最后 + 翻转
         for (int i = 0, j = 0; j < len; ++i) {
             while (basis[i] == 0) {
                 ++i;
             }
             basis[j++] = basis[i];
         }
-        basis.resize(len);
+        for (int i = 0, j = len - 1; i < j; ++i, --j) {
+            swap(basis[i], basis[j]);
+        }
     }
 
     // 第 k 小的异或和

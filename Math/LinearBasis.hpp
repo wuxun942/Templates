@@ -180,20 +180,20 @@ constexpr int MAXN = 100, MAXM = 100;
 constexpr double eps = 1e5;
 double mat[MAXN][MAXM];
 int basis[MAXN];
-int m, n, cnt; // 行数, 列数, 基数量
+int n, m, cnt; // 行数, 列数, 基数量
 
 bool insert(int i) {
-    for (int j = 0; j < n; ++j) {
+    for (int j = 0; j < m; ++j) {
         if (abs(mat[i][j]) >= eps) {
             // 这个位置还没有基
             if (basis[j] == 0) {
                 basis[j] = i;
                 return true;
             }
-        }
-        double r = mat[i][j] / mat[basis[j]][j];
-        for (int k = j; k < m; ++k) {
-            mat[i][k] -= r * mat[basis[j]][k];
+            double r = mat[i][j] / mat[basis[j]][j];
+            for (int k = j; k < m; ++k) {
+                mat[i][k] -= r * mat[basis[j]][k];
+            }
         }
     }
     return false;

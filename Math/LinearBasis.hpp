@@ -5,10 +5,10 @@ using namespace std;
 
 // 普通消元
 template<typename T>
-struct XorLinearBasisNormal {
+struct XorBasisNormal {
     vector<T> basis;
     bool has_zero = false;
-    XorLinearBasisNormal (int m) : basis(m) {}
+    XorBasisNormal (int m) : basis(m) {}
 
     void insert(T x) {
         for (int i = m - 1; i >= 0; --i) {
@@ -66,10 +66,10 @@ T max_xor() {
 
 // 高斯消元
 template<typename T>
-struct XorLinearBasisGauss {
+struct XorBasisGauss {
     vector<T> basis;
     bool has_zero = false;
-    XorLinearBasisGauss (const vector<T> &a) {
+    XorBasisGauss (const vector<T> &a) {
         basis = a;
         int bitlen = bit_width<uint64_t>(ranges::max(a)), n = a.size(), len = 0;
         for (int i = bitlen - 1; i >= 0; --i) {
@@ -173,4 +173,40 @@ T get_kth_xor(uint64_t k) {
         ans ^= basis[__builtin_ctz(k)];
     }
     return ans;
+}
+
+// 向量空间线性基：等效于加法方程组高斯消元
+constexpr int MAXN = 100, MAXM = 100;
+constexpr double eps = 1e5;
+double mat[MAXN][MAXM];
+int basis[MAXN];
+int m, n, cnt; // 行数, 列数, 基数量
+
+bool insert(int i) {
+    for (int j = 0; j < n; ++j) {
+        if (abs(mat[i][j]) >= eps) {
+            // 这个位置还没有基
+            if (basis[j] == 0) {
+                basis[j] = i;
+                return true;
+            }
+        }
+        double r = mat[i][j] / mat[basis[j]][j];
+        for (int k = j; k < m; ++k) {
+            mat[i][k] -= r * mat[basis[j]][k];
+        }
+    }
+    return false;
+}
+
+// 假设已经对 mat 赋值了
+void build() {
+    memset(basis, 0, sizeof(basis));
+    cnt = 0;
+    for (int i = 0; i < n; ++i) {
+        if (insert(i)) {
+            ++cnt;
+        }
+    }
+    // 最后得到 basis 数组，basis[j] 表示第一个非零数在第 j 列的基向量所在行
 }

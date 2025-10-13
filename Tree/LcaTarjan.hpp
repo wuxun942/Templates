@@ -20,7 +20,7 @@ public:
         g.resize(n);
         fa.resize(n);
         ranges::iota(fa, 0);
-        for (auto &e: edges) {
+        for (auto &e : edges) {
             g[e[0]].push_back(e[1]);
             g[e[1]].push_back(e[0]);
         }
@@ -37,14 +37,14 @@ public:
         vector ans(queries.size(), 0);
         auto dfs = [&](auto &&dfs, int x, int f) -> void {
             vis[x] = true;
-            for (int y: g[x]) {
+            for (int y : g[x]) {
                 if (y != f) {
                     dfs(dfs, y, x);
                     // 合并
                     fa[y] = x;
                 }
             }
-            for (auto &[y, idx]: groups[x]) {
+            for (auto &[y, idx] : groups[x]) {
                 // 访问过的点才能查询
                 if (vis[y]) {
                     ans[idx] = find(y);

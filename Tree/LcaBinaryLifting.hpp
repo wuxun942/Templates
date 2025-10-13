@@ -11,7 +11,7 @@ public:
     LcaBinaryLifting(const vector<vector<int>> &edges) {
         int n = edges.size() + 1;
         vector<vector<pair<int, int>>> g(n);
-        for (auto& e: edges) {
+        for (auto &e : edges) {
             g[e[0]].emplace_back(e[1], e[2]);
             g[e[1]].emplace_back(e[0], e[2]);
         }
@@ -21,7 +21,7 @@ public:
         dis.resize(n);
         auto dfs = [&](auto &&dfs, int x, int fa) -> void {
             pa[0][x] = fa;
-            for (auto &[y, w]: g[x]) {
+            for (auto &[y, w] : g[x]) {
                 if (y != fa) {
                     depth[y] = depth[x] + 1;
                     dis[y] = dis[x] + w;

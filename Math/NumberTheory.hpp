@@ -22,14 +22,14 @@ auto init = []() {
 // 欧拉筛预处理 LPF (最小质因子 / 最大质因子)
 constexpr int MX = 100'001;
 vector<int> primes;
-array<int, MX> lpf;
+int lpf[MX]{};
 auto init = []() {
     for (int i = 2; i < MX; i++) {
         if (lpf[i] == 0) {
             lpf[i] = i;
             primes.push_back(i);
         }
-        for (int p: primes) {
+        for (int p : primes) {
             if (i * p >= MX) {
                 break;
             }

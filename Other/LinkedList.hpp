@@ -1,15 +1,15 @@
 // 数组模拟链表，常用于链式前向星
 
 // 链式前向星建图，以下为 1-index
-constexpr int MAXN = 5001, MAXM = 500'001;
+constexpr int MAXN = 5001, MAXE = MAXN << 1;
 int head[MAXN]{};
-int nxt[MAXM];
-int to[MAXM];
-// int weight[MAXM];
-int cnt_e = 0;
-void add_e(int x, int y, int w = 0) {
-    nxt[++cnt_e] = head[x];
-    to[cnt_e] = y;
-    // weight[cnt_e] = w;
-    head[x] = cnt_e;
+int nxt[MAXE];
+int to[MAXE];
+// long long weight[MAXE];
+int cnt_edge = 0;
+void add_edge(int x, int y, long long w = 0) {
+    nxt[++cnt_edge] = head[x];
+    to[cnt_edge] = y;
+    // weight[cnt_edge] = w;
+    head[x] = cnt_edge;
 }

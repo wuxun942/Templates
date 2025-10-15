@@ -16,7 +16,7 @@ class LcaTarjan {
 
     // tarjan 辅助数组
     vector<vector<pair<int, int>>> groups; // 分组查询，内存紧张时可以改成链式前向星
-    vector<bool> vis;
+    vector<uint8_t> vis;
     vector<int> ans;
     void dfs(int x, int fa) {
         vis[x] = true;

@@ -10,7 +10,7 @@ constexpr int LEN = 9; // 数位长度
 constexpr int D = 10; // 进制
 vector<long long> pal;
 
-// x 为前一半（含中间），y 为未反转的后一半
+// first_half 为前一半（含中间），last_half 为未反转的后一半
 long long merge_number(long long first_half, long long last_half) {
     for (; last_half; last_half /= D) {
         first_half = first_half * D + last_half % D;

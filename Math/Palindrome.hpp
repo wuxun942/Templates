@@ -1,27 +1,41 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-// 预处理回文数，以 [1, 1e9] 范围为例
+/*
+给定数位长度，生成回文数
+以十进制为例，其他进制只需要修改数位范围和取模即可
+*/ 
 
-long long merge_num(long long x, long long y) {
-    for (; y; y /= 10) {
-        x = x * 10 + y % 10;
+constexpr int LEN = 9; // 数位长度
+constexpr int D = 10; // 进制
+vector<long long> pal;
+
+// x 为前一半（含中间），y 为未反转的后一半
+long long merge_number(long long first_half, long long last_half) {
+    for (; last_half; last_half /= D) {
+        first_half = first_half * D + last_half % D;
     }
-    return x;
+    return first_half;
 }
 
-vector<long long> pal;
 auto init = []() {
-    for (int mid = 0; mid < 10; ++mid) {
+    for (int mid = 0; mid < D; ++mid) {
         pal.push_back(mid);
     }
-    for (int i = 0, base = 1; i < 4; ++i, base *= 10) {
-        for (int x = base; x < base * 10; ++x) {
-            pal.push_back(merge_num(x, x));
-        }
-        for (int x = base; x < base * 10; ++x) {
-            for (int mid = 0; mid < 10; ++mid) {
-                pal.push_back(merge_num(10 * x + mid, x));
+    long long base = 1;
+    for (int i = 2; i <= LEN; ++i) {
+        if (i % 2) {
+            for (long long half = base; half < base * D; ++half) {
+                for (int mid = 0; mid < D; ++mid) {
+                    pal.push_back(merge_number(half * D + mid, half));
+                }
+            }
+        } else {
+            base *= D;
+            for (long long half = base; half < base * D; ++half) {
+                for (int mid = 0; mid < D; ++mid) {
+                    pal.push_back(merge_number(half, half));
+                }
             }
         }
     }

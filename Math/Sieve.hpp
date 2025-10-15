@@ -1,6 +1,16 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+/*
+质数筛 和 调和级数枚举
+
+质数筛的用法：
+1. 筛质数 / 预处理质数判断
+2. 求最小质因子
+
+调和级数枚举常用于 “倍数” 相关问题
+*/ 
+
 // 埃氏筛筛质数
 constexpr int MX = 100'001;
 bool is_prime[MX];
@@ -19,7 +29,7 @@ auto init = []() {
     return 0;
 }();
 
-// 欧拉筛预处理 LPF (最小质因子 / 最大质因子)
+// 欧拉筛预处理 LPF (最小质因子)
 constexpr int MX = 100'001;
 vector<int> primes;
 int lpf[MX]{};
@@ -36,7 +46,6 @@ auto init = []() {
             if (lpf[i * p] == 0) {
                 lpf[i * p] = p;
             }
-            // lpf[i * p] = p;
             if (i % p == 0) {
                 break;
             }
@@ -45,7 +54,7 @@ auto init = []() {
     return 0;
 }();
 
-// 预处理因数
+// 预处理因数（和质数筛无关，属于调和级数枚举）
 constexpr int MX = 100'001;
 vector<int> divisors[MX];
 auto init = []() {

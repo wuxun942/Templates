@@ -7,7 +7,7 @@ using namespace std;
 2. 计算 ax + by = gcd(a,b) 的一组解
 */
 template<typename T>
-tuple<T, T, T> exgcd(T a, T b) {
+array<T, 3> exgcd(T a, T b) {
     if (b == 0) {
         return {a, 1, 0};
     }

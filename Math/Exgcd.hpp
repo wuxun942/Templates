@@ -19,5 +19,8 @@ tuple<T, T, T> exgcd(T a, T b) {
 template<typename T>
 T get_inv(T x, T mod) {
     auto [g, a, b] = exgcd(x, mod);
+    if (g != 1) {
+        throw runtime_error("Invalid Input");
+    }
     return (a % mod + mod) % mod;
 }

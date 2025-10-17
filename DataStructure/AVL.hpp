@@ -15,7 +15,7 @@ int cnt = 0;
 int head = 0;
 
 // 节点的 key
-int key[MX];
+long long key[MX];
 
 // 子树高度
 int height[MX]{};
@@ -90,7 +90,7 @@ int maintain(int i) {
 }
 
 // 增加节点：找位置 + 保持平衡性
-int add(int i, int x) {
+int add(int i, long long x) {
     if (i == 0) {
         key[++cnt] = x;
         key_count[cnt] = sz[cnt] = height[cnt] = 1;
@@ -121,7 +121,7 @@ void add(int x) {
 */
 
 // 查找排名：有几个数比 x 小
-int get_rank(int i, int x) {
+int get_rank(int i, long long x) {
     if (i == 0) {
         return 0;
     }
@@ -133,7 +133,7 @@ int get_rank(int i, int x) {
     return sz[left_child[i]] + key_count[i] + get_rank(right_child[i], x);
 }
 
-int get_rank(int x) {
+int get_rank(long long x) {
     return get_rank(head, x);
 }
 
@@ -148,7 +148,7 @@ int remove_most_left(int i, int most_left) {
 }
 
 // 删除节点：如果有多个，只删除一个
-int remove(int i, int x) {
+int remove(int i, long long x) {
     if (key[i] < x) {
         right_child[i] = remove(right_child[i], x);
     } else if (key[i] > x) {
@@ -181,14 +181,14 @@ int remove(int i, int x) {
     return maintain(i);
 }
 
-void remove(int x) {
+void remove(long long x) {
     if (get_rank(x) != get_rank(x + 1)) {
         head = remove(head, x);
     }
 }
 
 // 查询第 k 大的数字（超过 size 则抛出异常）
-int index(int i, int k) {
+long long index(int i, int k) {
     int lsz = sz[left_child[i]], c = key_count[i];
     if (lsz >= k) {
         return index(left_child[i], k);
@@ -199,7 +199,7 @@ int index(int i, int k) {
     return key[i];
 }
 
-int index(int k) {
+int index(long long k) {
     if (k > sz[head] || k <= 0) {
         throw overflow_error("AVL Overflow");
     }
@@ -207,41 +207,41 @@ int index(int k) {
 }
 
 // 查找 x 的前驱（小于 x 中最大的数），相当于 prev(lower_bound(x))
-int prefix(int i, int x) {
+long long prefix(int i, long long x) {
     // 找不到
     if (i == 0) {
-        return INT_MIN;
+        return LLONG_MIN;
     }
     if (key[i] >= x) {
         return prefix(left_child[i], x);
     }
-    int res = prefix(right_child[i], x);
-    return res != INT_MIN ? res : key[i];
+    long long res = prefix(right_child[i], x);
+    return res != LLONG_MIN ? res : key[i];
 }
 
-int prefix(int x) {
+long long prefix(long long x) {
     return prefix(head, x);
 }
 
 // 查找 x 的后继（大于 x 中最小的数），相当于 upper_bound(x)
-int suffix(int i, int x) {
+long long suffix(int i, long long x) {
     // 找不到
     if (i == 0) {
-        return INT_MAX;
+        return LLONG_MAX;
     }
     if (key[i] <= x) {
         return suffix(right_child[i], x);
     }
     int res = suffix(left_child[i], x);
-    return res != INT_MAX ? res : key[i];
+    return res != LLONG_MAX ? res : key[i];
 }
 
-int suffix(int x) {
+long long suffix(long long x) {
     return suffix(head, x);
 }
 
 // 封装类 + vector 实现
-template<typename T>
+template<typename T, size_t MX>
 class AVL {
     // 空间使用计数
     int cnt = 0;
@@ -416,7 +416,7 @@ class AVL {
     }
 
     // 查找 x 的前驱（小于 x 中最大的数），相当于 prev(lower_bound(x))
-    T prefix(int i, int x) {
+    T prefix(int i, T x) {
         // 没有前驱
         if (i == 0) {
             return INT_MIN;
@@ -429,7 +429,7 @@ class AVL {
     }
 
     // 查找 x 的后继（大于 x 中最小的数），相当于 upper_bound(x)
-    T suffix(int i, int x) {
+    T suffix(int i, T x) {
         // 没有后继
         if (i == 0) {
             return INT_MAX;
@@ -470,11 +470,11 @@ public:
         return index(head, k);
     }
 
-    T prefix(int x) {
+    T prefix(T x) {
         return prefix(head, x);
     }
 
-    T suffix(int x) {
+    T suffix(T x) {
         return suffix(head, x);
     }
 };

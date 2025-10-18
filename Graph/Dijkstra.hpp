@@ -4,7 +4,7 @@ using namespace std;
 // 堆优化 Dijkstra，无向图 + 从 0 开始编号
 vector<long long> dijkstra(int n, const vector<vector<int>> &edges, int source) {
     vector<vector<pair<int, int>>> g(n);
-    for (auto &e: edges) {
+    for (auto &e : edges) {
         g[e[0]].emplace_back(e[1], e[2]);
         g[e[1]].emplace_back(e[0], e[2]); // 有向图得把本行删掉
     }

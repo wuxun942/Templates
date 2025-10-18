@@ -1,6 +1,8 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+// 预处理阶乘 / 组合数：注意区分带模和不带模
+
 // 阶乘逆元 + 带模组合数
 constexpr int MOD = 1'000'000'007;
 long long qpow(long long x, long long n, int mod) {
@@ -34,7 +36,7 @@ int comb(int n, int m, int mod) {
 
 // 不带模组合数
 
-// 无预处理
+// 不预处理
 long long comb(int n, int m) {
     if (n < m) {
         return 0;
@@ -47,7 +49,7 @@ long long comb(int n, int m) {
     return res;
 }
 
-// 有预处理
+// 预处理
 constexpr int MX = 101;
 long long c[MX][MX];
 auto init = []() {

@@ -13,9 +13,9 @@ class ST {
     }
 public:
     ST(const vector<int> &a) {
-        int n = a.size(), m = bit_width((unsigned) n);
+        int n = a.size(), m = bit_width<uint32_t>(n);
         st.resize(n, vector(m, 0)); // 看题目修改
-        for (int i = 0; i < n - 1; ++i) {
+        for (int i = 0; i < n; ++i) {
             st[i][0] = a[i];
         }
         for (int j = 1; j < m; ++j) {
@@ -30,7 +30,7 @@ public:
         if (l > r) {
             return 0;
         }
-        int k = bit_width((unsigned) r - l + 1) - 1;
+        int k = bit_width<uint32_t>(r - l + 1) - 1;
         return merge_val(st[l][k], st[r - (1 << k) + 1][k]);
     }
 };

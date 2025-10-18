@@ -25,6 +25,12 @@ long long get_inv(long long a, long long mod) {
     return (x % mod + mod) % mod;
 }
 
+long long multiply(long long a, long long b, long long mod) {
+    a = (a % mod + mod) % mod;
+    b = (b % mod + mod) % mod;
+    return (__int128_t) a * b % mod;
+}
+
 /*
 中国剩余定理
 对于方程组
@@ -53,7 +59,7 @@ long long crt(int n, long long *m, long long *r) {
     for (int i = 0; i < n; ++i) {
         long long a = lcm / m[i];
         long long x = get_inv(a, m[i]); // a 的逆元
-        long long c = (__int128_t) a * x % lcm * r[i] % lcm;
+        long long c = multiply(r[i], multiply(a, x, lcm), lcm);
         ans = (ans + c) % lcm;
     }
     return ans;
@@ -82,12 +88,6 @@ ans = m_{k+1} * y + r_{k+1}
 constexpr int MAXN = 100'001;
 int n;
 long long m[MAXN], r[MAXN];
-long long multiply(long long a, long long b, long long mod) {
-    a = (a % mod + mod) % mod;
-    b = (b % mod + mod) % mod;
-    return (__int128_t) a * b % mod;
-}
-
 long long excrt(int n, long long *m, long long *r) {
     long long lcm = 1, tail = 0, x, y;
     for (int i = 0; i < n; ++i) {

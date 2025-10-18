@@ -107,7 +107,7 @@ long long excrt(int n, long long *m, long long *r) {
         对于 lcm * x + b * y = c，它的对应特解为 x * (c / d)
         将其对 b / d 取模，得到最小非负特解
         */
-        long long x0 = multiply(x, c / d, b / d); // 获取最小非负特解
+        long long x0 = multiply(x, c / d, b / d);
         /*
         ans = lcm * x + tail = lcm * (x0 + (b / d) * n) + tail = lcm * (b / d) * n + lcm * x0 + tail
         new_lcm = lcm * (b / d)

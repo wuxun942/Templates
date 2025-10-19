@@ -50,7 +50,7 @@ x % mn = rn
 constexpr int MAXN = 100'001;
 int n;
 long long m[MAXN], r[MAXN];
-long long crt(int n, long long *m, long long *r) {
+long long crt() {
     long long lcm = 1;
     for (int i = 0; i < n; ++i) {
         lcm *= m[i];
@@ -88,7 +88,7 @@ ans = m_{k+1} * y + r_{k+1}
 constexpr int MAXN = 100'001;
 int n;
 long long m[MAXN], r[MAXN];
-long long excrt(int n, long long *m, long long *r) {
+long long excrt() {
     long long lcm = 1, tail = 0, x, y;
     for (int i = 0; i < n; ++i) {
         /*

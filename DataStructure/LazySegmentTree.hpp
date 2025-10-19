@@ -93,9 +93,9 @@ class LazySegmentTree {
         return merge_val(l_res, r_res);
     }
 public:
-    LazySegmentTree(int n, T init_val): LazySegmentTree(vector<T>(n, init_val)) {}
+    LazySegmentTree(int n, T init_val) : LazySegmentTree(vector<T>(n, init_val)) {}
 
-    LazySegmentTree(const vector<T> &a): n(a.size()), tree(2 << bit_width(a.size() - 1)) {
+    LazySegmentTree(const vector<T> &a) : n(a.size()), tree(2 << bit_width(a.size() - 1)) {
         build(a, 1, 0, n - 1);
     }
 

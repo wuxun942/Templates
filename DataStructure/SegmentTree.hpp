@@ -59,9 +59,9 @@ class SegmentTree {
     }
 
 public:
-    SegmentTree(int n, T init_val): SegmentTree(vector<T>(n, init_val)) {}
+    SegmentTree(int n, T init_val) : SegmentTree(vector<T>(n, init_val)) {}
 
-    SegmentTree(const vector<T> &a): n(a.size()), tree(2 << bit_width(a.size() - 1)) {
+    SegmentTree(const vector<T> &a) : n(a.size()), tree(2 << bit_width(a.size() - 1)) {
         build(a, 1, 0, n - 1);
     }
 

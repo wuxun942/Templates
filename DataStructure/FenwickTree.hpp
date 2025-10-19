@@ -10,9 +10,9 @@ template<typename T>
 class FenwickTree {
     vector<T> tree;
 public:
-    FenwickTree(int n): tree(n + 1) {}
+    FenwickTree(int n) : tree(n + 1) {}
 
-    FenwickTree(const vector<T> &a): tree(a.size() + 1) {
+    FenwickTree(const vector<T> &a) : tree(a.size() + 1) {
         int n = a.size();
         for (int i = 1; i <= n; i++) {
             tree[i] += a[i - 1];

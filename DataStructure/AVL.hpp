@@ -15,7 +15,7 @@ int cnt = 0;
 int head = 0;
 
 // 节点的 key
-long long key[MX];
+int64_t key[MX];
 
 // 子树高度
 int height[MX]{};
@@ -90,7 +90,7 @@ int maintain(int i) {
 }
 
 // 增加节点：找位置 + 保持平衡性
-int add(int i, long long x) {
+int insert(int i, int64_t x) {
     if (i == 0) {
         key[++cnt] = x;
         key_count[cnt] = sz[cnt] = height[cnt] = 1;
@@ -99,16 +99,16 @@ int add(int i, long long x) {
     if (key[i] == x) {
         ++key_count[i];
     } else if (key[i] > x) {
-        left_child[i] = add(left_child[i], x);
+        left_child[i] = insert(left_child[i], x);
     } else {
-        right_child[i] = add(right_child[i], x);
+        right_child[i] = insert(right_child[i], x);
     }
     up(i);
     return maintain(i);
 }
 
-void add(int x) {
-    head = add(head, x);
+void insert(int x) {
+    head = insert(head, x);
 }
 
 /*
@@ -121,7 +121,7 @@ void add(int x) {
 */
 
 // 查找排名：有几个数比 x 小
-int get_rank(int i, long long x) {
+int get_rank(int i, int64_t x) {
     if (i == 0) {
         return 0;
     }
@@ -133,7 +133,7 @@ int get_rank(int i, long long x) {
     return sz[left_child[i]] + key_count[i] + get_rank(right_child[i], x);
 }
 
-int get_rank(long long x) {
+int get_rank(int64_t x) {
     return get_rank(head, x);
 }
 
@@ -148,7 +148,7 @@ int remove_most_left(int i, int most_left) {
 }
 
 // 删除节点：如果有多个，只删除一个
-int remove(int i, long long x) {
+int remove(int i, int64_t x) {
     if (key[i] < x) {
         right_child[i] = remove(right_child[i], x);
     } else if (key[i] > x) {
@@ -181,14 +181,14 @@ int remove(int i, long long x) {
     return maintain(i);
 }
 
-void remove(long long x) {
+void remove(int64_t x) {
     if (get_rank(x) != get_rank(x + 1)) {
         head = remove(head, x);
     }
 }
 
 // 查询第 k 大的数字（超过 size 则抛出异常）
-long long index(int i, int k) {
+int64_t index(int i, int k) {
     int lsz = sz[left_child[i]], c = key_count[i];
     if (lsz >= k) {
         return index(left_child[i], k);
@@ -199,7 +199,7 @@ long long index(int i, int k) {
     return key[i];
 }
 
-int index(long long k) {
+int index(int64_t k) {
     if (k > sz[head] || k <= 0) {
         throw overflow_error("AVL Overflow");
     }
@@ -207,7 +207,7 @@ int index(long long k) {
 }
 
 // 查找 x 的前驱（小于 x 中最大的数），相当于 prev(lower_bound(x))
-long long prefix(int i, long long x) {
+int64_t prefix(int i, int64_t x) {
     // 找不到
     if (i == 0) {
         return LLONG_MIN;
@@ -215,16 +215,16 @@ long long prefix(int i, long long x) {
     if (key[i] >= x) {
         return prefix(left_child[i], x);
     }
-    long long res = prefix(right_child[i], x);
+    int64_t res = prefix(right_child[i], x);
     return res != LLONG_MIN ? res : key[i];
 }
 
-long long prefix(long long x) {
+int64_t prefix(int64_t x) {
     return prefix(head, x);
 }
 
 // 查找 x 的后继（大于 x 中最小的数），相当于 upper_bound(x)
-long long suffix(int i, long long x) {
+int64_t suffix(int i, int64_t x) {
     // 找不到
     if (i == 0) {
         return LLONG_MAX;
@@ -236,7 +236,7 @@ long long suffix(int i, long long x) {
     return res != LLONG_MAX ? res : key[i];
 }
 
-long long suffix(long long x) {
+int64_t suffix(int64_t x) {
     return suffix(head, x);
 }
 
@@ -317,7 +317,7 @@ class AVL {
     }
 
     // 增加节点：找位置 + 保持平衡性
-    int add(int i, T x) {
+    int insert(int i, T x) {
         if (i == 0) {
             key[++cnt] = x;
             key_count[cnt] = sz[cnt] = height[cnt] = 1;
@@ -326,9 +326,9 @@ class AVL {
         if (key[i] == x) {
             ++key_count[i];
         } else if (key[i] > x) {
-            left_child[i] = add(left_child[i], x);
+            left_child[i] = insert(left_child[i], x);
         } else {
-            right_child[i] = add(right_child[i], x);
+            right_child[i] = insert(right_child[i], x);
         }
         up(i);
         return maintain(i);
@@ -452,8 +452,8 @@ public:
         sz.resize(n + 1);
     }
 
-    void add(T x) {
-        head = add(head, x);
+    void insert(T x) {
+        head = insert(head, x);
     }
 
     int get_rank(T x) {

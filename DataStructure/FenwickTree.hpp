@@ -12,10 +12,10 @@ class FenwickTree {
 public:
     FenwickTree(int n) : tree(n + 1) {}
 
-    FenwickTree(const vector<T> &a) : tree(a.size() + 1) {
-        int n = a.size();
+    FenwickTree(const vector<T> &arr) : tree(arr.size() + 1) {
+        int n = arr.size();
         for (int i = 1; i <= n; i++) {
-            tree[i] += a[i - 1];
+            tree[i] += arr[i - 1];
             if (int nxt = i + (i & -i); nxt <= n) {
                 tree[nxt] += tree[i];
             }
@@ -50,10 +50,10 @@ using T = int;
 T tree[MAXN];
 int tree_size;
 
-void build(const T *a, int n) {
+void build(const T *arr, int n) {
     tree_size = n + 1;
     for (int i = 1; i < tree_size; i++) {
-        tree[i] += a[i - 1];
+        tree[i] += arr[i - 1];
         if (int nxt = i + (i & -i); nxt < tree_size) {
             tree[nxt] += tree[i];
         }
@@ -95,10 +95,10 @@ class FenwickTree {
     vector<T> info1, info2;
 
     // 传统初始化方法
-    void build(vector<T> &tree, const vector<T> &a) {
-        int n = a.size();
+    void build(vector<T> &tree, const vector<T> &arr) {
+        int n = arr.size();
         for (int i = 1; i <= n; i++) {
-            tree[i] += a[i - 1];
+            tree[i] += arr[i - 1];
             if (int nxt = i + (i & -i); nxt <= n) {
                 tree[nxt] += tree[i];
             }
@@ -124,13 +124,13 @@ class FenwickTree {
 public:
     FenwickTree(int n): info1(n + 1), info2(n + 1) {}
 
-    FenwickTree(const vector<T> &a): FenwickTree(a.size())  {
-        int n = a.size();
+    FenwickTree(const vector<T> &arr): FenwickTree(arr.size())  {
+        int n = arr.size();
         vector<T> diff1(n), diff2(n);
-        diff1[0] = a[0];
+        diff1[0] = arr[0];
         diff2[0] = 0;
         for (int i = 1; i < n; ++i) {
-            diff1[i] = a[i] - a[i - 1];
+            diff1[i] = arr[i] - arr[i - 1];
             diff2[i] = i * diff1[i];
         }
         build(info1, diff1);
@@ -159,9 +159,9 @@ T diff1[MAXN], diff2[MAXN];
 int tree_size;
 
 // 传统初始化方法
-void build(T *tree, const T *a) {
+void build(T *tree, const T *arr) {
     for (int i = 1; i < tree_size; i++) {
-        tree[i] += a[i - 1];
+        tree[i] += arr[i - 1];
         if (int nxt = i + (i & -i); nxt < tree_size) {
             tree[nxt] += tree[i];
         }
@@ -193,11 +193,11 @@ void build(int n) {
     fill(info2, info2 + tree_size, 0);
 }
 
-void build(const T *a, int n) {
-    diff1[0] = a[0];
+void build(const T *arr, int n) {
+    diff1[0] = arr[0];
     diff2[0] = 0;
     for (int i = 1; i < n; ++i) {
-        diff1[i] = a[i] - a[i - 1];
+        diff1[i] = arr[i] - arr[i - 1];
         diff2[i] = i * diff1[i];
     }
     tree_size = n + 1;

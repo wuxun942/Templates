@@ -27,10 +27,10 @@ using namespace std;
 //     }
 // }
 
-// void heapify(int sz, const int64_t *a) {
+// void heapify(int sz, const int64_t *arr) {
 //     n = sz;
 //     for (int i = 0; i < n; ++i) {
-//         h[i + 1] = a[i];
+//         h[i + 1] = arr[i];
 //     }
 //     for (int i = n; i; --i) {
 //         down(i);

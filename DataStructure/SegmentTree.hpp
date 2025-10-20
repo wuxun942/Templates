@@ -17,14 +17,14 @@ class SegmentTree {
         tree[o] = merge_val(tree[o * 2], tree[o * 2 + 1]);
     }
 
-    void build(const vector<T> &a, int o, int l, int r) {
+    void build(const vector<T> &arr, int o, int l, int r) {
         if (l == r) {
-            tree[o] = a[l];
+            tree[o] = arr[l];
             return;
         }
         int m = (l + r) / 2;
-        build(a, o * 2, l, m);
-        build(a, o * 2 + 1, m + 1, r);
+        build(arr, o * 2, l, m);
+        build(arr, o * 2 + 1, m + 1, r);
         maintain(o);
     }
 
@@ -61,8 +61,8 @@ class SegmentTree {
 public:
     SegmentTree(int n, T init_val) : SegmentTree(vector<T>(n, init_val)) {}
 
-    SegmentTree(const vector<T> &a) : n(a.size()), tree(2 << bit_width(a.size() - 1)) {
-        build(a, 1, 0, n - 1);
+    SegmentTree(const vector<T> &arr) : n(arr.size()), tree(2 << bit_width(arr.size() - 1)) {
+        build(arr, 1, 0, n - 1);
     }
 
     void update(int i, T val) {
@@ -82,7 +82,7 @@ public:
 constexpr int MAXN = 400'001;
 using T = int;
 int n;
-T a[MAXN];
+T arr[MAXN];
 T tree[MAXN << 2];
 
 T merge_val(T a, T b) {
@@ -93,14 +93,14 @@ void maintain(int o) {
     tree[o] = merge_val(tree[o * 2], tree[o * 2 + 1]);
 }
 
-void build(const T *a, int o, int l, int r) {
+void build(const T *arr, int o, int l, int r) {
     if (l == r) {
-        tree[o] = a[l];
+        tree[o] = arr[l];
         return;
     }
     int m = (l + r) / 2;
-    build(a, o * 2, l, m);
-    build(a, o * 2 + 1, m + 1, r);
+    build(arr, o * 2, l, m);
+    build(arr, o * 2 + 1, m + 1, r);
     maintain(o);
 }
 
@@ -132,9 +132,9 @@ T query(int o, int l, int r, int ql, int qr) {
     return merge_val(query(o * 2, l, m, ql, qr), query(o * 2 + 1, m + 1, r, ql, qr));
 }
 
-void build(const T *a, int a_size) {
+void build(const T *arr, int a_size) {
     n = a_size;
-    build(a, 1, 1, n);
+    build(arr, 1, 1, n);
 }
 
 void build(int sz, T init_val) {

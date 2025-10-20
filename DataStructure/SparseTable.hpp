@@ -12,11 +12,11 @@ class ST {
         return max(x, y); // 看题目修改
     }
 public:
-    ST(const vector<int> &a) {
+    ST(const vector<int> &arr) {
         int n = a.size(), m = bit_width<uint32_t>(n);
         st.resize(n, vector(m, 0)); // 看题目修改
         for (int i = 0; i < n; ++i) {
-            st[i][0] = a[i];
+            st[i][0] = arr[i];
         }
         for (int j = 1; j < m; ++j) {
             for (int i = 0; i + (1 << j) <= n; ++i) { // 区间右端点不越界
@@ -40,7 +40,7 @@ constexpr int MAXN = 100'000;
 constexpr int MAXM = 17;
 using T = int;
 int n, m;
-T a[MAXN];
+T arr[MAXN];
 T st[MAXN][MAXM];
 
 void init() {
@@ -59,7 +59,7 @@ T merge_val(T x, T y) {
 void build() {
     init();
     for (int i = 0; i < n - 1; ++i) {
-        st[i][0] = a[i];
+        st[i][0] = arr[i];
     }
     for (int j = 1; j < m; ++j) {
         for (int i = 0; i + (1 << j) <= n; ++i) { // 区间右端点不越界

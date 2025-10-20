@@ -47,16 +47,16 @@ class LazySegmentTree {
         tree[o].val = merge_val(tree[o * 2].val, tree[o * 2 + 1].val);
     }
 
-    void build(const vector<T> &a, int o, int l, int r) {
+    void build(const vector<T> &arr, int o, int l, int r) {
         Node &cur = tree[o];
         cur.todo = TODO_INIT;
         if (l == r) {
-            cur.val = a[l];
+            cur.val = arr[l];
             return;
         }
         int m = (l + r) / 2;
-        build(a, o * 2, l, m);
-        build(a, o * 2 + 1, m + 1, r);
+        build(arr, o * 2, l, m);
+        build(arr, o * 2 + 1, m + 1, r);
         maintain(o);
     }
 
@@ -95,8 +95,8 @@ class LazySegmentTree {
 public:
     LazySegmentTree(int n, T init_val) : LazySegmentTree(vector<T>(n, init_val)) {}
 
-    LazySegmentTree(const vector<T> &a) : n(a.size()), tree(2 << bit_width(a.size() - 1)) {
-        build(a, 1, 0, n - 1);
+    LazySegmentTree(const vector<T> &arr) : n(arr.size()), tree(2 << bit_width(arr.size() - 1)) {
+        build(arr, 1, 0, n - 1);
     }
 
     void update(int ql, int qr, F f) {
@@ -116,7 +116,7 @@ constexpr int MAXN = 100'001;
 int n;
 using T = int;
 using F = int;
-T a[MAXN];
+T arr[MAXN];
 struct Node {
     T val;
     F todo;
@@ -155,16 +155,16 @@ void maintain(int o) {
     tree[o].val = merge_val(tree[o * 2].val, tree[o * 2 + 1].val);
 }
 
-void build(const T *a, int o, int l, int r) {
+void build(const T *arr, int o, int l, int r) {
     Node &cur = tree[o];
     cur.todo = TODO_INIT;
     if (l == r) {
-        cur.val = a[l];
+        cur.val = arr[l];
         return;
     }
     int m = (l + r) / 2;
-    build(a, o * 2, l, m);
-    build(a, o * 2 + 1, m + 1, r);
+    build(arr, o * 2, l, m);
+    build(arr, o * 2 + 1, m + 1, r);
     maintain(o);
 }
 
@@ -199,15 +199,15 @@ T query(int o, int l, int r, int ql, int qr) {
     return merge_val(query(o * 2, l, m, ql, qr), query(o * 2 + 1, m + 1, r, ql, qr));
 }
 
-void build(const T *a, int a_size) {
+void build(const T *arr, int a_size) {
     n = a_size;
-    build(a, 1, 1, n);
+    build(arr, 1, 1, n);
 }
 
 void build(int sz, T init_val) {
     n = sz;
-    fill(a, a + n + 1, init_val);
-    build(a, 1, 1, n);
+    fill(arr, arr + n + 1, init_val);
+    build(arr, 1, 1, n);
 }
 
 void update(int ql, int qr, F f) {

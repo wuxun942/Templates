@@ -38,13 +38,13 @@ class LazySegmentTree {
             return;
         }
         int m = (l + r) / 2;
-        apply(o * 2, l, m, cur.todo);
-        apply(o * 2 + 1, m + 1, r, cur.todo);
+        apply(o << 1, l, m, cur.todo);
+        apply(o << 1 | 1, m + 1, r, cur.todo);
         cur.todo = TODO_INIT;
     }
 
     void maintain(int o) {
-        tree[o].val = merge_val(tree[o * 2].val, tree[o * 2 + 1].val);
+        tree[o].val = merge_val(tree[o << 1].val, tree[o << 1 | 1].val);
     }
 
     void build(const vector<T> &arr, int o, int l, int r) {
@@ -55,8 +55,8 @@ class LazySegmentTree {
             return;
         }
         int m = (l + r) / 2;
-        build(arr, o * 2, l, m);
-        build(arr, o * 2 + 1, m + 1, r);
+        build(arr, o << 1, l, m);
+        build(arr, o << 1 | 1, m + 1, r);
         maintain(o);
     }
 
@@ -68,10 +68,10 @@ class LazySegmentTree {
         spread(o, l, r);
         int m = (l + r) / 2;
         if (ql <= m) {
-            update(o * 2, l, m, ql, qr, f);
+            update(o << 1, l, m, ql, qr, f);
         }
         if (qr > m) {
-            update(o * 2 + 1, m + 1, r, ql, qr, f);
+            update(o << 1 | 1, m + 1, r, ql, qr, f);
         }
         maintain(o);
     }
@@ -83,13 +83,13 @@ class LazySegmentTree {
         spread(o, l, r);
         int m = (l + r) / 2;
         if (qr <= m) {
-            return query(o * 2, l, m, ql, qr);
+            return query(o << 1, l, m, ql, qr);
         }
         if (ql > m) {
-            return query(o * 2 + 1, m + 1, r, ql, qr);
+            return query(o << 1 | 1, m + 1, r, ql, qr);
         }
-        T l_res = query(o * 2, l, m, ql, qr);
-        T r_res = query(o * 2 + 1, m + 1, r, ql, qr);
+        T l_res = query(o << 1, l, m, ql, qr);
+        T r_res = query(o << 1 | 1, m + 1, r, ql, qr);
         return merge_val(l_res, r_res);
     }
 public:
@@ -146,13 +146,13 @@ void spread(int o, int l, int r) {
         return;
     }
     int m = (l + r) / 2;
-    apply(o * 2, l, m, cur.todo);
-    apply(o * 2 + 1, m + 1, r, cur.todo);
+    apply(o << 1, l, m, cur.todo);
+    apply(o << 1 | 1, m + 1, r, cur.todo);
     cur.todo = TODO_INIT;
 }
 
 void maintain(int o) {
-    tree[o].val = merge_val(tree[o * 2].val, tree[o * 2 + 1].val);
+    tree[o].val = merge_val(tree[o << 1].val, tree[o << 1 | 1].val);
 }
 
 void build(const T *arr, int o, int l, int r) {
@@ -163,8 +163,8 @@ void build(const T *arr, int o, int l, int r) {
         return;
     }
     int m = (l + r) / 2;
-    build(arr, o * 2, l, m);
-    build(arr, o * 2 + 1, m + 1, r);
+    build(arr, o << 1, l, m);
+    build(arr, o << 1 | 1, m + 1, r);
     maintain(o);
 }
 
@@ -176,10 +176,10 @@ void update(int o, int l, int r, int ql, int qr, F f) {
     spread(o, l, r);
     int m = (l + r) / 2;
     if (ql <= m) {
-        update(o * 2, l, m, ql, qr, f);
+        update(o << 1, l, m, ql, qr, f);
     }
     if (qr > m) {
-        update(o * 2 + 1, m + 1, r, ql, qr, f);
+        update(o << 1 | 1, m + 1, r, ql, qr, f);
     }
     maintain(o);
 }
@@ -191,12 +191,12 @@ T query(int o, int l, int r, int ql, int qr) {
     spread(o, l, r);
     int m = (l + r) / 2;
     if (qr <= m) {
-        return query(o * 2, l, m, ql, qr);
+        return query(o << 1, l, m, ql, qr);
     }
     if (ql > m) {
-        return query(o * 2 + 1, m + 1, r, ql, qr);
+        return query(o << 1 | 1, m + 1, r, ql, qr);
     }
-    return merge_val(query(o * 2, l, m, ql, qr), query(o * 2 + 1, m + 1, r, ql, qr));
+    return merge_val(query(o << 1, l, m, ql, qr), query(o << 1 | 1, m + 1, r, ql, qr));
 }
 
 void build(const T *arr, int a_size) {

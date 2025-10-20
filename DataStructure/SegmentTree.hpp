@@ -14,7 +14,7 @@ class SegmentTree {
     }
 
     void maintain(int o) {
-        tree[o] = merge_val(tree[o * 2], tree[o * 2 + 1]);
+        tree[o] = merge_val(tree[o << 1], tree[o << 1 | 1]);
     }
 
     void build(const vector<T> &arr, int o, int l, int r) {
@@ -23,8 +23,8 @@ class SegmentTree {
             return;
         }
         int m = (l + r) / 2;
-        build(arr, o * 2, l, m);
-        build(arr, o * 2 + 1, m + 1, r);
+        build(arr, o << 1, l, m);
+        build(arr, o << 1 | 1, m + 1, r);
         maintain(o);
     }
 
@@ -35,9 +35,9 @@ class SegmentTree {
         }
         int m = (l + r) / 2;
         if (i <= m) {
-            update(o * 2, l, m, i, val);
+            update(o << 1, l, m, i, val);
         } else {
-            update(o * 2 + 1, m + 1, r, i, val);
+            update(o << 1 | 1, m + 1, r, i, val);
         }
         maintain(o);
     }
@@ -48,13 +48,13 @@ class SegmentTree {
         }
         int m = (l + r) / 2;
         if (qr <= m) {
-            return query(o * 2, l, m, ql, qr);
+            return query(o << 1, l, m, ql, qr);
         }
         if (ql > m) {
-            return query(o * 2 + 1, m + 1, r, ql, qr);
+            return query(o << 1 | 1, m + 1, r, ql, qr);
         }
-        T l_res = query(o * 2, l, m, ql, qr);
-        T r_res = query(o * 2 + 1, m + 1, r, ql, qr);
+        T l_res = query(o << 1, l, m, ql, qr);
+        T r_res = query(o << 1 | 1, m + 1, r, ql, qr);
         return merge_val(l_res, r_res);
     }
 
@@ -90,7 +90,7 @@ T merge_val(T a, T b) {
 }
 
 void maintain(int o) {
-    tree[o] = merge_val(tree[o * 2], tree[o * 2 + 1]);
+    tree[o] = merge_val(tree[o << 1], tree[o << 1 | 1]);
 }
 
 void build(const T *arr, int o, int l, int r) {
@@ -99,8 +99,8 @@ void build(const T *arr, int o, int l, int r) {
         return;
     }
     int m = (l + r) / 2;
-    build(arr, o * 2, l, m);
-    build(arr, o * 2 + 1, m + 1, r);
+    build(arr, o << 1, l, m);
+    build(arr, o << 1 | 1, m + 1, r);
     maintain(o);
 }
 
@@ -111,9 +111,9 @@ void update(int o, int l, int r, int i, T val) {
     }
     int m = (l + r) / 2;
     if (i <= m) {
-        update(o * 2, l, m, i, val);
+        update(o << 1, l, m, i, val);
     } else {
-        update(o * 2 + 1, m + 1, r, i, val);
+        update(o << 1 | 1, m + 1, r, i, val);
     }
     maintain(o);
 }
@@ -124,12 +124,12 @@ T query(int o, int l, int r, int ql, int qr) {
     }
     int m = (l + r) / 2;
     if (qr <= m) {
-        return query(o * 2, l, m, ql, qr);
+        return query(o << 1, l, m, ql, qr);
     }
     if (ql > m) {
-        return query(o * 2 + 1, m + 1, r, ql, qr);
+        return query(o << 1 | 1, m + 1, r, ql, qr);
     }
-    return merge_val(query(o * 2, l, m, ql, qr), query(o * 2 + 1, m + 1, r, ql, qr));
+    return merge_val(query(o << 1, l, m, ql, qr), query(o << 1 | 1, m + 1, r, ql, qr));
 }
 
 void build(const T *arr, int a_size) {

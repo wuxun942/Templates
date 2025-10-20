@@ -7,10 +7,18 @@ using namespace std;
 可将树上任意一条路径划分为 O(log n) 条重链
 */
 
-constexpr int MAXN = 100'001;
+constexpr int MAXN = 100'001, MAXE = MAXN << 1;
 int head[MAXN]{};
-int nxt[MAXN];
-int to[MAXN];
+int nxt[MAXE];
+int to[MAXE];
+// long long weight[MAXE];
+int cnt_edge = 0;
+void add_edge(int x, int y, long long w = 0) {
+    nxt[++cnt_edge] = head[x];
+    to[cnt_edge] = y;
+    // weight[cnt_edge] = w;
+    head[x] = cnt_edge;
+}
 
 int fa[MAXN];
 int depth[MAXN]{}; // 或者初始化 depth[0] = 0
@@ -59,7 +67,7 @@ void dfs2(int x, int t) {
     for (int e = head[x], y; e; e = nxt[e]) {
         y = to[e];
         if (y != fa[x] && y != son[x]) {
-            dfs2(y, t);
+            dfs2(y, y);
         }
     }
 }

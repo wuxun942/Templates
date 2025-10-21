@@ -71,3 +71,21 @@ void dfs2(int x, int t) {
         }
     }
 }
+
+// 树链剖分通常结合线段树，完成路径更新和路径查询
+// 一般需要注意的是，线段树建立时的底层赋值为 tree[o] = arr[seg[l]]
+
+int arr[MAXN];
+void path_update(int x, int y) {
+    while (top[x] != top[y]) {
+        if (depth[top[x]] < depth[top[y]]) {
+            swap(x, y);
+        }
+        // update(dfn[top[x]], dfn[x]);
+        x = fa[top[x]];
+    }
+    if (depth[x] > depth[y]) {
+        swap(x, y);
+    }
+    // update(dfn[x], dfn[y]);
+}

@@ -46,15 +46,46 @@ vector<vector<int>> multiply(vector<vector<int>> &mat1, vector<vector<int>> &mat
 
 // 矩阵快速幂：只有方阵才有乘方
 
-// 不取模
+// 不取模，原地写法
 constexpr int SIZE = 100;
 using matrix = array<array<int, SIZE>, SIZE>;
-void multiply(matrix &mat1, matrix &mat2, matrix &res) {
+void multiply(matrix &mat1, matrix &mat2, matrix &res, int sz) {
     for (auto &row : res) {
         row.fill(0);
     }
-    for (int i = 0; i < SIZE; ++i) {
-        for (int k = 0; k < SIZE; ++k) {
+    for (int i = 0; i < sz; ++i) {
+        for (int k = 0; k < sz; ++k) {
+            if (mat1[i][k] == 0) {
+                continue;
+            }
+            for (int j = 0; j < sz; ++j) {
+                res[i][j] += mat1[i][k] * mat2[k][j];
+            }
+        }
+    }
+}
+
+matrix qpow(matrix mat, int n, int sz) {
+    matrix ans{}, tmp;
+    for (int i = 0; i < sz; ++i) {
+        ans[i][i] = 1;
+    }
+    for (; n > 0; n >>= 1, multiply(mat, mat, tmp, sz), mat = tmp) {
+        if (n & 1) {
+            multiply(ans, mat, tmp, sz);
+            ans = tmp;
+        }
+    }
+    return ans;
+}
+
+// 不取模，非原地写法
+constexpr int SIZE = 100;
+using matrix = array<array<int, SIZE>, SIZE>;
+matrix multiply(matrix& mat1, matrix& mat2, int sz) {
+    matrix res{};
+    for (int i = 0; i < sz; ++i) {
+        for (int k = 0; k < sz; ++k) {
             if (mat1[i][k] == 0) {
                 continue;
             }
@@ -63,26 +94,57 @@ void multiply(matrix &mat1, matrix &mat2, matrix &res) {
             }
         }
     }
+    return res;
 }
 
-matrix qpow(matrix mat, int n) {
+matrix qpow(matrix mat, int n, int sz) {
+    matrix ans{};
+    for (int i = 0; i < sz; ++i) {
+        ans[i][i] = 1;
+    }
+    for (; n > 0; n >>= 1, mat = multiply(mat, mat, sz)) {
+        if (n & 1) {
+            ans = multiply(ans, mat, sz);
+        }
+    }
+    return ans;
+}
+
+// 取模，原地写法
+constexpr int SIZE = 100;
+using matrix = array<array<int, SIZE>, SIZE>;
+void multiply(matrix &mat1, matrix &mat2, int sz, int mod, matrix &res) {
+    for (int i = 0; i < sz; ++i) {
+        for (int k = 0; k < sz; ++k) {
+            if (mat1[i][k] == 0) {
+                continue;
+            }
+            for (int j = 0; j < sz; ++j) {
+                res[i][j] = (res[i][j] + 1LL * mat1[i][k] * mat2[k][j]) % mod;
+            }
+        }
+    }
+}
+
+matrix qpow(matrix mat, int n, int sz, int mod) {
     matrix ans{}, tmp;
     for (int i = 0; i < SIZE; ++i) {
         ans[i][i] = 1;
     }
-    for (; n > 0; n >>= 1, multiply(mat, mat, tmp), mat = tmp) {
+    for (; n > 0; n >>= 1, multiply(mat, mat, sz, mod, tmp), mat = tmp) {
         if (n & 1) {
-            multiply(ans, mat, tmp);
+            multiply(ans, mat, sz, mod, tmp);
             ans = tmp;
         }
     }
     return ans;
 }
 
-// 取模
+// 取模，非原地写法
 constexpr int SIZE = 100;
 using matrix = array<array<int, SIZE>, SIZE>;
-void multiply(matrix &mat1, matrix &mat2, int mod, matrix &res) {
+matrix multiply(matrix& mat1, matrix& mat2, int sz, int mod) {
+    matrix res{};
     for (int i = 0; i < SIZE; ++i) {
         for (int k = 0; k < SIZE; ++k) {
             if (mat1[i][k] == 0) {
@@ -93,17 +155,17 @@ void multiply(matrix &mat1, matrix &mat2, int mod, matrix &res) {
             }
         }
     }
+    return res;
 }
 
-matrix qpow(matrix mat, int n, int mod) {
-    matrix ans{}, tmp;
+matrix qpow(matrix mat, int n, int sz, int mod) {
+    matrix ans{};
     for (int i = 0; i < SIZE; ++i) {
         ans[i][i] = 1;
     }
-    for (; n > 0; n >>= 1, multiply(mat, mat, mod, tmp), mat = tmp) {
+    for (; n > 0; n >>= 1, mat = multiply(mat, mat, sz, mod)) {
         if (n & 1) {
-            multiply(ans, mat, mod, tmp);
-            ans = tmp;
+            ans = multiply(ans, mat, sz, mod);
         }
     }
     return ans;

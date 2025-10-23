@@ -62,8 +62,8 @@ int comb(int n, int m, int mod) {
     return n < m ? 0 : fac[n] * inv_f[m] % mod * inv_f[n - m] % mod;
 }
 
-// 4. 小质数模下的更大范围计算
-// Lucas 定理：mod 必须是质数
+// 4. 小模数下的更大范围计算
+// 4.1 Lucas 定理：mod 必须是质数
 int Lucas(int n, int m, int mod) {
     if (n < mod && m < mod) {
         return c[n][m];
@@ -76,7 +76,7 @@ int Lucas(int n, int m, int mod) {
 
 把 mod 质因数分解为 p1 ** q1 * p2 ** q2 * ...
 令 mi = pi ** qi
-由 Legendre 公式先求出 ri = x % mi
-由扩展 CRT，x 的通解为 mod * y + x0
+先求出 ri = x % mi
+由 CRT，x 的通解为 mod * y + x0
 那么 x0 才是最后取模的结果
 */

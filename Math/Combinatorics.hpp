@@ -63,3 +63,11 @@ auto init = []() {
     }
     return 0;
 }();
+
+// Lucas 定理：mod 必须是质数
+int Lucas(int n, int m, int mod) {
+    if (n < mod && m < mod) {
+        return c[n][m];
+    }
+    return 1LL * c[n % mod][m % mod] * Lucas(n / mod, m / mod, mod);
+}

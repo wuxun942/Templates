@@ -79,16 +79,13 @@ int arr[MAXN];
 void path_update(int x, int y) {
     while (top[x] != top[y]) {
         if (depth[top[x]] < depth[top[y]]) {
-            // update(dfn[top[x]], dfn[x]);
-            x = fa[top[x]];
-        } else {
-            // update(dfn[top[y]], dfn[y]);
-            y = fa[top[y]];
+            swap(x, y);
         }
+        // update(dfn[top[x]], dfn[x]);
+        x = fa[top[x]];
     }
     if (depth[x] > depth[y]) {
-        // update(dfn[x], dfn[y]);
-    } else {
-        // update(dfn[y], dfn[x]);
+        swap(x, y);
     }
+    // update(dfn[x], dfn[y]);
 }

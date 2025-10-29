@@ -224,13 +224,15 @@ class LCA_HDL {
     void dfs1(int x, int f) {
         fa[x] = f;
         sz[x] = 1;
+        int max_size = 0;
         for (int y : g[x]) {
             if (y != f) {
                 depth[y] = depth[x] + 1;
                 dfs1(y, x);
                 sz[x] += sz[y];
-                if (sz[son[x]] < sz[y]) {
+                if (max_size < sz[y]) {
                     son[x] = y;
+                    max_size = sz[y];
                 }
             }
         }
@@ -238,7 +240,7 @@ class LCA_HDL {
     int clk = 0;
     void dfs2(int x, int t) {
         top[x] = t;
-        if (son[x] == 0) {
+        if (son[x] == -1) {
             return;
         }
         dfs2(son[x], t);
@@ -299,14 +301,16 @@ void dfs1(int x, int f) {
     fa[x] = f;
     sz[x] = 1;
     son[x] = 0;
+    int max_size = 0;
     for (int e = head[x], y; e; e = nxt[e]) {
         y = to[e];
         if (y != f) {
             depth[y] = depth[x] + 1;
             dfs1(y, x);
             sz[x] += sz[y];
-            if (son[x] == -1 || sz[son[x]] < sz[y]) {
+            if (max_size < sz[y]) {
                 son[x] = y;
+                max_size = sz[y];
             }
         }
     }
@@ -336,3 +340,8 @@ int get_lca(int x, int y) {
     }
     return depth[x] <= depth[y] ? x : y;
 }
+
+/*
+在倍增求 LCA 的过程中，我们实现了 O(log n) 求 k 级祖先的方法
+然而这个问题还能用长链剖分来优化到 O(1)
+*/

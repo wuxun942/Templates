@@ -16,25 +16,25 @@ class LcaTarjan {
     int n, root;
     vector<vector<int>> g;
     // 并查集
-    vector<int> pa;
+    vector<int> fa;
     int find(int x) {
-        if (x != pa[x]) {
-            pa[x] = find(pa[x]);
+        if (x != fa[x]) {
+            fa[x] = find(fa[x]);
         }
-        return pa[x];
+        return fa[x];
     }
 
     // tarjan 辅助数组
     vector<vector<pair<int, int>>> groups; // 分组查询，内存紧张时可以改成链式前向星
     vector<uint8_t> vis;
     vector<int> ans;
-    void dfs(int x, int fa) {
+    void dfs(int x, int f) {
         vis[x] = true;
         for (int y : g[x]) {
-            if (y != fa) {
+            if (y != f) {
                 dfs(y, x);
                 // 合并
-                pa[y] = x;
+                fa[y] = x;
             }
         }
         for (auto &[y, idx] : groups[x]) {
@@ -49,8 +49,8 @@ public:
         n = edges.size() + 1;
         this->root = root;
         g.resize(n);
-        pa.resize(n);
-        ranges::iota(pa, 0);
+        fa.resize(n);
+        ranges::iota(fa, 0);
         for (auto &e : edges) {
             g[e[0]].push_back(e[1]);
             g[e[1]].push_back(e[0]);
@@ -74,14 +74,14 @@ public:
 template<typename T>
 class LcaBinaryLifting {
     vector<vector<pair<int, int>>> g;
-    vector<vector<int>> pa;
+    vector<vector<int>> stjump;
     vector<int> depth;
     vector<T> dis; // 无权图用 depth 代替
     void dfs(int x, int fa) {
-        pa[0][x] = fa;
+        stjump[0][x] = fa;
         for (int i = 1, m = bit_width<uint32_t>(depth[x]); i < m; i++) {
-            if (int p = pa[i - 1][x]; p != -1) {
-                pa[i][x] = pa[i - 1][p];
+            if (int p = stjump[i - 1][x]; p != -1) {
+                stjump[i][x] = stjump[i - 1][p];
             }
         }
         for (auto &[y, w] : g[x]) {
@@ -100,7 +100,7 @@ public:
             g[e[0]].emplace_back(e[1], e[2]);
             g[e[1]].emplace_back(e[0], e[2]);
         }
-        pa.resize(bit_width<uint32_t>(n), vector(n, -1));
+        stjump.resize(bit_width<uint32_t>(n), vector(n, -1));
         depth.resize(n);
         dis.resize(n);
         dfs(root, -1);
@@ -108,7 +108,7 @@ public:
 
     int get_kth_ancestor(int x, int k) {
         for (; k; k &= k - 1) {
-            x = pa[__builtin_ctz(k)][x];
+            x = stjump[__builtin_ctz(k)][x];
         }
         return x;
     }
@@ -122,29 +122,18 @@ public:
             return x;
         }
         for (int i = bit_width<uint32_t>(depth[x]) - 1; i >= 0; i--) {
-            if (int px = pa[i][x], py = pa[i][y]; px != py) {
+            if (int px = stjump[i][x], py = stjump[i][y]; px != py) {
                 x = px;
                 y = py;
             }
         }
-        return pa[0][x];
+        return stjump[0][x];
     }
 
     // 获取 x 与 y 的距离
     T get_dis(int x, int y) {
         return dis[x] + dis[y] - 2 * dis[get_lca(x, y)];
     }
-
-    // 从 x 出发向上跳至多 d 距离
-    // int upto_dis(int x, T d) {
-    //     for (int i = bit_width<uint32_t>(depth[x]) - 1; i >= 0; --i) {
-    //         if (int p = pa[i][x]; p >= 0 && dis[x] - dis[p] <= d) {
-    //             d -= dis[x] - dis[p];
-    //             x = p;
-    //         }
-    //     }
-    //     return x;
-    // }
 };
 
 constexpr int MAXN = 100'001, MAXM = 17, MAXE = MAXN << 1;
@@ -160,13 +149,13 @@ void add_edge(int x, int y, long long w = 0) {
     head[x] = cnt_edge;
 }
 
-int pa[MAXM][MAXN];
+int stjump[MAXM][MAXN];
 int depth[MAXN];
 void dfs(int x, int fa) {
-    pa[0][x] = fa;
+    stjump[0][x] = fa;
     for (int i = 1, m = __lg(depth[x]); i <= m; i++) {
-        if (int p = pa[i - 1][x]; p != 0) {
-            pa[i][x] = pa[i - 1][p];
+        if (int p = stjump[i - 1][x]; p != 0) {
+            stjump[i][x] = stjump[i - 1][p];
         }
     }
     for (int e = head[x], y; e; e = nxt[e]) {
@@ -182,7 +171,7 @@ void build(int n, int root = 1) {
     int m = __lg(n);
     for (int i = 0; i <= m; ++i) {
         for (int j = 0; j < n; ++j) {
-            pa[i][j] = 0;
+            stjump[i][j] = 0;
         }
     }
     depth[root] = 0;
@@ -191,7 +180,7 @@ void build(int n, int root = 1) {
 
 int get_kth_ancestor(int x, int k) {
     for (; k; k &= k - 1) {
-        x = pa[__builtin_ctz(k)][x];
+        x = stjump[__builtin_ctz(k)][x];
     }
     return x;
 }
@@ -205,12 +194,12 @@ int get_lca(int x, int y) {
         return x;
     }
     for (int i = __lg(depth[x]); i >= 0; i--) {
-        if (int px = pa[i][x], py = pa[i][y]; px != py) {
+        if (int px = stjump[i][x], py = stjump[i][y]; px != py) {
             x = px;
             y = py;
         }
     }
-    return pa[0][x];
+    return stjump[0][x];
 }
 
 // 树剖求 LCA
@@ -345,3 +334,104 @@ int get_lca(int x, int y) {
 在倍增求 LCA 的过程中，我们实现了 O(log n) 求 k 级祖先的方法
 然而这个问题还能用长链剖分来优化到 O(1)
 */
+
+constexpr int MAXN = 500'001, MAXE = MAXN << 1;
+int head[MAXN]{};
+int nxt[MAXE];
+int to[MAXE];
+int cnt_edge = 0;
+void add_edge(int x, int y, long long w = 0) {
+    nxt[++cnt_edge] = head[x];
+    to[cnt_edge] = y;
+    head[x] = cnt_edge;
+}
+
+int fa[MAXN];
+int depth[MAXN]{}; // 或者初始化 depth[0] = 0
+int height[MAXN];
+
+// 每个子树的长儿子（子树最高）
+int son[MAXN];
+
+// 所在长链的头节点
+int top[MAXN];
+
+// 按长链分配 dfn
+int dfn[MAXN];
+
+// dfn 到原序号的逆映射
+int seg[MAXN];
+
+constexpr int MAXH = 20;
+int stjump[MAXN][MAXH]{};
+int up[MAXN];
+int down[MAXN];
+
+// 第一次遍历，建立 fa, depth, sz, son 信息
+void dfs1(int x, int f) {
+    fa[x] = f;
+    depth[x] = depth[f] + 1;
+    son[x] = 0;
+    int max_height = 0;
+    stjump[x][0] = f;
+    for (int j = 1; j <= __lg(depth[x]); ++j) {
+        stjump[x][j] = stjump[stjump[x][j - 1]][j - 1];
+    }
+    for (int e = head[x], y; e; e = nxt[e]) {
+        y = to[e];
+        if (y != f) {
+            dfs1(y, x);
+            if (max_height < height[y]) {
+                son[x] = y;
+                max_height = height[y];
+            }
+        }
+    }
+    height[x] = max_height + 1;
+}
+
+// 第二次遍历，建立 top, dfn, seg 信息
+int clk = 0;
+void dfs2(int x, int t) {
+    top[x] = t;
+    dfn[x] = ++clk; // 此为 1-index
+    seg[clk] = x;
+    if (son[x] == 0) {
+        return;
+    }
+    dfs2(son[x], t);
+    for (int e = head[x], y; e; e = nxt[e]) {
+        y = to[e];
+        if (y != fa[x] && y != son[x]) {
+            dfs2(y, y);
+        }
+    }
+}
+
+void prepare(int n, int root) {
+    dfs1(root, 0);
+    dfs2(root, root);
+    for (int x = 1; x <= n; ++x) {
+        if (top[x] == x) {
+            for (int i = 0, a = x, b = x; i < height[x]; ++i, a = stjump[a][0], b = son[b]) {
+                up[dfn[x] + i] = a;
+                down[dfn[x] + i] = b;
+            }
+        }
+    }
+}
+
+int query(int x, int k) {
+    if (k == 0) {
+        return x;
+    }
+    int hb = __lg(k);
+    x = stjump[x][hb];
+    k -= 1 << hb;
+    k -= depth[x] - depth[top[x]];
+    x = top[x];
+    if (k >= 0) {
+        return up[dfn[x] + k];
+    }
+    return down[dfn[x] - k];
+}

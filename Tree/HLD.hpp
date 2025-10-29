@@ -107,6 +107,8 @@ void path_update(int x, int y) {
 
 只需要把 sz 数组改成 height 数组，表示子树的高度
 并且把选择 son 的逻辑改成最大 height 即可
+
+同时这也启示我们，剖分的权值可以根据题目要求进行调整
 */
 
 constexpr int MAXN = 100'001, MAXE = MAXN << 1;
@@ -141,7 +143,6 @@ int seg[MAXN];
 // 第一次遍历，建立 fa, depth, sz, son 信息
 void dfs1(int x, int f) {
     fa[x] = f;
-    height[x] = 1;
     son[x] = 0;
     int max_height = 0;
     for (int e = head[x], y; e; e = nxt[e]) {
@@ -150,13 +151,13 @@ void dfs1(int x, int f) {
             depth[y] = depth[x] + 1;
             // arr[y] = weight[e]; // 处理边权问题时，转化为点权的技巧
             dfs1(y, x);
-            height[x] = max(height[x], height[y] + 1);
             if (max_height < height[y]) {
                 son[x] = y;
                 max_height = height[y];
             }
         }
     }
+    height[x] = max_height + 1;
 }
 
 // 第二次遍历，建立 top, dfn, seg 信息

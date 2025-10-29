@@ -47,10 +47,12 @@ public:
 // 静态数组实现
 constexpr int MAXN = 100'001;
 using T = int;
-T tree[MAXN];
+int n;
+T arr[MAXN];
 int tree_size;
+T tree[MAXN];
 
-void build(const T *arr, int n) {
+void build(int n, const T *arr) {
     tree_size = n + 1;
     for (int i = 1; i < tree_size; i++) {
         tree[i] += arr[i - 1];

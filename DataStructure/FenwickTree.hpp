@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-// 树状数组，需要注意查询和修改都是 1-index
+// 树状数组，需要注意查询和修改都是 1-based
 
 // 单点更新区间查询（原始） / 区间更新单点查询（直接当差分用）
 

@@ -1,6 +1,6 @@
 // 数组模拟链表，常用于链式前向星
 
-// 链式前向星建图，以下为 1-index
+// 链式前向星建图，以下为 1-based
 constexpr int MAXN = 5001, MAXE = MAXN << 1;
 int head[MAXN]{};
 int nxt[MAXE];

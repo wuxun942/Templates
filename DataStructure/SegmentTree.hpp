@@ -3,7 +3,7 @@ using namespace std;
 
 // 线段树，单点更新 + 区间查询，以找区间最大值为例
 
-// 泛型模板类封装，0-index
+// 泛型模板类封装，0-based
 template<typename T>
 class SegmentTree {
     int n;
@@ -78,7 +78,7 @@ public:
     }
 };
 
-// 静态数组实现，1-index
+// 静态数组实现，1-based
 constexpr int MAXN = 400'001;
 using T = int;
 int n;

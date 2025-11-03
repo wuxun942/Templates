@@ -8,7 +8,7 @@ using namespace std;
 2. 倍增：原理简单，可求路径信息，但常数大
 3. 树链剖分：原理较难，复杂度和倍增相同且常数小，可作为上位替代
 
-以下类封装方法均为 0-index，全局区实现为 1-index
+以下类封装方法均为 0-based，全局区实现为 1-based
 */
 
 // Tarjan 算法求 LCA
@@ -394,7 +394,7 @@ void dfs1(int x, int f) {
 int clk = 0;
 void dfs2(int x, int t) {
     top[x] = t;
-    dfn[x] = ++clk; // 此为 1-index
+    dfn[x] = ++clk; // 此为 1-based
     seg[clk] = x;
     if (son[x] == 0) {
         return;

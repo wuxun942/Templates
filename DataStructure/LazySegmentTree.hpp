@@ -3,7 +3,7 @@ using namespace std;
 
 // Lazy 线段树，以 区间增加 + 维护区间和为例
 
-// 泛型模板类封装，0-index
+// 泛型模板类封装，0-based
 template<typename T, typename F>
 class LazySegmentTree {
     const F TODO_INIT = 0;
@@ -111,7 +111,7 @@ public:
     }
 };
 
-// 静态数组实现，1-index
+// 静态数组实现，1-based
 constexpr int MAXN = 100'001;
 int n;
 using T = int;

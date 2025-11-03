@@ -14,7 +14,7 @@ using namespace std;
 7. 树上边权都是正数的前提下，所有节点走向重心的距离最小。
 */
 
-// 以下均以 1 为最小编号
+// 以下均以 1-based
 
 // 无权树
 constexpr int MX = 100'001;

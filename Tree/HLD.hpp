@@ -102,7 +102,7 @@ void path_update(int x, int y) {
 }
 
 /*
-2. 长链剖分：把重儿子改成长儿子
+2. 长链剖分：把重儿子改成长儿子（常用于树形 DP 的优化）
 从任意节点沿着长链向上跳，到达根节点至多需要 O(sqrt(n)) 步
 
 只需要把 sz 数组改成 height 数组，表示子树的高度
@@ -128,19 +128,14 @@ int fa[MAXN];
 int depth[MAXN]{}; // 或者初始化 depth[0] = 0
 int height[MAXN];
 
-// 每个子树的长儿子（子树最高）
 int son[MAXN];
 
-// 所在长链的头节点
 int top[MAXN];
 
-// 按长链分配 dfn
 int dfn[MAXN];
 
-// dfn 到原序号的逆映射
 int seg[MAXN];
 
-// 第一次遍历，建立 fa, depth, sz, son 信息
 void dfs1(int x, int f) {
     fa[x] = f;
     son[x] = 0;
@@ -149,7 +144,6 @@ void dfs1(int x, int f) {
         y = to[e];
         if (y != f) {
             depth[y] = depth[x] + 1;
-            // arr[y] = weight[e]; // 处理边权问题时，转化为点权的技巧
             dfs1(y, x);
             if (max_height < height[y]) {
                 son[x] = y;
@@ -160,7 +154,6 @@ void dfs1(int x, int f) {
     height[x] = max_height + 1;
 }
 
-// 第二次遍历，建立 top, dfn, seg 信息
 int clk = 0;
 void dfs2(int x, int t) {
     top[x] = t;

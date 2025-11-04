@@ -1,9 +1,12 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-// AVL 树
+/*
+AVL 树：一种自平衡树
+*/ 
 
-// 静态数组实现
+using T = long long;
+constexpr T INF = LLONG_MAX;
 
 // 最大节点数量
 constexpr int MAXN = 100'001;
@@ -15,7 +18,10 @@ int cnt = 0;
 int head = 0;
 
 // 节点的 key
-int64_t key[MAXN];
+T key[MAXN];
+
+// 节点 key 的计数
+int key_count[MAXN];
 
 // 子树高度
 int height[MAXN]{};
@@ -24,24 +30,23 @@ int height[MAXN]{};
 int ls[MAXN]{};
 int rs[MAXN]{};
 
-// 节点 key 的计数
-int key_count[MAXN];
-
 // 子树的数字总数
-int sz[MAXN]{};
+int siz[MAXN]{};
 
 // 整体初始化
-void clear(int n) {
+void clear(int n = cnt) {
     head = cnt = 0;
+    fill(key, key + n + 1, 0);
+    fill(key_count, key_count + n + 1, 0);
     fill(height, height + n + 1, 0);
     fill(ls, ls + n + 1, 0);
     fill(rs, rs + n + 1, 0);
-    fill(sz, sz + n + 1, 0);
+    fill(siz, siz + n + 1, 0);
 }
 
 // 更新节点信息
 void up(int i) {
-    sz[i] = sz[ls[i]] + sz[rs[i]] + key_count[i];
+    siz[i] = siz[ls[i]] + siz[rs[i]] + key_count[i];
     height[i] = max(height[ls[i]], height[rs[i]]) + 1;
 }
 
@@ -91,10 +96,10 @@ int maintain(int i) {
 }
 
 // 增加节点：找位置 + 保持平衡性
-int insert(int i, int64_t x) {
+int insert(int i, T x) {
     if (i == 0) {
         key[++cnt] = x;
-        key_count[cnt] = sz[cnt] = height[cnt] = 1;
+        key_count[cnt] = siz[cnt] = height[cnt] = 1;
         return cnt;
     }
     if (key[i] == x) {
@@ -121,21 +126,22 @@ void insert(int x) {
 2.3 既有左子树又有右子树，根节点替换为把右子树的最左节点（也可以是左子树的最右节点）
 */
 
-// 查找排名：有几个数比 x 小
-int get_rank(int i, int64_t x) {
+// 有几个数比 x 小
+int small(int i, T x) {
     if (i == 0) {
         return 0;
     }
     // x 太小了，只能往左找
     if (key[i] >= x) {
-        return get_rank(ls[i], x);
+        return small(ls[i], x);
     }
     // x 足够大，根节点和左子树都更小，还要往右找
-    return sz[ls[i]] + key_count[i] + get_rank(rs[i], x);
+    return siz[ls[i]] + key_count[i] + small(rs[i], x);
 }
 
-int get_rank(int64_t x) {
-    return get_rank(head, x) + 1;
+// 查找排名：返回 x 的名次（从 1 开始）
+int get_rank(T x) {
+    return small(head, x) + 1;
 }
 
 // 删除右子树的最左节点
@@ -149,7 +155,7 @@ int remove_most_left(int i, int most_left) {
 }
 
 // 删除节点：如果有多个，只删除一个
-int remove(int i, int64_t x) {
+int remove(int i, T x) {
     if (key[i] < x) {
         rs[i] = remove(rs[i], x);
     } else if (key[i] > x) {
@@ -182,61 +188,58 @@ int remove(int i, int64_t x) {
     return maintain(i);
 }
 
-void remove(int64_t x) {
+void remove(T x) {
     if (get_rank(x) != get_rank(x + 1)) {
         head = remove(head, x);
     }
 }
 
 // 查询第 k 大的数字（超过 size 则抛出异常）
-int64_t index(int i, int k) {
-    int lsz = sz[ls[i]], c = key_count[i];
-    if (lsz >= k) {
+T index(int i, int k) {
+    if (siz[ls[i]] >= k) {
         return index(ls[i], k);
     }
-    if (lsz + c < k) {
-        return index(rs[i], k - lsz - c);
+    if (siz[ls[i]] + key_count[i] < k) {
+        return index(rs[i], k - siz[ls[i]] - key_count[i]);
     }
     return key[i];
 }
 
-int index(int64_t k) {
-    if (k > sz[head] || k <= 0) {
+int index(T k) {
+    if (k > siz[head] || k <= 0) {
         throw overflow_error("AVL Overflow");
     }
     return index(head, k);
 }
 
 // 查找 x 的前驱（小于 x 中最大的数）
-int64_t pre(int i, int64_t x) {
+T pre(int i, T x) {
     // 找不到
     if (i == 0) {
-        return LLONG_MIN;
+        return -INF;
     }
     if (key[i] >= x) {
         return pre(ls[i], x);
     }
-    int64_t res = pre(rs[i], x);
-    return res != LLONG_MIN ? res : key[i];
+    return max(key[i], pre(rs[i], x));
 }
 
-int64_t pre(int64_t x) {
+T pre(T x) {
     return pre(head, x);
 }
 
 // 查找 x 的后继（大于 x 中最小的数）
-int64_t post(int i, int64_t x) {
+T post(int i, T x) {
     // 找不到
     if (i == 0) {
-        return LLONG_MAX;
+        return INF;
     }
     if (key[i] <= x) {
         return post(rs[i], x);
     }
-    int res = post(ls[i], x);
-    return res != LLONG_MAX ? res : key[i];
+    return min(key[i], post(ls[i], x));
 }
 
-int64_t post(int64_t x) {
+T post(T x) {
     return post(head, x);
 }

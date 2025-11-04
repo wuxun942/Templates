@@ -9,17 +9,20 @@ using namespace std;
 一般取 alpha = 0.7
 */
 
+using T = long long;
+constexpr T INF = LLONG_MAX;
+
 constexpr double ALPHA = 0.7;
 constexpr int MAXN = 100'001;
-
-// 头节点
-int head = 0;
 
 // 空间使用计数
 int cnt = 0;
 
+// 头节点
+int head = 0;
+
 // 节点的 key
-int64_t key[MAXN];
+T key[MAXN];
 
 // 节点 key 的计数
 int key_count[MAXN];
@@ -50,9 +53,8 @@ int father;
 int side;
 
 // 整体初始化
-void clear(int n) {
-    cnt = 0;
-    head = 0;
+void clear(int n = cnt) {
+    cnt = head = 0;
     fill(key, key + n + 1, 0);
     fill(key_count, key_count + n + 1, 0);
     fill(ls, ls + n + 1, 0);
@@ -62,7 +64,7 @@ void clear(int n) {
 }
 
 // 新建一个 key = x 的节点并初始化
-int init(int64_t x) {
+int init(T x) {
     key[++cnt] = x;
     ls[cnt] = rs[cnt] = 0;
     key_count[cnt] = siz[cnt] = diff[cnt] = 1;
@@ -122,7 +124,7 @@ bool balance(int i) {
 }
 
 // 插入，f: 父节点，s: i 是 f 的哪个儿子
-void add(int i, int f, int s, int64_t x) {
+void add(int i, int f, int s, T x) {
     if (i == 0) {
         if (f == 0) {
             head = init(x);
@@ -148,30 +150,30 @@ void add(int i, int f, int s, int64_t x) {
     }
 }
 
-void add(int64_t x) {
+void add(T x) {
     top = father = side = 0;
     add(head, 0, 0, x);
     rebuild();
 }
 
-// 查找排名：有几个数比 x 小
-int get_rank(int i, int64_t x) {
+// 有几个数比 x 小
+int small(int i, T x) {
     if (i == 0) {
         return 0;
     }
     if (key[i] >= x) {
-        return get_rank(ls[i], x);
-    } else {
-        return siz[ls[i]] + key_count[i] + get_rank(rs[i], x);
+        return small(ls[i], x);
     }
+    return siz[ls[i]] + key_count[i] + small(rs[i], x);
 }
 
-int get_rank(int64_t x) {
-    return get_rank(head, x) + 1;
+// 查找排名：返回 x 的名次（从 1 开始）
+int get_rank(T x) {
+    return small(head, x) + 1;
 }
 
 // 查询第 k 大的数字（超过 size 则抛出异常）
-int64_t index(int i, int k) {
+T index(int i, int k) {
     if (siz[ls[i]] >= k) {
         return index(ls[i], k);
     } else if (siz[ls[i]] + key_count[i] < k) {
@@ -180,7 +182,7 @@ int64_t index(int i, int k) {
     return key[i];
 }
 
-int64_t index(int k) {
+T index(int k) {
     if (k > siz[head] || k <= 0) {
         throw overflow_error("ScapeGoat Overflow");
     }
@@ -188,25 +190,25 @@ int64_t index(int k) {
 }
 
 // 查找 x 的前驱（小于 x 中最大的数）
-int pre(int64_t x) {
+int pre(T x) {
     int kth = get_rank(x);
     if (kth == 1) {
-        return LLONG_MIN;
+        return -INF;
     }
     return index(kth - 1);
 }
 
 // 查找 x 的后继（大于 x 中最小的数）
-int post(int64_t x) {
+int post(T x) {
     int kth = get_rank(x + 1);
     if (kth == siz[head] + 1) {
-        return LLONG_MAX;
+        return INF;
     }
     return index(kth);
 }
 
 // 删除节点：如果有多个，只删除一个
-void remove(int i, int f, int s, int64_t x) {
+void remove(int i, int f, int s, T x) {
     if (key[i] == x) {
         key_count[i]--;
     } else if (key[i] > x) {
@@ -222,7 +224,7 @@ void remove(int i, int f, int s, int64_t x) {
     }
 }
 
-void remove(int64_t x) {
+void remove(T x) {
     // 存在 x
     if (get_rank(x) != get_rank(x + 1)) {
         top = father = side = 0;

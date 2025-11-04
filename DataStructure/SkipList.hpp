@@ -3,7 +3,9 @@ using namespace std;
 
 // 跳表
 
-// 静态数组实现
+using T = long long;
+
+constexpr T INF = LLONG_MAX;
 
 // 最大层数
 constexpr int MAXL = 20;
@@ -15,7 +17,7 @@ constexpr int MAXN = 100'001;
 int cnt;
 
 // 节点的 key
-int64_t key[MAXN];
+T key[MAXN];
 
 // 节点 key 的计数
 int key_count[MAXN]{};
@@ -32,14 +34,16 @@ int len[MAXN][MAXL + 1]{};
 // 建立跳表，即建立 -inf 节点
 void build() {
     cnt = 1;
-    key[cnt] = LLONG_MIN;
+    key[cnt] = -INF;
     level[cnt] = MAXL;
 }
 
 // 清空跳表
-void clear(int n = MAXN) {
+void clear(int n = cnt) {
     build();
+    fill(key, key + n + 1, 0);
     fill(key_count, key_count + n + 1, 0);
+    fill(level, level + n + 1, 0);
     for (int i = 1; i <= n; ++i) {
         memset(next_node[i], 0, sizeof(next_node[i]));
         memset(len[i], 0, sizeof(len[i]));
@@ -56,7 +60,7 @@ int random_level() {
 }
 
 // 查找节点，返回节点编号
-int find(int i, int h, int64_t x) {
+int find(int i, int h, T x) {
     while (next_node[i][h] != 0 && key[next_node[i][h]] < x) {
         i = next_node[i][h];
     }
@@ -79,7 +83,7 @@ int find(int i, int h, int64_t x) {
 
 // 增加次数：在 i 号节点的 h 层，x 出现次数加一
 // 执行前保证 x 一定存在
-void add_count(int i, int h, int64_t x) {
+void add_count(int i, int h, T x) {
     while (next_node[i][h] != 0 && key[next_node[i][h]] < x) {
         i = next_node[i][h];
     }
@@ -120,7 +124,7 @@ int add_node(int i, int h, int j) {
     return right_cnt + down_cnt;
 }
 
-void add(int64_t x) {
+void add(T x) {
     if (find(1, MAXL, x) != 0) {
         add_count(1, MAXL, x);
     } else {
@@ -133,7 +137,7 @@ void add(int64_t x) {
 
 // 删除节点：如果有多个，只删除一个
 // 减少次数：当前在 i 号节点的 h 层，x 减少一个词频
-void remove_count(int i, int h, int64_t x) {
+void remove_count(int i, int h, T x) {
     while (next_node[i][h] != 0 && key[next_node[i][h]] < x) {
         i = next_node[i][h];
     }
@@ -162,7 +166,7 @@ void remove_node(int i, int h, int j) {
     remove_node(i, h - 1, j);
 }
 
-void remove(int64_t x) {
+void remove(T x) {
     int j = find(1, MAXL, x);
     // 节点存在
     if (j != 0) {
@@ -174,8 +178,8 @@ void remove(int64_t x) {
     }
 }
 
-// 查找排名：有几个数比 x 小
-int get_rank(int i, int h, int x) {
+// 有几个数比 x 小
+int small(int i, int h, int x) {
     if (h == 0) {
         return 0;
     }
@@ -184,15 +188,16 @@ int get_rank(int i, int h, int x) {
         right_cnt += len[i][h];
         i = next_node[i][h];
     }
-    return right_cnt + get_rank(i, h - 1, x);
+    return right_cnt + small(i, h - 1, x);
 }
 
-int get_rank(int64_t x) {
-    return get_rank(1, MAXL, x) + 1;
+// 查找排名：返回 x 的名次（从 1 开始）
+int get_rank(T x) {
+    return small(1, MAXL, x) + 1;
 }
 
 // 查询第 k 大的数字（超过 size 则抛出异常）
-int index(int i, int h, int64_t x) {
+int index(int i, int h, T x) {
     if (h == 0) {
         throw overflow_error("SkipList Overflow");
     }
@@ -207,12 +212,12 @@ int index(int i, int h, int64_t x) {
     return index(i, h - 1, x - c);
 }
 
-int index(int64_t x) {
+int index(T x) {
     return index(1, MAXL, x);
 }
 
 // 查找 x 的前驱（小于 x 中最大的数）
-int64_t pre(int i, int h, int64_t x) {
+T pre(int i, int h, T x) {
     while (next_node[i][h] != 0 && key[next_node[i][h]] < x) {
         i = next_node[i][h];
     }
@@ -223,19 +228,19 @@ int64_t pre(int i, int h, int64_t x) {
     return pre(i, h - 1, x);
 }
 
-int64_t pre(int64_t x) {
+T pre(T x) {
     return pre(1, MAXL, x);
 }
 
 // 查找 x 的后继（大于 x 中最小的数）
-int64_t post(int i, int h, int64_t x) {
+T post(int i, int h, T x) {
     while (next_node[i][h] != 0 && key[next_node[i][h]] < x) {
         i = next_node[i][h];
     }
     if (h == 1) {
         // 找不到
         if (next_node[i][h] == 0) {
-            return LLONG_MAX;
+            return INF;
         }
         if (key[next_node[i][h]] > x) {
             return key[next_node[i][h]];
@@ -244,7 +249,7 @@ int64_t post(int i, int h, int64_t x) {
         i = next_node[i][h];
         // 找不到
         if (next_node[i][h] == 0) {
-            return LLONG_MAX;
+            return INF;
         }
         return key[next_node[i][h]];
         
@@ -252,6 +257,6 @@ int64_t post(int i, int h, int64_t x) {
     return post(i, h - 1, x);
 }
 
-int64_t post(int64_t x) {
+T post(T x) {
     return post(1, MAXL, x);
 }

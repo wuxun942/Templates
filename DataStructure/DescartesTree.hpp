@@ -16,6 +16,8 @@ int ls[MAXN], rs[MAXN];
 // 以下的 arr 和 st 均为 1-based
 void build(int n, const int *arr) {
     top = 0;
+    fill(ls + 1, ls + n + 1, 0);
+    fill(rs + 1, rs + n + 1, 0);
     for (int i = 1; i <= n; ++i) {
         int pos = top;
         // 维护一个单增的栈

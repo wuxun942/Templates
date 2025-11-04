@@ -135,7 +135,7 @@ int get_rank(int i, int64_t x) {
 }
 
 int get_rank(int64_t x) {
-    return get_rank(head, x);
+    return get_rank(head, x) + 1;
 }
 
 // 删除右子树的最左节点

@@ -19,7 +19,7 @@ void build(int n, const int *arr) {
     for (int i = 1; i <= n; ++i) {
         int pos = top;
         // 维护一个单增的栈
-        while (pos > 0 && st[pos] >= arr[i]) {
+        while (pos > 0 && arr[st[pos]] >= arr[i]) {
             --pos;
         }
         // 存在更小的值，就将 i 作为其右儿子

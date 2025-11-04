@@ -167,7 +167,7 @@ int get_rank(int i, int64_t x) {
 }
 
 int get_rank(int64_t x) {
-    return get_rank(head, x);
+    return get_rank(head, x) + 1;
 }
 
 // 查询第 k 大的数字（超过 size 则抛出异常）

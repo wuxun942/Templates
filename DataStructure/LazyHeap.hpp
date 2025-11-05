@@ -1,9 +1,12 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-// 懒删除堆，需要注意这里的 pop 不同于 STL 中的 pop，是有返回值的。
+/*
+懒删除堆：采用延迟删除，只有等到被删除元素到达堆顶时再删除，否则只记录待删除信息
+需要注意这里的 pop 不同于 STL 中的 pop，是有返回值的
+以维护堆中元素和为例
+*/ 
 
-// 哈希表记录
 template<typename T, typename comp = less<T>, typename F = T>
 class LazyHeap {
     priority_queue<T, vector<T>, comp> pq;
@@ -35,6 +38,10 @@ public:
     T top() {
         apply_remove();
         return pq.top();
+    }
+
+    F get_sum() {
+        return sum;
     }
 
     void push(T x) {
@@ -85,6 +92,14 @@ struct DualHeaps {
 
     DualHeaps(int k) {
         this->k = k;
+    }
+
+    F get_sum1() {
+        return h1.sum;
+    }
+
+    F get_sum2() {
+        return h2.sum;
     }
 
     void insert(T x) {

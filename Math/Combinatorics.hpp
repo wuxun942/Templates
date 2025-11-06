@@ -33,7 +33,7 @@ auto init = []() {
 
 // 3. 质数模下的预处理：阶乘逆元 + 带模组合数
 constexpr int MOD = 1'000'000'007;
-long long qpow(long long x, long long n, int mod) {
+long long qpow(long long x, long long n, int mod = MOD) {
     int ans = 1;
     x %= mod;
     for (; n > 0; n >>= 1, x = x * x % mod) {
@@ -58,12 +58,29 @@ auto init = []() {
     return 0;
 }();
 
-int comb(int n, int m, int mod) {
-    return n < m ? 0 : fac[n] * inv_f[m] % mod * inv_f[n - m] % mod;
+long long comb(int n, int m, int mod = MOD) {
+    if (n < m) {
+        return 0;
+    }
+    return fac[n] * inv_f[m] % mod * inv_f[n - m] % mod;
 }
 
 // 4. 小模数下的更大范围计算
 // 4.1 Lucas 定理：mod 必须是质数
+constexpr int MAXN = 101;
+long long c[MAXN][MAXN];
+auto init = []() {
+    memset(c, 0, sizeof(c));
+    c[0][0] = 1;
+    for (int i = 1; i < MAXN; ++i) {
+        c[i][0] = c[i][i] = 1;
+        for (int j = 1; j < i; ++j) {
+            c[i][j] = c[i - 1][j - 1] + c[i - 1][j];
+        }
+    }
+    return 0;
+}();
+
 int Lucas(int n, int m, int mod) {
     if (n < mod && m < mod) {
         return c[n][m];

@@ -42,13 +42,3 @@ long long gcd(long long a, long long b, long long &x, long long &y) {
     }
     return a1;
 }
-
-// 扩展欧几里得算法求逆元：要求 gcd(a,b) = 1
-long long get_inv(long long a, long long mod) {
-    long long x, y;
-    long long g = exgcd(a, mod, x, y);
-    if (g != 1) {
-        throw runtime_error("Invalid Input");
-    }
-    return (x % mod + mod) % mod;
-}

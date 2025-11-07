@@ -1,7 +1,10 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-// 树状数组，需要注意查询和修改都是 1-based
+/*
+树状数组，需要注意查询和修改都是 1-based
+对于 arr，所有模板类封装均为 0-based，所有静态数组实现均为 1-based
+*/
 
 // 单点更新区间查询（原始） / 区间更新单点查询（直接当差分用）
 
@@ -53,18 +56,18 @@ int tree_size;
 T tree[MAXN];
 
 void build(int n, const T *arr) {
-    tree_size = n + 1;
-    for (int i = 1; i < tree_size; i++) {
-        tree[i] += arr[i - 1];
-        if (int nxt = i + (i & -i); nxt < tree_size) {
+    tree_size = n;
+    for (int i = 1; i <= tree_size; i++) {
+        tree[i] += arr[i];
+        if (int nxt = i + (i & -i); nxt <= tree_size) {
             tree[nxt] += tree[i];
         }
     }
 }
 
 void build(int n) {
-    tree_size = n + 1;
-    fill(tree, tree + tree_size, 0);
+    tree_size = n;
+    fill(tree, tree + tree_size + 1, 0);
 }
 
 void update(int i, T val) {
@@ -74,7 +77,7 @@ void update(int i, T val) {
 }
 
 T query(int i) {
-    if (i >= tree_size) {
+    if (i > tree_size) {
         throw overflow_error("FenwickTree Overflow");
     }
     T res = 0;
@@ -162,9 +165,9 @@ int tree_size;
 
 // 传统初始化方法
 void build(T *tree, const T *arr) {
-    for (int i = 1; i < tree_size; i++) {
-        tree[i] += arr[i - 1];
-        if (int nxt = i + (i & -i); nxt < tree_size) {
+    for (int i = 1; i <= tree_size; i++) {
+        tree[i] += arr[i];
+        if (int nxt = i + (i & -i); nxt <= tree_size) {
             tree[nxt] += tree[i];
         }
     }
@@ -172,14 +175,14 @@ void build(T *tree, const T *arr) {
 
 // 传统单点更新
 void update(T *tree, int i, T val) {
-    for (; i < tree_size; i += i & -i) {
+    for (; i <= tree_size; i += i & -i) {
         tree[i] += val;
     }
 }
 
 // 传统单点查询
 T query(const T *tree, int i) {
-    if (i >= tree_size) {
+    if (i > tree_size) {
         throw overflow_error("FenwickTree Overflow");
     }
     T res = 0;
@@ -190,19 +193,19 @@ T query(const T *tree, int i) {
 }
 
 void build(int n) {
-    tree_size = n + 1;
-    fill(info1, info1 + tree_size, 0);
-    fill(info2, info2 + tree_size, 0);
+    tree_size = n;
+    fill(info1, info1 + tree_size + 1, 0);
+    fill(info2, info2 + tree_size + 1, 0);
 }
 
 void build(const T *arr, int n) {
-    diff1[0] = arr[0];
-    diff2[0] = 0;
-    for (int i = 1; i < n; ++i) {
+    diff1[1] = arr[1];
+    diff2[1] = 0;
+    for (int i = 2; i < n; ++i) {
         diff1[i] = arr[i] - arr[i - 1];
         diff2[i] = i * diff1[i];
     }
-    tree_size = n + 1;
+    tree_size = n;
     build(info1, diff1);
     build(info2, diff2);
 }

@@ -18,7 +18,8 @@ vector<int> primes;
 auto init = []() {
     ranges::fill(is_prime, true);
     is_prime[0] = is_prime[1] = false;
-    for (int i = 2; i * i < MX; i++) {
+    // 如果只要填 is_prime，循环条件可以放宽到 i * i < MX
+    for (int i = 2; i < MX; i++) {
         if (is_prime[i]) {
             primes.push_back(i);
             for (int j = i * i; j < MX; j += i) {

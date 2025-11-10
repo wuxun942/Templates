@@ -19,19 +19,24 @@ long long merge_number(long long first_half, long long last_half) {
 }
 
 auto init = []() {
-    for (int mid = 0; mid < D; ++mid) {
-        pal.push_back(mid);
-    }
     long long base = 1;
-    for (int i = 2; i <= LEN; ++i) {
+    for (int i = 1; i <= LEN; ++i) {
         if (i % 2) {
-            for (long long half = base; half < base * D; ++half) {
+            if (i == 1) {
                 for (int mid = 0; mid < D; ++mid) {
-                    pal.push_back(merge_number(half * D + mid, half));
+                    pal.push_back(mid);
+                }
+            } else {
+                for (long long half = base; half < base * D; ++half) {
+                    for (int mid = 0; mid < D; ++mid) {
+                        pal.push_back(merge_number(half * D + mid, half));
+                    }
                 }
             }
         } else {
-            base *= D;
+            if (i > 2) {
+                base *= D;
+            }
             for (long long half = base; half < base * D; ++half) {
                 for (int mid = 0; mid < D; ++mid) {
                     pal.push_back(merge_number(half, half));

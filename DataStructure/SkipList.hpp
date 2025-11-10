@@ -124,7 +124,8 @@ int add_node(int i, int h, int j) {
     return right_cnt + down_cnt;
 }
 
-void add(T x) {
+// 插入节点
+void insert(T x) {
     if (find(1, MAXL, x) != 0) {
         add_count(1, MAXL, x);
     } else {
@@ -216,7 +217,7 @@ int index(T x) {
     return index(1, MAXL, x);
 }
 
-// 查找 x 的前驱（小于 x 中最大的数）
+// 查找 x 的前驱（严格小于 x 中最大的数）
 T pre(int i, int h, T x) {
     while (next_node[i][h] != 0 && key[next_node[i][h]] < x) {
         i = next_node[i][h];
@@ -232,7 +233,7 @@ T pre(T x) {
     return pre(1, MAXL, x);
 }
 
-// 查找 x 的后继（大于 x 中最小的数）
+// 查找 x 的后继（严格大于 x 中最小的数）
 T post(int i, int h, T x) {
     while (next_node[i][h] != 0 && key[next_node[i][h]] < x) {
         i = next_node[i][h];

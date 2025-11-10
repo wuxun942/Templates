@@ -123,8 +123,9 @@ bool balance(int i) {
     return ALPHA * diff[i] >= max(diff[ls[i]], diff[rs[i]]);
 }
 
-// 插入，f: 父节点，s: i 是 f 的哪个儿子
-void add(int i, int f, int s, T x) {
+// 插入节点
+// f: 父节点，s: i 是 f 的哪个儿子
+void insert(int i, int f, int s, T x) {
     if (i == 0) {
         if (f == 0) {
             head = init(x);
@@ -137,9 +138,9 @@ void add(int i, int f, int s, T x) {
         if (key[i] == x) {
             key_count[i]++;
         } else if (key[i] > x) {
-            add(ls[i], i, 1, x);
+            insert(ls[i], i, 1, x);
         } else {
-            add(rs[i], i, 2, x);
+            insert(rs[i], i, 2, x);
         }
         up(i);
         if (!balance(i)) {
@@ -150,9 +151,9 @@ void add(int i, int f, int s, T x) {
     }
 }
 
-void add(T x) {
+void insert(T x) {
     top = father = side = 0;
-    add(head, 0, 0, x);
+    insert(head, 0, 0, x);
     rebuild();
 }
 
@@ -189,7 +190,7 @@ T index(int k) {
     return index(head, k);
 }
 
-// 查找 x 的前驱（小于 x 中最大的数）
+// 查找 x 的前驱（严格小于 x 中最大的数）
 int pre(T x) {
     int kth = get_rank(x);
     if (kth == 1) {
@@ -198,7 +199,7 @@ int pre(T x) {
     return index(kth - 1);
 }
 
-// 查找 x 的后继（大于 x 中最小的数）
+// 查找 x 的后继（严格大于 x 中最小的数）
 int post(T x) {
     int kth = get_rank(x + 1);
     if (kth == siz[head] + 1) {

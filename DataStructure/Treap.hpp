@@ -1,10 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-/*
-Treap：一种弱平衡树，通过随机化权重实现的笛卡尔树
-此处保留有旋 Treap 和 FHQ Treap 的实现
-*/
+// Treap：一种弱平衡树，通过随机化权重实现的笛卡尔树
 
 using T = long long;
 constexpr T INF = LLONG_MAX;
@@ -69,7 +66,7 @@ int right_rotate(int i) {
    return l;
 }
 
-// 增加节点
+// 插入节点
 int insert(int i, T x) {
     if (i == 0) {
         key[++cnt] = x;
@@ -132,7 +129,7 @@ T index(int k) {
     return index(head, k);
 }
 
-// 查找 x 的前驱（小于 x 中最大的数）
+// 查找 x 的前驱（严格小于 x 中最大的数）
 T pre(int i, T x) {
     if (i == 0) {
         return -INF;
@@ -147,7 +144,7 @@ T pre(T x) {
     return pre(head, x);
 }
 
-// 查找 x 的后继（大于 x 中最小的数）
+// 查找 x 的后继（严格大于 x 中最小的数）
 T post(int i, T x) {
     if (i == 0) {
         return INF;

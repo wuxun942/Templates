@@ -95,7 +95,7 @@ int maintain(int i) {
     return i;
 }
 
-// 增加节点：找位置 + 保持平衡性
+// 插入节点：找位置 + 保持平衡性
 int insert(int i, T x) {
     if (i == 0) {
         key[++cnt] = x;
@@ -212,7 +212,7 @@ int index(T k) {
     return index(head, k);
 }
 
-// 查找 x 的前驱（小于 x 中最大的数）
+// 查找 x 的前驱（严格小于 x 中最大的数）
 T pre(int i, T x) {
     // 找不到
     if (i == 0) {
@@ -228,7 +228,7 @@ T pre(T x) {
     return pre(head, x);
 }
 
-// 查找 x 的后继（大于 x 中最小的数）
+// 查找 x 的后继（严格大于 x 中最小的数）
 T post(int i, T x) {
     // 找不到
     if (i == 0) {

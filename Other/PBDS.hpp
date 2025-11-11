@@ -6,9 +6,6 @@ pb_ds: Policy-Based Data Structures
 当然也可以被其他平衡树 / 有序表模板代替
 */
 
-#include <bits/stdc++.h>
-using namespace std;
-
 #include <ext/pb_ds/assoc_container.hpp>
 #include <ext/pb_ds/tree_policy.hpp>
 using __gnu_pbds::tree;

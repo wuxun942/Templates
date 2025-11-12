@@ -203,7 +203,11 @@ void remove(T x) {
     }
 }
 
-// FHQ Treap：将 Treap 的旋转操作换成分裂和合并，可实现可持久化
+/*
+FHQ Treap：将 Treap 的旋转操作换成分裂和合并，可实现可持久化
+分裂操作可分为按值分裂和按排名分裂两类，两者的复杂度都是 O(log n)
+对于后者，它能维护中序遍历顺序不变
+*/
 
 // 有 key_count 版本
 
@@ -249,7 +253,7 @@ void up(int i) {
     siz[i] = siz[ls[i]] + siz[rs[i]] + key_count[i];
 }
 
-// 分裂
+// 按值分裂
 void split(int l, int r, int i, T x) {
     if (i == 0) {
         rs[l] = ls[r] = 0;
@@ -264,6 +268,22 @@ void split(int l, int r, int i, T x) {
     }
     up(i);
 }
+
+// // 按排名分裂（实际使用时两种方法只能保留一个）
+// void split(int l, int r, int i, int rank) {
+//     if (i == 0) {
+//         rs[l] = ls[r] = 0;
+//         return;
+//     }
+//     if (siz[ls[i]] + 1 <= rank) {
+//         rs[l] = i;
+//         split(i, r, rs[i], rank - siz[ls[i]] - 1);
+//     } else {
+//         ls[r] = i;
+//         split(l, i, ls[i], rank);
+//     }
+//     up(i);
+// }
 
 // 合并
 int merge(int l, int r) {
@@ -444,7 +464,7 @@ void up(int i) {
     siz[i] = siz[ls[i]] + siz[rs[i]] + 1;
 }
 
-// 分裂
+// 按值分裂
 void split(int l, int r, int i, T x) {
     if (i == 0) {
         rs[l] = ls[r] = 0;
@@ -453,12 +473,28 @@ void split(int l, int r, int i, T x) {
     if (key[i] <= x) { // key 太小，放在左子树的右儿子
         rs[l] = i;
         split(i, r, rs[i], x);
-    } else { // key 太大，放在右子树的左儿子
+    } else { // key 太大，放在右子树的左儿子，
         ls[r] = i;
         split(l, i, ls[i], x);
     }
     up(i);
 }
+
+// 按排名分裂（实际使用时两种方法只能保留一个）
+// void split(int l, int r, int i, int rank) {
+//     if (i == 0) {
+//         rs[l] = ls[r] = 0;
+//         return;
+//     }
+//     if (siz[ls[i]] + 1 <= rank) {
+//         rs[l] = i;
+//         split(i, r, rs[i], rank - siz[ls[i]] - 1);
+//     } else {
+//         ls[r] = i;
+//         split(l, i, ls[i], rank);
+//     }
+//     up(i);
+// }
 
 // 合并
 int merge(int l, int r) {

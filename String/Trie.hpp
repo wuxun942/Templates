@@ -7,11 +7,9 @@ using namespace std;
 constexpr int MAXL = 5'000'001;
 int tree[MAXL][27]; // 末位表示 end
 int cnt_v;
-void init(int n) {
+void init(int n = cnt_v) {
     cnt_v = 0;
-    for (int i = 0; i <= n; ++i) {
-        memset(tree[i], 0, sizeof(tree[i]));
-    }
+    memset(tree, 0, (n + 1) * 27 * sizeof(int));
 }
 
 void init(const vector<string> &a) {
@@ -64,13 +62,9 @@ constexpr int MAXL = 5'000'001; // 最长比特位 * 数量
 int tree[MAXL][3];
 int cnt_v;
 
-void init(int n) {
+void init(int n = cnt_v) {
     cnt_v = 0;
-    for (int i = 0; i <= n; ++i) {
-        tree[i][0] = 0;
-        tree[i][1] = 0;
-        tree[i][2] = 0; // 经过次数，用于删除节点
-    }
+    memset(tree, 0, (n + 1) * 3 * sizeof(int));
 }
 
 void init(const vector<T> &a) {

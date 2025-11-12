@@ -14,10 +14,8 @@ void build(const vector<string>& a) {
     for (auto &s : a) {
         sum_len += s.size();
     }
-    for (int i = 0; i <= sum_len; ++i) {
-        memset(tree[i], 0, sizeof(tree[i]));
-        fail[i] = 0;
-    }
+    memset(tree, 0, (sum_len + 1) * 27 * sizeof(int));
+    fill(fail, fail + sum_len + 1, 0);
 
     // 插入（同字典树）
     cnt_v = 0;
@@ -80,10 +78,8 @@ void build(const vector<string> &a) {
     for (auto &s : a) {
         sum_len += s.size();
     }
-    for (int i = 0; i <= sum_len; ++i) {
-        memset(tree[i], 0, sizeof(tree[i]));
-        fail[i] = 0;
-    }
+    memset(tree, 0, (sum_len + 1) * 27 * sizeof(int));
+    fill(fail, fail + sum_len + 1, 0);
 
     // 插入（同字典树）
     cnt_v = 0;
@@ -151,12 +147,10 @@ void build(const vector<string> &a) {
     for (auto &s : a) {
         sum_len += s.size();
     }
-    for (int i = 0; i <= sum_len; ++i) {
-        memset(tree[i], 0, sizeof(tree[i]));
-        fail[i] = 0;
-        head[i] = -1;
-        cnt[i] = 0;
-    }
+    memset(tree, 0, (sum_len + 1) * 27 * sizeof(int));
+    fill(fail, fail + sum_len + 1, 0);
+    fill(head, head + sum_len + 1, -1);
+    fill(cnt, cnt + sum_len + 1, 0);
 
     // 插入（同字典树）
     n = a.size();

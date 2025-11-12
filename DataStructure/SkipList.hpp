@@ -1,13 +1,12 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-// 跳表
+// 跳表：通过随机化层数，实现 O(log n) 的操作
 
 using T = long long;
-
 constexpr T INF = LLONG_MAX;
 
-// 最大层数
+// 最大层数，层数值域为 [1, MAXL]
 constexpr int MAXL = 20;
 
 // 最大节点数量
@@ -20,16 +19,16 @@ int cnt;
 T key[MAXN];
 
 // 节点 key 的计数
-int key_count[MAXN]{};
+int key_count[MAXN];
 
 // 节点层数
 int level[MAXN];
 
 // 每层节点的下一跳
-int next_node[MAXN][MAXL + 1]{};
+int next_node[MAXN][MAXL + 1];
 
 // 每层节点一跳的长度
-int len[MAXN][MAXL + 1]{};
+int len[MAXN][MAXL + 1];
 
 // 建立跳表，即建立 -inf 节点
 void build() {
@@ -44,10 +43,8 @@ void clear(int n = cnt) {
     fill(key, key + n + 1, 0);
     fill(key_count, key_count + n + 1, 0);
     fill(level, level + n + 1, 0);
-    for (int i = 1; i <= n; ++i) {
-        memset(next_node[i], 0, sizeof(next_node[i]));
-        memset(len[i], 0, sizeof(len[i]));
-    }
+    memset(next_node, 0, (n + 1) * (MAXL + 1) * sizeof(int));
+    memset(len, 0, (n + 1) * (MAXL + 1) * sizeof(int));
 }
 
 // 生成随机层数

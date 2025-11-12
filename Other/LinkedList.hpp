@@ -2,7 +2,7 @@
 
 // 链式前向星建图，以下为 1-based
 constexpr int MAXN = 5001, MAXE = MAXN << 1;
-int head[MAXN]{};
+int head[MAXN];
 int nxt[MAXE];
 int to[MAXE];
 // long long weight[MAXE];

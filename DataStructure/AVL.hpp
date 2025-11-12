@@ -24,18 +24,18 @@ T key[MAXN];
 int key_count[MAXN];
 
 // 子树高度
-int height[MAXN]{};
+int height[MAXN];
 
 // 左右儿子
-int ls[MAXN]{};
-int rs[MAXN]{};
+int ls[MAXN];
+int rs[MAXN];
 
 // 子树的数字总数
-int siz[MAXN]{};
+int siz[MAXN];
 
 // 整体初始化
 void clear(int n = cnt) {
-    head = cnt = 0;
+    head = cnt = 0;    
     fill(key, key + n + 1, 0);
     fill(key_count, key_count + n + 1, 0);
     fill(height, height + n + 1, 0);

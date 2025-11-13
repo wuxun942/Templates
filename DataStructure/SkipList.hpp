@@ -1,7 +1,11 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-// 跳表：通过随机化层数，实现 O(log n) 的操作
+/*
+跳表：通过随机化层数，实现 O(log n) 的操作
+
+由于用了rand，需要设置随机种子 srand(time(0))
+*/
 
 using T = long long;
 constexpr T INF = LLONG_MAX;

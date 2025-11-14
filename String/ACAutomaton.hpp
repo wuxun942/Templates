@@ -3,7 +3,7 @@ using namespace std;
 
 // 朴素 AC 自动机
 constexpr int MAXL = 1'000'001;
-int tree[MAXL][27]; // 末位表示 end
+int trie[MAXL][27]; // 末位表示 end
 int fail[MAXL];
 int last[MAXL]; // 上一个匹配位置
 int cnt_v;
@@ -14,7 +14,7 @@ void build(const vector<string>& a) {
     for (auto &s : a) {
         sum_len += s.size();
     }
-    memset(tree, 0, (sum_len + 1) * 27 * sizeof(int));
+    memset(trie, 0, (sum_len + 1) * 27 * sizeof(int));
     fill(fail, fail + sum_len + 1, 0);
 
     // 插入（同字典树）
@@ -22,31 +22,31 @@ void build(const vector<string>& a) {
     for (auto &s : a) {
         int cur = 0;
         for (char c : s) {
-            int &son = tree[cur][c - 'a'];
+            int &son = trie[cur][c - 'a'];
             if (son == 0) {
                 son = ++cnt_v;
             }
             cur = son;
         }
-        tree[cur][26] = 1;
+        trie[cur][26] = 1;
     }
 
     // 构建 fail 指针
-    int l = -1, r = 0;
+    int l = 0, r = 0;
     for (int j = 0; j < 26; ++j) {
-        if (tree[0][j] != 0) {
-            q[r++] = tree[0][j];
+        if (trie[0][j] != 0) {
+            q[r++] = trie[0][j];
         }
     }
-    while (l + 1 < r) {
-        int x = q[++l];
+    while (l < r) {
+        int x = q[l++];
         for (int j = 0; j < 26; ++j) {
-            if (tree[x][j] == 0) {
-                tree[x][j] = tree[fail[x]][j];
+            if (trie[x][j] == 0) {
+                trie[x][j] = trie[fail[x]][j];
             } else {
-                fail[tree[x][j]] = tree[fail[x]][j];
-                last[tree[x][j]] = tree[fail[tree[x][j]]][26] ? fail[tree[x][j]] : last[fail[tree[x][j]]];
-                q[r++] = tree[x][j];
+                fail[trie[x][j]] = trie[fail[x]][j];
+                last[trie[x][j]] = trie[fail[trie[x][j]]][26] ? fail[trie[x][j]] : last[fail[trie[x][j]]];
+                q[r++] = trie[x][j];
             }
         }
     }
@@ -56,9 +56,9 @@ void build(const vector<string>& a) {
 bool search(const string& s) {
     int cur = 0;
     for (char c : s) {
-        cur = tree[cur][c - 'a'];
+        cur = trie[cur][c - 'a'];
         for (int ptr = cur; ptr > 0; ptr = last[ptr]) {
-            if (tree[ptr][26]) {
+            if (trie[ptr][26]) {
                 return true;
             }
         }
@@ -68,7 +68,7 @@ bool search(const string& s) {
 
 // 只考虑命中时报警
 constexpr int MAXL = 1'000'001;
-int tree[MAXL][27]; // 末位表示 end
+int trie[MAXL][27]; // 末位表示 end
 int fail[MAXL];
 int q[MAXL];
 int cnt_v;
@@ -78,7 +78,7 @@ void build(const vector<string> &a) {
     for (auto &s : a) {
         sum_len += s.size();
     }
-    memset(tree, 0, (sum_len + 1) * 27 * sizeof(int));
+    memset(trie, 0, (sum_len + 1) * 27 * sizeof(int));
     fill(fail, fail + sum_len + 1, 0);
 
     // 插入（同字典树）
@@ -86,31 +86,31 @@ void build(const vector<string> &a) {
     for (auto &s : a) {
         int cur = 0;
         for (char c : s) {
-            int &son = tree[cur][c - 'a'];
+            int &son = trie[cur][c - 'a'];
             if (son == 0) {
                 son = ++cnt_v;
             }
             cur = son;
         }
-        tree[cur][26] = 1;
+        trie[cur][26] = 1;
     }
 
     // 构建 fail 指针
     int l = -1, r = 0;
     for (int j = 0; j < 26; ++j) {
-        if (tree[0][j] != 0) {
-            q[r++] = tree[0][j];
+        if (trie[0][j] != 0) {
+            q[r++] = trie[0][j];
         }
     }
     while (l + 1 < r) {
         int x = q[++l];
-        tree[x][26] |= tree[fail[x]][26]; // 等价位置也要有 end 标记
+        trie[x][26] |= trie[fail[x]][26]; // 等价位置也要有 end 标记
         for (int j = 0; j < 26; ++j) {
-            if (tree[x][j] == 0) {
-                tree[x][j] = tree[fail[x]][j];
+            if (trie[x][j] == 0) {
+                trie[x][j] = trie[fail[x]][j];
             } else {
-                fail[tree[x][j]] = tree[fail[x]][j];
-                q[r++] = tree[x][j];
+                fail[trie[x][j]] = trie[fail[x]][j];
+                q[r++] = trie[x][j];
             }
         }
     }
@@ -120,8 +120,8 @@ void build(const vector<string> &a) {
 bool search(const string &s) {
     int cur = 0;
     for (char c : s) {
-        cur = tree[cur][c - 'a'];
-        if (tree[cur][26]) {
+        cur = trie[cur][c - 'a'];
+        if (trie[cur][26]) {
             return true;
         }
     }
@@ -130,7 +130,7 @@ bool search(const string &s) {
 
 // 扫描文章 + 离线统计词频
 constexpr int MAXL = 1'000'001; // 模式串长度总和
-int tree[MAXL][26];
+int trie[MAXL][26];
 int fail[MAXL];
 int cnt_v;
 int q[MAXL];
@@ -147,7 +147,7 @@ void build(const vector<string> &a) {
     for (auto &s : a) {
         sum_len += s.size();
     }
-    memset(tree, 0, (sum_len + 1) * 27 * sizeof(int));
+    memset(trie, 0, (sum_len + 1) * 27 * sizeof(int));
     fill(fail, fail + sum_len + 1, 0);
     fill(head, head + sum_len + 1, -1);
     fill(cnt, cnt + sum_len + 1, 0);
@@ -159,7 +159,7 @@ void build(const vector<string> &a) {
         auto &s = a[i];
         int cur = 0;
         for (char c : s) {
-            int &son = tree[cur][c - 'a'];
+            int &son = trie[cur][c - 'a'];
             if (son == 0) {
                 son = ++cnt_v;
             }
@@ -171,18 +171,18 @@ void build(const vector<string> &a) {
     // 构建 fail 指针
     int l = -1, r = 0;
     for (int j = 0; j < 26; ++j) {
-        if (tree[0][j] != 0) {
-            q[r++] = tree[0][j];
+        if (trie[0][j] != 0) {
+            q[r++] = trie[0][j];
         }
     }
     while (l + 1 < r) {
         int x = q[++l];
         for (int j = 0; j < 26; ++j) {
-            if (tree[x][j] == 0) {
-                tree[x][j] = tree[fail[x]][j];
+            if (trie[x][j] == 0) {
+                trie[x][j] = trie[fail[x]][j];
             } else {
-                fail[tree[x][j]] = tree[fail[x]][j];
-                q[r++] = tree[x][j];
+                fail[trie[x][j]] = trie[fail[x]][j];
+                q[r++] = trie[x][j];
             }
         }
     }
@@ -208,7 +208,7 @@ void dfs(int x) {
 vector<int> scan(const string &s) {
     int cur = 0;
     for (char c : s) {
-        cur = tree[cur][c - 'a'];
+        cur = trie[cur][c - 'a'];
         ++cnt[cur];
     }
     dfs(0);

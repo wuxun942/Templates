@@ -5,49 +5,49 @@ using namespace std;
 
 // 只考虑26个字母的字典树的静态数组实现
 constexpr int MAXL = 5'000'001;
-int tree[MAXL][27]; // 末位表示 end
+int trie[MAXL][27]; // 末位表示 end
 int cnt_v;
-void init(int n = cnt_v) {
+void clear(int n = cnt_v) {
     cnt_v = 0;
-    memset(tree, 0, (n + 1) * 27 * sizeof(int));
+    memset(trie, 0, (n + 1) * 27 * sizeof(int));
 }
 
-void init(const vector<string> &a) {
+void clear(const vector<string> &a) {
     int sum_len = 0;
     for (auto& s : a) {
         sum_len += s.size();
     }
-    init(sum_len);
+    clear(sum_len);
 }
 
 void insert(const string &s) {
     int cur = 0;
     for (char c : s) {
-        int &son = tree[cur][c - 'a'];
+        int &son = trie[cur][c - 'a'];
         if (son == 0) {
             son = ++cnt_v;
         }
         cur = son;
     }
-    tree[cur][26] = 1;
+    trie[cur][26] = 1;
 }
 
 bool search_word(const string &s) {
     int cur = 0;
     for (char c : s) {
-        int son = tree[cur][c - 'a'];
+        int son = trie[cur][c - 'a'];
         if (son == 0) {
             return false;
         }
         cur = son;
     }
-    return tree[cur][26];
+    return trie[cur][26];
 }
 
 bool search_prefix(const string &s) {
     int cur = 0;
     for (char c : s) {
-        int son = tree[cur][c - 'a'];
+        int son = trie[cur][c - 'a'];
         if (son == 0) {
             return false;
         }
@@ -59,32 +59,32 @@ bool search_prefix(const string &s) {
 // 0-1 字典树
 using T = int;
 constexpr int MAXL = 5'000'001; // 最长比特位 * 数量
-int tree[MAXL][3];
+int trie[MAXL][3];
 int cnt_v;
 
-void init(int n = cnt_v) {
+void clear(int n = cnt_v) {
     cnt_v = 0;
-    memset(tree, 0, (n + 1) * 3 * sizeof(int));
+    memset(trie, 0, (n + 1) * 3 * sizeof(int));
 }
 
-void init(const vector<T> &a) {
+void clear(const vector<T> &a) {
     int mx = 0;
     for (T x : a) {
         mx = max(mx, bit_width((unsigned) x));
     }
-    init(mx * a.size());
+    clear(mx * a.size());
 }
 
 // k: 比特位长度，不要减一
 void insert(T x, int k) {
     int cur = 0;
     for (int i = k - 1; i >= 0; --i) {
-        int bit = x >> i & 1, &son = tree[cur][bit];
+        int bit = x >> i & 1, &son = trie[cur][bit];
         if (son == 0) {
             son = ++cnt_v;
         }
         cur = son;
-        ++tree[cur][2];
+        ++trie[cur][2];
     }
 }
 
@@ -94,11 +94,11 @@ T search(T x, int k) {
     int cur = 0;
     for (int i = k - 1; i >= 0; --i) {
         int bit = x >> i & 1;
-        if (int son = tree[cur][bit ^ 1]; tree[son][2] > 0) {
+        if (int son = trie[cur][bit ^ 1]; trie[son][2] > 0) {
             res = res * 2 + 1;
             cur = son;
         } else {
-            cur = tree[cur][bit];
+            cur = trie[cur][bit];
             res = res * 2;
         }
     }
@@ -109,7 +109,7 @@ T search(T x, int k) {
 void remove(T x, int k) {
     int cur = 0;
     for (int i = k - 1; i >= 0; --i) {
-        cur = tree[cur][x >> i & 1];
-        --tree[cur][2];
+        cur = trie[cur][x >> i & 1];
+        --trie[cur][2];
     }
 }

@@ -208,7 +208,7 @@ void remove(T x) {
 /*
 FHQ Treap：将 Treap 的旋转操作换成分裂和合并，可实现可持久化
 分裂操作可分为按值分裂和按排名分裂两类，两者的复杂度都是 O(log n)
-对于后者，它能维护中序遍历顺序不变
+两者的使用场景有所差别，关心插入值则用前者，关心插入位置则用后者
 */
 
 // 有 key_count 版本
@@ -256,36 +256,36 @@ void up(int i) {
 }
 
 // 按值分裂
-void split(int l, int r, int i, T x) {
+void split_key(int l, int r, int i, T x) {
     if (i == 0) {
         rs[l] = ls[r] = 0;
         return;
     }
     if (key[i] <= x) { // key 太小，放在左子树的右儿子
         rs[l] = i;
-        split(i, r, rs[i], x);
+        split_key(i, r, rs[i], x);
     } else { // key 太大，放在右子树的左儿子
         ls[r] = i;
-        split(l, i, ls[i], x);
+        split_key(l, i, ls[i], x);
     }
     up(i);
 }
 
-// // 按排名分裂（实际使用时两种方法只能保留一个）
-// void split(int l, int r, int i, int rank) {
-//     if (i == 0) {
-//         rs[l] = ls[r] = 0;
-//         return;
-//     }
-//     if (siz[ls[i]] + 1 <= rank) {
-//         rs[l] = i;
-//         split(i, r, rs[i], rank - siz[ls[i]] - 1);
-//     } else {
-//         ls[r] = i;
-//         split(l, i, ls[i], rank);
-//     }
-//     up(i);
-// }
+// // 按排名分裂
+void split_rank(int l, int r, int i, int rank) {
+    if (i == 0) {
+        rs[l] = ls[r] = 0;
+        return;
+    }
+    if (siz[ls[i]] + 1 <= rank) {
+        rs[l] = i;
+        split_rank(i, r, rs[i], rank - siz[ls[i]] - 1);
+    } else {
+        ls[r] = i;
+        split_rank(l, i, ls[i], rank);
+    }
+    up(i);
+}
 
 // 合并
 int merge(int l, int r) {
@@ -338,7 +338,7 @@ void insert(T x) {
         change_count(head, x, 1);
         return;
     }
-    split(0, 0, head, x);
+    split_key(0, 0, head, x);
     key[++cnt] = x;
     key_count[cnt] = siz[cnt] = 1;
     priority[cnt] = rand();
@@ -352,10 +352,10 @@ void remove(T x) {
         if (key_count[i] > 1) {
             change_count(head, x, -1);
         } else {
-            split(0, 0, head, x);
+            split_key(0, 0, head, x);
             int lm = rs[0];
             int r = ls[0];
-            split(0, 0, lm, x - 1);
+            split_key(0, 0, lm, x - 1);
             int l = rs[0];
             head = merge(l, r);
         }
@@ -467,36 +467,36 @@ void up(int i) {
 }
 
 // 按值分裂
-void split(int l, int r, int i, T x) {
+void split_key(int l, int r, int i, T x) {
     if (i == 0) {
         rs[l] = ls[r] = 0;
         return;
     }
     if (key[i] <= x) { // key 太小，放在左子树的右儿子
         rs[l] = i;
-        split(i, r, rs[i], x);
+        split_key(i, r, rs[i], x);
     } else { // key 太大，放在右子树的左儿子，
         ls[r] = i;
-        split(l, i, ls[i], x);
+        split_key(l, i, ls[i], x);
     }
     up(i);
 }
 
-// 按排名分裂（实际使用时两种方法只能保留一个）
-// void split(int l, int r, int i, int rank) {
-//     if (i == 0) {
-//         rs[l] = ls[r] = 0;
-//         return;
-//     }
-//     if (siz[ls[i]] + 1 <= rank) {
-//         rs[l] = i;
-//         split(i, r, rs[i], rank - siz[ls[i]] - 1);
-//     } else {
-//         ls[r] = i;
-//         split(l, i, ls[i], rank);
-//     }
-//     up(i);
-// }
+// 按排名分裂
+void split_rank(int l, int r, int i, int rank) {
+    if (i == 0) {
+        rs[l] = ls[r] = 0;
+        return;
+    }
+    if (siz[ls[i]] + 1 <= rank) {
+        rs[l] = i;
+        split_rank(i, r, rs[i], rank - siz[ls[i]] - 1);
+    } else {
+        ls[r] = i;
+        split_rank(l, i, ls[i], rank);
+    }
+    up(i);
+}
 
 // 合并
 int merge(int l, int r) {
@@ -518,7 +518,7 @@ int merge(int l, int r) {
 
 // 插入节点：按 x 分裂，再插入，合并
 void insert(T x) {
-    split(0, 0, head, x);
+    split_key(0, 0, head, x);
     key[++cnt] = x;
     siz[cnt] = 1;
     priority[cnt] = rand();
@@ -527,10 +527,10 @@ void insert(T x) {
 
 // 删除节点：先按 x 分裂，再按 x - 1 分裂，删除第二次分裂的头节点
 void remove(T x) {
-    split(0, 0, head, x);
+    split_key(0, 0, head, x);
     int lm = rs[0];
     int r = ls[0];
-    split(0, 0, lm, x - 1);
+    split_key(0, 0, lm, x - 1);
     int l = rs[0];
     int m = ls[0];
     head = merge(merge(l, merge(ls[m], rs[m])), r);
@@ -539,7 +539,7 @@ void remove(T x) {
 // 查找排名：返回 x 的名次（从 1 开始）
 int get_rank(T x) {
     // 按 x - 1 分裂，小于等于 x - 1 的树的大小加 1 即为排名
-    split(0, 0, head, x - 1);
+    split_key(0, 0, head, x - 1);
     int ans = siz[rs[0]] + 1;
     head = merge(rs[0], ls[0]);
     return ans;

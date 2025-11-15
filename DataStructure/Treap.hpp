@@ -592,3 +592,147 @@ T post(int i, T x) {
 T post(T x) {
     return post(head, x);
 }
+
+// 可持久化 FHQ Treap（只保留无 key_count 的版本）
+
+using T = long long;
+constexpr T INT = LLONG_MAX;
+
+// 每个版本的最大节点数
+constexpr int MAXN = 500001;
+
+// 节点总数 = 每个版本的最大节点数 * 版本数
+constexpr int MAXM = MAXN * 50;
+
+// 节点编号
+int cnt = 0;
+
+// 不同版本的头节点
+int heads[MAXN];
+
+// 节点的 key
+T key[MAXM];
+
+// 左右儿子
+int ls[MAXM];
+int rs[MAXM];
+
+// 子树大小
+int siz[MAXM];
+
+// 随机生成的权重
+int priority[MAXM];
+
+// 拷贝节点
+int copy(int i) {
+    key[++cnt] = key[i];
+    ls[cnt] = ls[i];
+    rs[cnt] = rs[i];
+    siz[cnt] = siz[i];
+    priority[cnt] = priority[i];
+    return cnt;
+}
+
+// 维护子树信息
+void up(int i) {
+    siz[i] = siz[ls[i]] + siz[rs[i]] + 1;
+}
+
+// 按值分裂
+void split(int l, int r, int i, T x) {
+    if (i == 0) {
+        rs[l] = ls[r] = 0;
+        return;
+    } 
+    i = copy(i);
+    if (key[i] <= x) {
+        rs[l] = i;
+        split(i, r, rs[i], x);
+    } else {
+        ls[r] = i;
+        split(l, i, ls[i], x);
+    }
+    up(i);
+}
+
+// 合并
+int merge(int l, int r) {
+    if (l == 0 || r == 0) {
+        return l + r;
+    }
+    if (priority[l] >= priority[r]) {
+        l = copy(l);
+        rs[l] = merge(rs[l], r);
+        up(l);
+        return l;
+    }
+    r = copy(r);
+    ls[r] = merge(l, ls[r]);
+    up(r);
+    return r;
+}
+
+// 在 v 版本插入 x
+void insert(int v, int i, T x) {
+    split(0, 0, i, x);
+    int l = rs[0];
+    int r = ls[0];
+    ls[0] = rs[0] = 0;
+    ++cnt;
+    key[cnt] = x;
+    siz[cnt] = 1;
+    priority[cnt] = rand();
+    heads[v] = merge(merge(l, cnt), r);
+}
+
+// 在 v 版本删除 x
+void remove(int v, int i, T x) {
+    split(0, 0, i, x);
+    int lm = rs[0];
+    int r = ls[0];
+    split(0, 0, lm, x - 1);
+    int l = rs[0];
+    int m = ls[0];
+    ls[0] = rs[0] = 0;
+    heads[v] = merge(merge(l, merge(ls[m], rs[m])), r);
+}
+
+int small(int i, T x) {
+    if (i == 0) {
+        return 0;
+    }
+    if (key[i] >= x) {
+        return small(ls[i], x);
+    }
+    return siz[ls[i]] + 1 + small(rs[i], x);
+}
+
+T index(int i, int k) {
+    if (siz[ls[i]] >= k) {
+        return index(ls[i], k);
+    }
+     if (siz[ls[i]] + 1 < k) {
+        return index(rs[i], k - siz[ls[i]] - 1);
+    }
+    return key[i];
+}
+
+T pre(int i, T x) {
+    if (i == 0) {
+        return -INF;
+    }
+    if (key[i] >= x) {
+        return pre(ls[i], x);
+    }
+    return max(key[i], pre(rs[i], x));
+}
+
+T post(int i, T x) {
+    if (i == 0) {
+        return INF;
+    }
+    if (key[i] <= x) {
+        return post(rs[i], x);
+    }
+    return min(key[i], post(ls[i], x));
+}

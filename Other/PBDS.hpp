@@ -8,11 +8,8 @@ pb_ds: Policy-Based Data Structures
 
 #include <ext/pb_ds/assoc_container.hpp>
 #include <ext/pb_ds/tree_policy.hpp>
-using __gnu_pbds::tree;
 using __gnu_pbds::null_type;
 using __gnu_pbds::rb_tree_tag;
 using __gnu_pbds::tree_order_statistics_node_update;
 template<typename T>
-using ordered_set = tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node_update>;
-template<typename T1, typename T2>
-using ordered_map = tree<T1, T2, less<T1>, rb_tree_tag, tree_order_statistics_node_update>;
+using ordered_set = __gnu_pbds::tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node_update>;

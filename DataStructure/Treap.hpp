@@ -120,7 +120,7 @@ int get_rank(T x) {
     return small(head, x) + 1;
 }
 
-// 查询第 k 大的数字
+// 查询第 k 小的数字
 T index(int i, int k) {
     if (siz[ls[i]] >= k) {
         return index(ls[i], k);
@@ -378,7 +378,7 @@ int get_rank(T x) {
     return small(head, x) + 1;
 }
 
-// 查询第 k 大的数字（超过 size 则抛出异常）
+// 查询第 k 小的数字（超过 size 则抛出异常）
 T index(int i, int k) {
     if (siz[ls[i]] >= k) {
         return index(ls[i], k);
@@ -545,7 +545,7 @@ int get_rank(T x) {
     return ans;
 }
 
-// 查询第 k 大的数字（超过 size 则抛出异常）
+// 查询第 k 小的数字（超过 size 则抛出异常）
 T index(int i, int k) {
     if (siz[ls[i]] >= k) {
         return index(ls[i], k);
@@ -596,13 +596,14 @@ T post(T x) {
 // 可持久化 FHQ Treap（只保留无 key_count 的版本）
 
 using T = long long;
-constexpr T INT = LLONG_MAX;
+constexpr T INF = LLONG_MAX;
 
 // 每个版本的最大节点数
-constexpr int MAXN = 500001;
+constexpr int MAXN = 100'001;
 
-// 节点总数 = 每个版本的最大节点数 * 版本数
-constexpr int MAXM = MAXN * 50;
+// 节点总数 = 每个版本的最大节点数 * 倍数
+// 通常来说，这个数至少是树高的 5 倍；实际上这个数往往会更小
+constexpr int MAXM = MAXN * 85;
 
 // 节点编号
 int cnt = 0;
@@ -623,7 +624,7 @@ int siz[MAXM];
 // 随机生成的权重
 int priority[MAXM];
 
-// 拷贝节点
+// 拷贝节点，返回新节点编号
 int copy(int i) {
     key[++cnt] = key[i];
     ls[cnt] = ls[i];
@@ -672,7 +673,7 @@ int merge(int l, int r) {
     return r;
 }
 
-// 在 v 版本插入 x
+// 以 i 为头节点的树上插入 x，作为 v 版本
 void insert(int v, int i, T x) {
     split(0, 0, i, x);
     int l = rs[0];
@@ -685,7 +686,7 @@ void insert(int v, int i, T x) {
     heads[v] = merge(merge(l, cnt), r);
 }
 
-// 在 v 版本删除 x
+// 以 i 为头节点的树上删除 x（保证存在），作为 v 版本
 void remove(int v, int i, T x) {
     split(0, 0, i, x);
     int lm = rs[0];
@@ -697,6 +698,7 @@ void remove(int v, int i, T x) {
     heads[v] = merge(merge(l, merge(ls[m], rs[m])), r);
 }
 
+// 比 x 小的数字数量；如需查询排名，需要在此基础上加 1
 int small(int i, T x) {
     if (i == 0) {
         return 0;
@@ -707,6 +709,7 @@ int small(int i, T x) {
     return siz[ls[i]] + 1 + small(rs[i], x);
 }
 
+// 查询第 k 小的数字
 T index(int i, int k) {
     if (siz[ls[i]] >= k) {
         return index(ls[i], k);
@@ -717,6 +720,7 @@ T index(int i, int k) {
     return key[i];
 }
 
+// 查找 x 的前驱
 T pre(int i, T x) {
     if (i == 0) {
         return -INF;
@@ -727,6 +731,7 @@ T pre(int i, T x) {
     return max(key[i], pre(rs[i], x));
 }
 
+// 查找 x 的后继
 T post(int i, T x) {
     if (i == 0) {
         return INF;

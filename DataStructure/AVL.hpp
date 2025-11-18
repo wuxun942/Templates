@@ -194,7 +194,7 @@ void remove(T x) {
     }
 }
 
-// 查询第 k 大的数字（超过 size 则抛出异常）
+// 查询第 k 小的数字（超过 size 则抛出异常）
 T index(int i, int k) {
     if (siz[ls[i]] >= k) {
         return index(ls[i], k);

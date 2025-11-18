@@ -198,7 +198,7 @@ int get_rank(T x) {
     return small(1, MAXL, x) + 1;
 }
 
-// 查询第 k 大的数字（超过 size 则抛出异常）
+// 查询第 k 小的数字（超过 size 则抛出异常）
 int index(int i, int h, T x) {
     if (h == 0) {
         throw overflow_error("SkipList Overflow");

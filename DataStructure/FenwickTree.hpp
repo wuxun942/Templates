@@ -12,7 +12,7 @@ using namespace std;
 template<typename T>
 class FenwickTree {
     vector<T> tree;
-    
+
 public:
     FenwickTree(int n) : tree(n + 1) {}
 
@@ -252,18 +252,18 @@ public:
     }
 
     void update(int x, int y, T val) {
-        for (; x < m; x += x & -x) {
-            for (; y < n; y += y & -y) {
-                tree[x][y] += val;
+        for (int i = x; i < m; i += i & -i) {
+            for (int j = y; j < n; j += j & -j) {
+                tree[i][j] += val;
             }
         }
     }
 
     T query(int x, int y) {
         T ans = 0;
-        for (; x > 0; x &= x - 1) {
-            for (; y > 0; y &= y - 1) {
-                ans += tree[x][y];
+        for (int i = x; i > 0; i &= i - 1) {
+            for (int j = y; j > 0; j &= j - 1) {
+                ans += tree[i][j];
             }
         }
         return ans;
@@ -288,12 +288,12 @@ class FenwickTree {
         T v2 = x * v;
         T v3 = y * v;
         T v4 = x * y * v;
-        for (; x <= m; x += x & -x) {
-            for (; y <= n; y += y & -y) {
-                info1[x][y] += v1;
-                info2[x][y] += v2;
-                info3[x][y] += v3;
-                info4[x][y] += v4;
+        for (int i = x; i <= m; i += i & -i) {
+            for (int j = y; j <= n; j += j & -j) {
+                info1[i][j] += v1;
+                info2[i][j] += v2;
+                info3[i][j] += v3;
+                info4[i][j] += v4;
             }
         }
     }

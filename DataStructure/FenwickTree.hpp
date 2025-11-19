@@ -12,6 +12,7 @@ using namespace std;
 template<typename T>
 class FenwickTree {
     vector<T> tree;
+    
 public:
     FenwickTree(int n) : tree(n + 1) {}
 
@@ -230,6 +231,7 @@ template<typename T>
 class FenwickTree {
     int m, n;
     vector<vector<T>> tree;
+
 public:
     FenwickTree(int m, int n) {
         this->m = m + 1;
@@ -249,29 +251,29 @@ public:
         }
     }
 
-    void update(int i, int j, T val) {
-        for (; i < m; i += i & -i) {
-            for (; j < n; j += j & -j) {
-                tree[i][j] += val;
+    void update(int x, int y, T val) {
+        for (; x < m; x += x & -x) {
+            for (; y < n; y += y & -y) {
+                tree[x][y] += val;
             }
         }
     }
 
-    T query(int i, int j) {
+    T query(int x, int y) {
         T ans = 0;
-        for (; i > 0; i &= i - 1) {
-            for (; j > 0; j &= j - 1) {
-                ans += tree[i][j];
+        for (; x > 0; x &= x - 1) {
+            for (; y > 0; y &= y - 1) {
+                ans += tree[x][y];
             }
         }
         return ans;
     }
 
-    T query(int up, int down, int left, int right) {
-        if (up < down || left < right) {
+    T query(int x1, int y1, int x2, int y2) {
+        if (x1 < x2 || y1 < y2) {
             return 0;
         }
-        return query(down, right) - query(down, left - 1) - query(up - 1, right) + query(up - 1, left - 1);
+        return query(x2, y2) - query(x2, y1 - 1) - query(x1 - 1, y2) + query(x1 - 1, y1 - 1);
     }
 };
 
@@ -280,29 +282,18 @@ template<typename T>
 class FenwickTree {
     vector<vector<T>> info1, info2, info3, info4;
     int m, n;
-public:
-    FenwickTree (int m, int n) {
-        this->m = m + 1;
-        this->n = n + 1;
-        info1.resize(m + 1, vector(n + 1, 0));
-        info2.resize(m + 1, vector(n + 1, 0));
-        info3.resize(m + 1, vector(n + 1, 0));
-        info4.resize(m + 1, vector(n + 1, 0));
-    }
-
-    
 
     void update(int x, int y, T v) {
         T v1 = v;
         T v2 = x * v;
         T v3 = y * v;
         T v4 = x * y * v;
-        for (int i = x; i <= n; i += i & -i) {
-            for (int j = y; j <= m; j += j & -j) {
-                info1[i][j] += v1;
-                info2[i][j] += v2;
-                info3[i][j] += v3;
-                info4[i][j] += v4;
+        for (; x <= m; x += x & -x) {
+            for (; y <= n; y += y & -y) {
+                info1[x][y] += v1;
+                info2[x][y] += v2;
+                info3[x][y] += v3;
+                info4[x][y] += v4;
             }
         }
     }
@@ -317,14 +308,34 @@ public:
         return ans;
     }
 
-    void update(int a, int b, int c, int d, T v) {
-        update(a, b, v);
-        update(c + 1, d + 1, v);
-        update(a, d + 1, -v);
-        update(c + 1, b, -v);
+public:
+    FenwickTree(int m, int n) {
+        this->m = m + 1;
+        this->n = n + 1;
+        info1.resize(m + 1, vector(n + 1, 0));
+        info2.resize(m + 1, vector(n + 1, 0));
+        info3.resize(m + 1, vector(n + 1, 0));
+        info4.resize(m + 1, vector(n + 1, 0));
     }
 
-    T query(int a, int b, int c, int d) {
-        return query(c, d) - query(a - 1, d) - query(c, b - 1) + query(a - 1, b - 1);
+    FenwickTree(const vector<vector<T>> &mat) {
+        m = mat.size();
+        n = mat[0].size();
+        for (int i = 0; i < m; ++i) {
+            for (int j = 0; j < n; ++j) {
+                update(i, j, mat[i][j]);
+            }
+        }
+    }
+
+    void update(int x1, int y1, int x2, int y2, T v) {
+        update(x1, y1, v);
+        update(x2 + 1, y2 + 1, v);
+        update(x1, y2 + 1, -v);
+        update(x2 + 1, y1, -v);
+    }
+
+    T query(int x1, int y1, int x2, int y2) {
+        return query(x2, y2) - query(x1 - 1, y2) - query(x2, y1 - 1) + query(x1 - 1, y1 - 1);
     }
 };

@@ -20,6 +20,7 @@ class LazyHeap {
             pq.pop();
         }
     }
+    
 public:
     size_t size() {
         return sz;

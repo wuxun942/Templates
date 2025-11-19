@@ -92,6 +92,7 @@ class LazySegmentTree {
         T r_res = query(o << 1 | 1, m + 1, r, ql, qr);
         return merge_val(l_res, r_res);
     }
+    
 public:
     LazySegmentTree(int n, T init_val) : LazySegmentTree(vector<T>(n, init_val)) {}
 

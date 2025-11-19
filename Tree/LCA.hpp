@@ -44,6 +44,7 @@ class LcaTarjan {
             }
         }
     }
+    
 public:
     LcaTarjan(vector<vector<int>> &edges, int root = 0) {
         n = edges.size() + 1;
@@ -92,6 +93,7 @@ class LcaBinaryLifting {
             }
         }
     }
+
 public:
     LcaBinaryLifting(const vector<vector<int>> &edges, int root = 0) {
         int n = edges.size() + 1;
@@ -226,6 +228,7 @@ class LCA_HDL {
             }
         }
     }
+
     int clk = 0;
     void dfs2(int x, int t) {
         top[x] = t;
@@ -239,6 +242,7 @@ class LCA_HDL {
             }
         }
     }
+
 public:
     LCA_HDL(vector<vector<int>> &edges, int root = 0) {
         int n = edges.size() + 1;

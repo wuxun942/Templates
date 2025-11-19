@@ -11,6 +11,7 @@ class ST {
     T merge_val(T x, T y) {
         return max(x, y); // 看题目修改
     }
+    
 public:
     ST(const vector<int> &arr) {
         int n = a.size(), m = bit_width<uint32_t>(n);

@@ -6,6 +6,7 @@ using namespace std;
 // 封装为类
 class UnionFind {
     vector<int> fa, sz;
+    
 public:
     int cc;
     UnionFind(int n): fa(n), sz(n, 1), cc(n) {

@@ -6,7 +6,7 @@ using namespace std;
 对于 arr，所有模板类封装均为 0-based，所有静态数组实现均为 1-based
 */
 
-// 单点更新区间查询（原始） / 区间更新单点查询（直接当差分用）
+// 单点修改 + 区间查询（原始） / 区间修改 + 单点查询（直接当差分用）
 
 // 泛型模板类封装
 template<typename T>
@@ -32,11 +32,11 @@ public:
     }
 
     T query(int i) {
-        T res = 0;
+        T ans = 0;
         for (; i > 0; i &= i - 1) {
-            res += tree[i];
+            ans += tree[i];
         }
-        return res;
+        return ans;
     }
 
     T query(int l, int r) {
@@ -80,11 +80,11 @@ T query(int i) {
     if (i > tree_size) {
         throw overflow_error("FenwickTree Overflow");
     }
-    T res = 0;
+    T ans = 0;
     for (; i > 0; i &= i - 1) {
-        res += tree[i];
+        ans += tree[i];
     }
-    return res;
+    return ans;
 }
 
 T query(int l, int r) {
@@ -94,7 +94,7 @@ T query(int l, int r) {
     return query(r) - query(l - 1);
 }
 
-// 区间更新区间查询
+// 区间修改 + 区间查询
 template<typename T>
 class FenwickTree {
     vector<T> info1, info2;
@@ -110,7 +110,7 @@ class FenwickTree {
         }
     }
 
-    // 传统单点更新
+    // 传统单点修改
     void update(vector<T> &tree, int i, T val) {
         for (; i < tree.size(); i += i & -i) {
             tree[i] += val;
@@ -119,17 +119,17 @@ class FenwickTree {
 
     // 传统单点查询
     T query(const vector<T> &tree, int i) {
-        T res = 0;
+        T ans = 0;
         for (; i > 0; i &= i - 1) {
-            res += tree[i];
+            ans += tree[i];
         }
-        return res;
+        return ans;
     }
 
 public:
-    FenwickTree(int n): info1(n + 1), info2(n + 1) {}
+    FenwickTree(int n) : info1(n + 1), info2(n + 1) {}
 
-    FenwickTree(const vector<T> &arr): FenwickTree(arr.size())  {
+    FenwickTree(const vector<T> &arr) : FenwickTree(arr.size())  {
         int n = arr.size();
         vector<T> diff1(n), diff2(n);
         diff1[0] = arr[0];
@@ -142,7 +142,7 @@ public:
         build(info2, diff2);
     }
 
-    // 区间更新
+    // 区间
     void update(int l, int r, T val) {
         update(info1, l, val);
         update(info1, r + 1, -val);
@@ -173,7 +173,7 @@ void build(T *tree, const T *arr) {
     }
 }
 
-// 传统单点更新
+// 传统单点修改
 void update(T *tree, int i, T val) {
     for (; i <= tree_size; i += i & -i) {
         tree[i] += val;
@@ -185,11 +185,11 @@ T query(const T *tree, int i) {
     if (i > tree_size) {
         throw overflow_error("FenwickTree Overflow");
     }
-    T res = 0;
+    T ans = 0;
     for (; i > 0; i &= i - 1) {
-        res += tree[i];
+        ans += tree[i];
     }
-    return res;
+    return ans;
 }
 
 void build(int n) {
@@ -210,7 +210,7 @@ void build(const T *arr, int n) {
     build(info2, diff2);
 }
 
-// 区间更新
+// 区间修改
 void update(int l, int r, T val) {
     update(info1, l, val);
     update(info1, r + 1, -val);
@@ -222,3 +222,109 @@ void update(int l, int r, T val) {
 T query(int l, int r) {
     return query(info1, r) * r - query(info1, l - 1) * (l - 1) - query(info2, r) + query(info2, l - 1);
 }
+
+// 二维树状数组，代码和一维没什么差别，实现上比树套树简单很多
+
+// 单点修改 + 范围查询
+template<typename T>
+class FenwickTree {
+    int m, n;
+    vector<vector<T>> tree;
+public:
+    FenwickTree(int m, int n) {
+        this->m = m + 1;
+        this->n = n + 1;
+        tree.resize(m + 1, vector<T>(n + 1));
+    }
+
+    FenwickTree(const vector<vector<T>> &mat) {
+        int m = mat.size(), n = mat[0].size();
+        this->m = m + 1;
+        this->n = n + 1;
+        tree.resize(m + 1, vector<T>(n + 1));
+        for (int i = 0; i < m; ++i) {
+            for (int j = 0; j < n; ++j) {
+                update(i + 1, j + 1, mat[i][j]);
+            }
+        }
+    }
+
+    void update(int i, int j, T val) {
+        for (; i < m; i += i & -i) {
+            for (; j < n; j += j & -j) {
+                tree[i][j] += val;
+            }
+        }
+    }
+
+    T query(int i, int j) {
+        T ans = 0;
+        for (; i > 0; i &= i - 1) {
+            for (; j > 0; j &= j - 1) {
+                ans += tree[i][j];
+            }
+        }
+        return ans;
+    }
+
+    T query(int up, int down, int left, int right) {
+        if (up < down || left < right) {
+            return 0;
+        }
+        return query(down, right) - query(down, left - 1) - query(up - 1, right) + query(up - 1, left - 1);
+    }
+};
+
+// 范围修改 + 范围查询
+template<typename T>
+class FenwickTree {
+    vector<vector<T>> info1, info2, info3, info4;
+    int m, n;
+public:
+    FenwickTree (int m, int n) {
+        this->m = m + 1;
+        this->n = n + 1;
+        info1.resize(m + 1, vector(n + 1, 0));
+        info2.resize(m + 1, vector(n + 1, 0));
+        info3.resize(m + 1, vector(n + 1, 0));
+        info4.resize(m + 1, vector(n + 1, 0));
+    }
+
+    
+
+    void update(int x, int y, T v) {
+        T v1 = v;
+        T v2 = x * v;
+        T v3 = y * v;
+        T v4 = x * y * v;
+        for (int i = x; i <= n; i += i & -i) {
+            for (int j = y; j <= m; j += j & -j) {
+                info1[i][j] += v1;
+                info2[i][j] += v2;
+                info3[i][j] += v3;
+                info4[i][j] += v4;
+            }
+        }
+    }
+
+    T query(int x, int y) {
+        T ans = 0;
+        for (int i = x; i > 0; i &= i - 1) {
+            for (int j = y; j > 0; j &= j - 1) {
+                ans += (x + 1) * (y + 1) * info1[i][j] - (y + 1) * info2[i][j] - (x + 1) * info3[i][j] + info4[i][j];
+            }
+        }
+        return ans;
+    }
+
+    void update(int a, int b, int c, int d, T v) {
+        update(a, b, v);
+        update(c + 1, d + 1, v);
+        update(a, d + 1, -v);
+        update(c + 1, b, -v);
+    }
+
+    T query(int a, int b, int c, int d) {
+        return query(c, d) - query(a - 1, d) - query(c, b - 1) + query(a - 1, b - 1);
+    }
+};

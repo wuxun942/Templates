@@ -2,7 +2,8 @@
 using namespace std;
 
 // 乘法快速幂
-long long qpow(long long x, long long n, int mod) {
+constexpr int MOD = 1'000'000'007;
+long long qpow(long long x, long long n, int mod = MOD) {
     int ans = 1;
     x %= mod;
     for (; n > 0; n >>= 1, x = x * x % mod) {
@@ -32,9 +33,10 @@ vector<vector<int>> multiply(vector<vector<int>> &mat1, vector<vector<int>> &mat
 }
 
 // 矩阵快速幂：只有方阵才有乘方
+constexpr int MOD = 1'000'000'007;
 constexpr int SIZE = 100;
 using matrix = array<array<int, SIZE>, SIZE>;
-matrix multiply(matrix& mat1, matrix& mat2, int sz, int mod) {
+matrix multiply(matrix& mat1, matrix& mat2, int sz = SIZE, int mod = MOD) {
     matrix res{};
     for (int i = 0; i < SIZE; ++i) {
         for (int k = 0; k < SIZE; ++k) {
@@ -49,7 +51,7 @@ matrix multiply(matrix& mat1, matrix& mat2, int sz, int mod) {
     return res;
 }
 
-matrix qpow(matrix mat, int n, int sz, int mod) {
+matrix qpow(matrix mat, int n, int sz = SIZE, int mod = MOD) {
     matrix ans{};
     for (int i = 0; i < SIZE; ++i) {
         ans[i][i] = 1;

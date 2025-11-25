@@ -11,7 +11,7 @@ using namespace std;
 调和级数枚举常用于 “倍数” 相关问题
 */ 
 
-// 埃氏筛筛质数
+// 埃氏筛筛质数 O(MX * log(log(MX)))
 constexpr int MX = 100'001;
 bool is_prime[MX];
 vector<int> primes;
@@ -30,7 +30,7 @@ auto init = []() {
     return 0;
 }();
 
-// 欧拉筛预处理 LPF (最小质因子)
+// 欧拉筛预处理 LPF (最小质因子) O(MX)
 constexpr int MX = 100'001;
 vector<int> primes;
 int lpf[MX];
@@ -55,13 +55,25 @@ auto init = []() {
     return 0;
 }();
 
-// 预处理因数（和质数筛无关，属于调和级数枚举）
+// 预处理因数（和质数筛无关，属于调和级数枚举，不过套路相似）
 constexpr int MX = 100'001;
 vector<int> divisors[MX];
 auto init = []() {
     for (int i = 1; i < MX; ++i) {
         for (int j = i; j < MX; j += i) {
             divisors[j].push_back(i);
+        }
+    }
+    return 0;
+}();
+
+// 平方剩余核
+constexpr int MX = 100'001;
+int core[MX];
+auto init = []() {
+    for (int i = 1; i < MX; ++i) {
+        for (int j = 1; j * i * i < MX; ++j) {
+            core[j] = i;
         }
     }
     return 0;

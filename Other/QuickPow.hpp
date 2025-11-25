@@ -20,35 +20,35 @@ vector<vector<int>> multiply(vector<vector<int>> &mat1, vector<vector<int>> &mat
     if (mat2.size() != p) {
         throw runtime_error("Invalid Input");
     }
-    vector res(m, vector(n, 0));
+    vector ans(m, vector(n, 0));
     for (int i = 0; i < m; ++i) {
         for (int j = 0; j < n; ++j) {
-            int &x = res[i][j];
+            int &x = ans[i][j];
             for (int k = 0; k < p; ++k) {
                 x += mat1[i][k] * mat2[k][j];
             }
         }
     }
-    return res;
+    return ans;
 }
 
 // 矩阵快速幂：只有方阵才有乘方
 constexpr int MOD = 1'000'000'007;
 constexpr int SIZE = 100;
-using matrix = array<array<int, SIZE>, SIZE>;
-matrix multiply(matrix& mat1, matrix& mat2, int sz = SIZE, int mod = MOD) {
-    matrix res{};
+using matrix = array<array<long long, SIZE>, SIZE>;
+matrix multiply(matrix &mat1, matrix &mat2, int sz = SIZE, int mod = MOD) {
+    matrix ans{};
     for (int i = 0; i < SIZE; ++i) {
         for (int k = 0; k < SIZE; ++k) {
             if (mat1[i][k] == 0) {
                 continue;
             }
             for (int j = 0; j < SIZE; ++j) {
-                res[i][j] = (res[i][j] + 1LL * mat1[i][k] * mat2[k][j]) % mod;
+                ans[i][j] = (ans[i][j] + mat1[i][k] * mat2[k][j]) % mod;
             }
         }
     }
-    return res;
+    return ans;
 }
 
 matrix qpow(matrix mat, int n, int sz = SIZE, int mod = MOD) {

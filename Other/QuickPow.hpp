@@ -51,7 +51,7 @@ matrix multiply(matrix &mat1, matrix &mat2, int sz = SIZE, int mod = MOD) {
     return ans;
 }
 
-matrix qpow(matrix mat, int n, int sz = SIZE, int mod = MOD) {
+matrix qpow(matrix mat, long long n, int sz = SIZE, int mod = MOD) {
     matrix ans{};
     for (int i = 0; i < SIZE; ++i) {
         ans[i][i] = 1;

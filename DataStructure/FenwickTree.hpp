@@ -123,7 +123,7 @@ public:
                 s += tree[ans];
             }
         }
-        return ans;
+        return ans + 1;
     }
 };
 

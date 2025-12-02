@@ -95,6 +95,39 @@ T query(int l, int r) {
     return query(r) - query(l - 1);
 }
 
+/*
+权值树状数组第 k 小
+按值域建树，用倍增代替二分，可以实现 O(log U) 的查询
+在值域较大时，需要结合离散化，复杂度为 O(log n)
+*/
+template<typename T>
+class FenwickTree {
+    vector<T> tree;
+
+public:
+    FenwickTree(int n) : tree(n + 1) {}
+
+    void update(int i, T val) {
+        for (; i < tree.size(); i += i & -i) {
+            tree[i] += val;
+        }
+    }
+
+    int query(T k) {
+        int n = tree.size() - 1;
+        int m = bit_width<uint32_t>(n);
+        T s = 0;
+        int ans = 0;
+        for (int i = m - 1; i >= 0; --i) {
+            if (s + tree[ans | 1 << i] < k) {
+                s += tree[ans | 1 << i];
+                ans |= 1 << i;
+            }
+        }
+        return ans;
+    }
+};
+
 // 区间修改 + 区间查询
 template<typename T>
 class FenwickTree {

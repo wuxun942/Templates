@@ -3,14 +3,14 @@ using namespace std;
 
 // 数位DP v2.1
 // 代码示例：返回 [low, high] 中的恰好包含 target 个 0 的数字个数
-int digitDP(int low, int high, int target) {
+long long digitDP(int low, int high, int target) {
     string low_s = to_string(low);
     string high_s = to_string(high);
     int n = high_s.size();
     int diff_lh = n - low_s.size();
     // limit_low, limit_high 不需要记忆
-    vector memo(n, vector(target + 1, -1));
-    auto dfs = [&](this auto &&dfs, int i, int cnt0, bool limit_low, bool limit_high) -> int {
+    vector memo(n, vector(target + 1, -1LL));
+    auto dfs = [&](this auto &&dfs, int i, int cnt0, bool limit_low, bool limit_high) -> long long {
         if (cnt0 > target) {
             return 0;
         }
@@ -22,7 +22,7 @@ int digitDP(int low, int high, int target) {
         }
         int lo = limit_low && i >= diff_lh ? low_s[i - diff_lh] - '0' : 0;
         int hi = limit_high ? high_s[i] - '0' : 9;
-        int res = 0;
+        long long res = 0;
         int d = lo;
         // 这部分单独处理前导零问题
         if (limit_low && i < diff_lh) {

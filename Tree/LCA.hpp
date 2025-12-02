@@ -155,7 +155,7 @@ int stjump[MAXM][MAXN];
 int depth[MAXN];
 void dfs(int x, int fa) {
     stjump[0][x] = fa;
-    for (int i = 1, m = __lg(depth[x]); i <= m; i++) {
+    for (int i = 1, m = bit_width<uint32_t>(depth[x]); i < m; i++) {
         if (int p = stjump[i - 1][x]; p != 0) {
             stjump[i][x] = stjump[i - 1][p];
         }
@@ -170,8 +170,8 @@ void dfs(int x, int fa) {
 }
 
 void build(int n, int root = 1) {
-    int m = __lg(n);
-    for (int i = 0; i <= m; ++i) {
+    int m = bit_width<uint32_t>(n);
+    for (int i = 0; i < m; ++i) {
         for (int j = 0; j < n; ++j) {
             stjump[i][j] = 0;
         }
@@ -195,7 +195,7 @@ int get_lca(int x, int y) {
     if (x == y) {
         return x;
     }
-    for (int i = __lg(depth[x]); i >= 0; i--) {
+    for (int i = bit_width<uint32_t>(depth[x]) - 1; i >= 0; i--) {
         if (int px = stjump[i][x], py = stjump[i][y]; px != py) {
             x = px;
             y = py;
@@ -378,7 +378,7 @@ void dfs1(int x, int f) {
     son[x] = 0;
     int max_height = 0;
     stjump[x][0] = f;
-    for (int j = 1; j <= __lg(depth[x]); ++j) {
+    for (int j = 1; j < bit_width<uint32_t>(depth[x]); ++j) {
         stjump[x][j] = stjump[stjump[x][j - 1]][j - 1];
     }
     for (int e = head[x], y; e; e = nxt[e]) {
@@ -429,7 +429,7 @@ int query(int x, int k) {
     if (k == 0) {
         return x;
     }
-    int hb = __lg(k);
+    int hb = bit_width<uint32_t>(k) - 1;
     x = stjump[x][hb];
     k -= 1 << hb;
     k -= depth[x] - depth[top[x]];

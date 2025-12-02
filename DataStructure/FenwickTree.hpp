@@ -103,25 +103,24 @@ T query(int l, int r) {
 template<typename T>
 class FenwickTree {
     vector<T> tree;
+    int n;
 
 public:
-    FenwickTree(int n) : tree(n + 1) {}
+    FenwickTree(int n) : tree(n + 1), n(n) {}
 
     void update(int i, T val) {
-        for (; i < tree.size(); i += i & -i) {
+        for (; i <= n; i += i & -i) {
             tree[i] += val;
         }
     }
 
     int query(T k) {
-        int n = tree.size() - 1;
-        int m = bit_width<uint32_t>(n);
         T s = 0;
         int ans = 0;
-        for (int i = m - 1; i >= 0; --i) {
-            if (s + tree[ans | 1 << i] < k) {
-                s += tree[ans | 1 << i];
+        for (int i = bit_width<uint32_t>(n) - 1; i >= 0; --i) {
+            if ((ans | 1 << i) <= n && s + tree[ans | 1 << i] < k) {
                 ans |= 1 << i;
+                s += tree[ans];
             }
         }
         return ans;

@@ -466,7 +466,7 @@ void up(int i) {
     siz[i] = siz[ls[i]] + siz[rs[i]] + 1;
 }
 
-// 按值分裂
+// 按值分裂，严格大于 x 的节点放在右树
 void split_key(int l, int r, int i, T x) {
     if (i == 0) {
         rs[l] = ls[r] = 0;

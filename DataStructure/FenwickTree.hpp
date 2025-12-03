@@ -72,7 +72,7 @@ void build(int n) {
 }
 
 void update(int i, T val) {
-    for (; i < tree_size; i += i & -i) {
+    for (; i <= tree_size; i += i & -i) {
         tree[i] += val;
     }
 }
@@ -234,7 +234,7 @@ void build(int n) {
 void build(const T *arr, int n) {
     diff1[1] = arr[1];
     diff2[1] = 0;
-    for (int i = 2; i < n; ++i) {
+    for (int i = 2; i <= n; ++i) {
         diff1[i] = arr[i] - arr[i - 1];
         diff2[i] = i * diff1[i];
     }

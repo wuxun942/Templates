@@ -113,15 +113,15 @@ public:
 };
 
 // 静态数组实现，1-based
-constexpr int MAXN = 100'001;
+constexpr int MAX_N = 100'000 + 5;
 int n;
 using T = int;
 using F = int;
-T arr[MAXN];
+T arr[MAX_N];
 struct Node {
     T val;
     F todo;
-} tree[MAXN << 2];
+} tree[MAX_N << 2];
 
 constexpr F TODO_INIT = 0;
 

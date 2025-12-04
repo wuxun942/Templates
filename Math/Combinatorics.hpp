@@ -17,12 +17,12 @@ long long comb(int n, int m) {
 }
 
 // 2. 递推预处理组合数
-constexpr int MAXN = 101;
-long long c[MAXN][MAXN];
+constexpr int MAX_N = 100 + 5;
+long long c[MAX_N][MAX_N];
 auto init = []() {
     memset(c, 0, sizeof(c));
     c[0][0] = 1;
-    for (int i = 1; i < MAXN; ++i) {
+    for (int i = 1; i < MAX_N; ++i) {
         c[i][0] = c[i][i] = 1;
         for (int j = 1; j < i; ++j) {
             c[i][j] = c[i - 1][j - 1] + c[i - 1][j];
@@ -44,15 +44,15 @@ long long qpow(long long x, long long n, int mod = MOD) {
     return ans;
 }
 
-constexpr int MAXN = 200'001;
-long long fac[MAXN], inv_f[MAXN];
+constexpr int MAX_N = 200'000 + 5;
+long long fac[MAX_N], inv_f[MAX_N];
 auto init = []() {
     fac[0] = 1;
-    for (int i = 1; i < MAXN; i++) {
+    for (int i = 1; i < MAX_N; i++) {
         fac[i] = fac[i - 1] * i % MOD;
     }
-    inv_f[MAXN - 1] = qpow(fac[MAXN - 1], MOD - 2, MOD);
-    for (int i = MAXN - 2; i >= 0; i--) {
+    inv_f[MAX_N - 1] = qpow(fac[MAX_N - 1], MOD - 2, MOD);
+    for (int i = MAX_N - 2; i >= 0; i--) {
         inv_f[i] = inv_f[i + 1] * (i + 1) % MOD;
     }
     return 0;
@@ -67,12 +67,12 @@ long long comb(int n, int m, int mod = MOD) {
 
 // 4. 小模数下的更大范围计算
 // 4.1 Lucas 定理：mod 必须是质数
-constexpr int MAXN = 101;
-long long c[MAXN][MAXN];
+constexpr int MAX_N = 100 + 5;
+long long c[MAX_N][MAX_N];
 auto init = []() {
     memset(c, 0, sizeof(c));
     c[0][0] = 1;
-    for (int i = 1; i < MAXN; ++i) {
+    for (int i = 1; i < MAX_N; ++i) {
         c[i][0] = c[i][i] = 1;
         for (int j = 1; j < i; ++j) {
             c[i][j] = c[i - 1][j - 1] + c[i - 1][j];

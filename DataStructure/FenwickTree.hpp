@@ -49,12 +49,12 @@ public:
 };
 
 // 静态数组实现
-constexpr int MAXN = 100'001;
+constexpr int MAX_N = 100'000 + 5;
 using T = int;
 int n;
-T arr[MAXN];
+T arr[MAX_N];
 int tree_size;
-T tree[MAXN];
+T tree[MAX_N];
 
 void build(int n, const T *arr) {
     tree_size = n;
@@ -191,9 +191,9 @@ public:
 
 // 静态数组实现
 using T = int;
-constexpr int MAXN = 100'001;
-T info1[MAXN], info2[MAXN];
-T diff1[MAXN], diff2[MAXN];
+constexpr int MAX_N = 100'000 + 5;
+T info1[MAX_N], info2[MAX_N];
+T diff1[MAX_N], diff2[MAX_N];
 int tree_size;
 
 // 传统初始化方法

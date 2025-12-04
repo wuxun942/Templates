@@ -7,7 +7,7 @@ using namespace std;
 以 区间增加 + 维护区间和 为例，下标从 1 开始
 */
 
-constexpr int MAXN = 400'001;
+constexpr int MAX_N = 400'000 + 5;
 using T = long long;
 using F = int;
 struct Node {
@@ -15,7 +15,7 @@ struct Node {
     int left = 0;
     int right = 0;
     F to_add = 0;
-} tree[MAXN];
+} tree[MAX_N];
 int cnt = 0;
 int n, init_val;
 

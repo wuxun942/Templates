@@ -32,9 +32,9 @@ struct XorBasisNormal {
     }
 };
 
-constexpr int MAXB = 64;
+constexpr int MAX_B = 64;
 using T = long long;
-T basis[MAXB];
+T basis[MAX_B];
 int bitlen;
 bool has_zero;
 void build(int m) {
@@ -118,9 +118,9 @@ struct XorBasisGauss {
     }
 };
 
-constexpr int MAXB = 64;
+constexpr int MAX_B = 64;
 using T = long long;
-T basis[MAXB];
+T basis[MAX_B];
 int b;
 bool has_zero;
 
@@ -176,10 +176,10 @@ T get_kth_xor(uint64_t k) {
 }
 
 // 向量空间线性基：等效于加法方程组高斯消元
-constexpr int MAXN = 100, MAXM = 100;
+constexpr int MAX_N = 100 + 5, MAX_M = 100 + 5;
 constexpr double eps = 1e5;
-double mat[MAXN][MAXM];
-int basis[MAXN];
+double mat[MAX_N][MAX_M];
+int basis[MAX_N];
 int n, m, cnt; // 行数, 列数, 基数量
 
 bool insert(int i) {

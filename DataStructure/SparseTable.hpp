@@ -37,12 +37,12 @@ public:
 };
 
 // 静态数组实现
-constexpr int MAXN = 100'000;
-constexpr int MAXM = 17;
+constexpr int MAX_N = 100'000 + 5;
+constexpr int MAX_M = 17;
 using T = int;
 int n, m;
-T arr[MAXN];
-T st[MAXN][MAXM];
+T arr[MAX_N];
+T st[MAX_N][MAX_M];
 
 void init() {
     m = bit_width((unsigned) n);

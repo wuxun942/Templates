@@ -47,9 +47,9 @@ x % mn = rn
 最后一项为 lcm / mi 在模 mi 下的逆元，需要用到扩欧求解
 */ 
 
-constexpr int MAXN = 100'001;
+constexpr int MAX_N = 100'000 + 5;
 int n;
-long long m[MAXN], r[MAXN];
+long long m[MAX_N], r[MAX_N];
 long long crt() {
     long long lcm = 1;
     for (int i = 0; i < n; ++i) {
@@ -85,9 +85,9 @@ ans = m_{k+1} * y + r_{k+1}
 即对前 k + 1 个方程，仍然能将解的形式表示为 ans = lcm * x + tail
 */
 
-constexpr int MAXN = 100'001;
+constexpr int MAX_N = 100'000 + 5;
 int n;
-long long m[MAXN], r[MAXN];
+long long m[MAX_N], r[MAX_N];
 long long excrt() {
     long long lcm = 1, tail = 0, x, y;
     for (int i = 0; i < n; ++i) {

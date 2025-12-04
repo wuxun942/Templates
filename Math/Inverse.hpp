@@ -59,11 +59,11 @@ inv[i] + p / i * inv[p % i] = 0 (mod p)
 inv[i] = p - p / i * inv[p % i] (mod p)
 */
 constexpr int MOD = 1'000'000'007;
-constexpr int MAXX = 100'001;
-int inv[MAXX];
+constexpr int MAX_X = 100'000 + 5;
+int inv[MAX_X];
 auto init = []() {
     inv[1] = 1;
-    for (int i = 2; i < MAXX; ++i) {
+    for (int i = 2; i < MAX_X; ++i) {
         inv[i] = MOD - 1LL * inv[MOD % i] * (MOD / i) % MOD;
     }
     return 0;

@@ -138,11 +138,11 @@ public:
     }
 };
 
-constexpr int MAXN = 100'001, MAXM = 17, MAXE = MAXN << 1;
-int head[MAXN]{};
-int nxt[MAXE];
-int to[MAXE];
-// long long weight[MAXE];
+constexpr int MAX_N = 100'000 + 5, MAX_M = 17, MAX_E = MAX_N << 1;
+int head[MAX_N]{};
+int nxt[MAX_E];
+int to[MAX_E];
+// long long weight[MAX_E];
 int cnt_edge = 0;
 void add_edge(int x, int y, long long w = 0) {
     nxt[++cnt_edge] = head[x];
@@ -151,8 +151,8 @@ void add_edge(int x, int y, long long w = 0) {
     head[x] = cnt_edge;
 }
 
-int stjump[MAXM][MAXN];
-int depth[MAXN];
+int stjump[MAX_M][MAX_N];
+int depth[MAX_N];
 void dfs(int x, int fa) {
     stjump[0][x] = fa;
     for (int i = 1, m = bit_width<uint32_t>(depth[x]); i < m; i++) {
@@ -271,11 +271,11 @@ public:
     }
 };
 
-constexpr int MAXN = 100'001, MAXE = MAXN << 1;
-int head[MAXN]{};
-int nxt[MAXE];
-int to[MAXE];
-// long long weight[MAXE];
+constexpr int MAX_N = 100'000 + 5, MAX_E = MAX_N << 1;
+int head[MAX_N]{};
+int nxt[MAX_E];
+int to[MAX_E];
+// long long weight[MAX_E];
 int cnt_edge = 0;
 void add_edge(int x, int y, long long w = 0) {
     nxt[++cnt_edge] = head[x];
@@ -284,11 +284,11 @@ void add_edge(int x, int y, long long w = 0) {
     head[x] = cnt_edge;
 }
 
-int fa[MAXN];
-int depth[MAXN]{};
-int sz[MAXN]{};
-int son[MAXN];
-int top[MAXN];
+int fa[MAX_N];
+int depth[MAX_N]{};
+int sz[MAX_N]{};
+int son[MAX_N];
+int top[MAX_N];
 
 void dfs1(int x, int f) {
     fa[x] = f;
@@ -339,10 +339,10 @@ int get_lca(int x, int y) {
 然而这个问题还能用长链剖分来优化到 O(1)
 */
 
-constexpr int MAXN = 500'001, MAXE = MAXN << 1;
-int head[MAXN]{};
-int nxt[MAXE];
-int to[MAXE];
+constexpr int MAX_N = 500'000 + 5, MAX_E = MAX_N << 1;
+int head[MAX_N]{};
+int nxt[MAX_E];
+int to[MAX_E];
 int cnt_edge = 0;
 void add_edge(int x, int y, long long w = 0) {
     nxt[++cnt_edge] = head[x];
@@ -350,26 +350,26 @@ void add_edge(int x, int y, long long w = 0) {
     head[x] = cnt_edge;
 }
 
-int fa[MAXN];
-int depth[MAXN]{}; // 或者初始化 depth[0] = 0
-int height[MAXN];
+int fa[MAX_N];
+int depth[MAX_N]{}; // 或者初始化 depth[0] = 0
+int height[MAX_N];
 
 // 每个子树的长儿子（子树最高）
-int son[MAXN];
+int son[MAX_N];
 
 // 所在长链的头节点
-int top[MAXN];
+int top[MAX_N];
 
 // 按长链分配 dfn
-int dfn[MAXN];
+int dfn[MAX_N];
 
 // dfn 到原序号的逆映射
-int seg[MAXN];
+int seg[MAX_N];
 
-constexpr int MAXH = 20;
-int stjump[MAXN][MAXH]{};
-int up[MAXN];
-int down[MAXN];
+constexpr int MAX_N = 100'000 + 5, MAX_H = 20;
+int stjump[MAX_N][MAX_H]{};
+int up[MAX_N];
+int down[MAX_N];
 
 // 第一次遍历，建立 fa, depth, sz, son 信息
 void dfs1(int x, int f) {

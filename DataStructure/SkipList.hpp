@@ -10,35 +10,35 @@ using namespace std;
 using T = long long;
 constexpr T INF = LLONG_MAX;
 
-// 最大层数，层数值域为 [1, MAXL]
-constexpr int MAXL = 20;
+// 最大层数，层数值域为 [1, MAX_L]
+constexpr int MAX_L = 20;
 
 // 最大节点数量
-constexpr int MAXN = 100'001;
+constexpr int MAX_N = 100'000 + 5;
 
 // 空间使用计数
 int cnt;
 
 // 节点的 key
-T key[MAXN];
+T key[MAX_N];
 
 // 节点 key 的计数
-int key_count[MAXN];
+int key_count[MAX_N];
 
 // 节点层数
-int level[MAXN];
+int level[MAX_N];
 
 // 每层节点的下一跳
-int next_node[MAXN][MAXL + 1];
+int next_node[MAX_N][MAX_L + 1];
 
 // 每层节点一跳的长度
-int len[MAXN][MAXL + 1];
+int len[MAX_N][MAX_L + 1];
 
 // 建立跳表，即建立 -inf 节点
 void build() {
     cnt = 1;
     key[cnt] = -INF;
-    level[cnt] = MAXL;
+    level[cnt] = MAX_L;
 }
 
 // 清空跳表
@@ -47,14 +47,14 @@ void clear(int n = cnt) {
     fill(key, key + n + 1, 0);
     fill(key_count, key_count + n + 1, 0);
     fill(level, level + n + 1, 0);
-    memset(next_node, 0, (n + 1) * (MAXL + 1) * sizeof(int));
-    memset(len, 0, (n + 1) * (MAXL + 1) * sizeof(int));
+    memset(next_node, 0, (n + 1) * (MAX_L + 1) * sizeof(int));
+    memset(len, 0, (n + 1) * (MAX_L + 1) * sizeof(int));
 }
 
 // 生成随机层数
 int random_level() {
     int ans = 1;
-    while (ans <= MAXL && rand() / (double) RAND_MAX < 0.5) {
+    while (ans <= MAX_L && rand() / (double) RAND_MAX < 0.5) {
         ++ans;
     }
     return ans;
@@ -127,13 +127,13 @@ int add_node(int i, int h, int j) {
 
 // 插入节点
 void insert(T x) {
-    if (find(1, MAXL, x) != 0) {
-        add_count(1, MAXL, x);
+    if (find(1, MAX_L, x) != 0) {
+        add_count(1, MAX_L, x);
     } else {
         key[++cnt] = x;
         key_count[cnt] = 1;
         level[cnt] = random_level();
-        add_node(1, MAXL, cnt);
+        add_node(1, MAX_L, cnt);
     }
 }
 
@@ -169,13 +169,13 @@ void remove_node(int i, int h, int j) {
 }
 
 void remove(T x) {
-    int j = find(1, MAXL, x);
+    int j = find(1, MAX_L, x);
     // 节点存在
     if (j != 0) {
         if (key_count[j] > 1) {
-            remove_count(1, MAXL, x);
+            remove_count(1, MAX_L, x);
         } else {
-            remove_node(1, MAXL, j);
+            remove_node(1, MAX_L, j);
         }
     }
 }
@@ -195,7 +195,7 @@ int small(int i, int h, int x) {
 
 // 查找排名：返回 x 的名次（从 1 开始）
 int get_rank(T x) {
-    return small(1, MAXL, x) + 1;
+    return small(1, MAX_L, x) + 1;
 }
 
 // 查询第 k 小的数字（超过 size 则抛出异常）
@@ -215,7 +215,7 @@ int index(int i, int h, T x) {
 }
 
 int index(T x) {
-    return index(1, MAXL, x);
+    return index(1, MAX_L, x);
 }
 
 // 查找 x 的前驱（严格小于 x 中最大的数）
@@ -231,7 +231,7 @@ T pre(int i, int h, T x) {
 }
 
 T pre(T x) {
-    return pre(1, MAXL, x);
+    return pre(1, MAX_L, x);
 }
 
 // 查找 x 的后继（严格大于 x 中最小的数）
@@ -260,5 +260,5 @@ T post(int i, int h, T x) {
 }
 
 T post(T x) {
-    return post(1, MAXL, x);
+    return post(1, MAX_L, x);
 }

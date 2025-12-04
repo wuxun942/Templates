@@ -12,8 +12,8 @@ using namespace std;
 
 // 单模哈希：以下使用无符号整数计算哈希值，利用自然溢出，相当于对 2^64 取模。
 // 可使用 “异或随机数” 的方式降低哈希冲突的概率
-constexpr int MAXN = 100'001;
-size_t h[MAXN], p[MAXN], q;
+constexpr int MAX_N = 100'000 + 5;
+size_t h[MAX_N], p[MAX_N], q;
 
 void build(const string &s, int base = 1'000'000'007) {
     mt19937_64 rng(chrono::steady_clock::now().time_since_epoch().count());
@@ -34,8 +34,8 @@ size_t get_hash(int l, int r) {
 
 // 双模哈希：使用随机 base
 // 为方便压缩表示，以下使用 int 范围下的 MOD
-constexpr int MAXN = 100'001;
-long long h1[MAXN], p1[MAXN], h2[MAXN], p2[MAXN];
+constexpr int MAX_N = 100'000 + 5;
+long long h1[MAX_N], p1[MAX_N], h2[MAX_N], p2[MAX_N];
 int base1, base2;
 constexpr int MOD1 = 1'070'777'777, MOD2 = 1'000'000'007;
 

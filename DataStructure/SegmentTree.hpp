@@ -79,11 +79,11 @@ public:
 };
 
 // 静态数组实现，1-based
-constexpr int MAXN = 400'001;
+constexpr int MAX_N = 100'000 + 5;
 using T = int;
 int n;
-T arr[MAXN];
-T tree[MAXN << 2];
+T arr[MAX_N];
+T tree[MAX_N << 2];
 
 T merge_val(T a, T b) {
     return max(a, b);

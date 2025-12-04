@@ -15,11 +15,11 @@ using namespace std;
 1.2 容易证明，一棵树的重链数量为 O(log n)
 */
 
-constexpr int MAXN = 100'001, MAXE = MAXN << 1;
-int head[MAXN]{};
-int nxt[MAXE];
-int to[MAXE];
-// long long weight[MAXE];
+constexpr int MAX_N = 100'000 + 5, MAX_E = MAX_N << 1;
+int head[MAX_N]{};
+int nxt[MAX_E];
+int to[MAX_E];
+// long long weight[MAX_E];
 int cnt_edge = 0;
 void add_edge(int x, int y, long long w = 0) {
     nxt[++cnt_edge] = head[x];
@@ -28,21 +28,21 @@ void add_edge(int x, int y, long long w = 0) {
     head[x] = cnt_edge;
 }
 
-int fa[MAXN];
-int depth[MAXN]{}; // 或者初始化 depth[0] = 0
-int sz[MAXN];
+int fa[MAX_N];
+int depth[MAX_N]{}; // 或者初始化 depth[0] = 0
+int sz[MAX_N];
 
 // 每个子树的重儿子（子树最大）
-int son[MAXN];
+int son[MAX_N];
 
 // 所在重链的头节点
-int top[MAXN];
+int top[MAX_N];
 
 // 按重链分配 dfn
-int dfn[MAXN];
+int dfn[MAX_N];
 
 // dfn 到原序号的逆映射
-int seg[MAXN];
+int seg[MAX_N];
 
 // 第一次遍历，建立 fa, depth, sz, son 信息
 void dfs1(int x, int f) {
@@ -86,7 +86,7 @@ void dfs2(int x, int t) {
 // 树链剖分通常结合线段树，完成路径更新和路径查询
 // 一般需要注意的是，线段树建立时的底层赋值为 tree[o] = arr[seg[l]]
 
-int arr[MAXN]; // 如果是边权问题，需要加上 arr[1] = 0;
+int arr[MAX_N]; // 如果是边权问题，需要加上 arr[1] = 0;
 void path_update(int x, int y) {
     while (top[x] != top[y]) {
         if (depth[top[x]] < depth[top[y]]) {
@@ -111,11 +111,11 @@ void path_update(int x, int y) {
 同时这也启示我们，剖分的权值可以根据题目要求进行调整
 */
 
-constexpr int MAXN = 100'001, MAXE = MAXN << 1;
-int head[MAXN]{};
-int nxt[MAXE];
-int to[MAXE];
-// long long weight[MAXE];
+constexpr int MAX_N = 100'000 + 5, MAX_E = MAX_N << 1;
+int head[MAX_N]{};
+int nxt[MAX_E];
+int to[MAX_E];
+// long long weight[MAX_E];
 int cnt_edge = 0;
 void add_edge(int x, int y, long long w = 0) {
     nxt[++cnt_edge] = head[x];
@@ -124,17 +124,17 @@ void add_edge(int x, int y, long long w = 0) {
     head[x] = cnt_edge;
 }
 
-int fa[MAXN];
-int depth[MAXN]{}; // 或者初始化 depth[0] = 0
-int height[MAXN];
+int fa[MAX_N];
+int depth[MAX_N]{}; // 或者初始化 depth[0] = 0
+int height[MAX_N];
 
-int son[MAXN];
+int son[MAX_N];
 
-int top[MAXN];
+int top[MAX_N];
 
-int dfn[MAXN];
+int dfn[MAX_N];
 
-int seg[MAXN];
+int seg[MAX_N];
 
 void dfs1(int x, int f) {
     fa[x] = f;

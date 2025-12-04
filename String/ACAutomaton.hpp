@@ -2,12 +2,12 @@
 using namespace std;
 
 // 朴素 AC 自动机
-constexpr int MAXL = 1'000'001;
-int trie[MAXL][27]; // 末位表示 end
-int fail[MAXL];
-int last[MAXL]; // 上一个匹配位置
+constexpr int MAX_L = 1'000'000 + 5;
+int trie[MAX_L][27]; // 末位表示 end
+int fail[MAX_L];
+int last[MAX_L]; // 上一个匹配位置
 int cnt_v;
-int q[MAXL];
+int q[MAX_L];
 void build(const vector<string>& a) {
     // 初始化
     int sum_len = 0;
@@ -67,10 +67,10 @@ bool search(const string& s) {
 }
 
 // 只考虑命中时报警
-constexpr int MAXL = 1'000'001;
-int trie[MAXL][27]; // 末位表示 end
-int fail[MAXL];
-int q[MAXL];
+constexpr int MAX_L = 1'000'000 + 5;
+int trie[MAX_L][27]; // 末位表示 end
+int fail[MAX_L];
+int q[MAX_L];
 int cnt_v;
 void build(const vector<string> &a) {
     // 初始化
@@ -129,17 +129,17 @@ bool search(const string &s) {
 }
 
 // 扫描文章 + 离线统计词频
-constexpr int MAXL = 1'000'001; // 模式串长度总和
-int trie[MAXL][26];
-int fail[MAXL];
+constexpr int MAX_L = 1'000'000 + 5; // 模式串长度总和
+int trie[MAX_L][26];
+int fail[MAX_L];
 int cnt_v;
-int q[MAXL];
-int head[MAXL];
-int nxt[MAXL];
-int to[MAXL];
-int cnt[MAXL];
-constexpr int MAXN = 1'000'001; // 模式串个数
-int end_node[MAXN];
+int q[MAX_L];
+int head[MAX_L];
+int nxt[MAX_L];
+int to[MAX_L];
+int cnt[MAX_L];
+constexpr int MAX_N = 1'000'000 + 5; // 模式串个数
+int end_node[MAX_N];
 int n;
 void build(const vector<string> &a) {
     // 初始化

@@ -12,12 +12,12 @@ using namespace std;
 */ 
 
 // 两次 DFS 求直径
-constexpr int MX = 1'000'001;
-int head[MX];
-int nxt[MX];
-int to[MX];
-int weight[MX];
-int last[MX];
+constexpr int MAX_N = 1'000'000 + 5;
+int head[MAX_N];
+int nxt[MAX_N];
+int to[MAX_N];
+int weight[MAX_N];
+int last[MAX_N];
 int e;
 
 void add_edge(int x, int y, int w) {
@@ -59,11 +59,11 @@ long long get_diameter(const vector<vector<int>>& edges) {
 }
 
 // 树形 DP 求直径
-constexpr int MX = 1'000'001;
-int head[MX];
-int nxt[MX];
-int to[MX];
-int weight[MX];
+constexpr int MAX_N = 1'000'000 + 5;
+int head[MAX_N];
+int nxt[MAX_N];
+int to[MAX_N];
+int weight[MAX_N];
 int e;
 long long ans;
 

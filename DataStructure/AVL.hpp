@@ -9,7 +9,7 @@ using T = long long;
 constexpr T INF = LLONG_MAX;
 
 // 最大节点数量
-constexpr int MAXN = 100'001;
+constexpr int MAX_N = 100'000 + 5;
 
 // 空间使用计数
 int cnt = 0;
@@ -18,20 +18,20 @@ int cnt = 0;
 int head = 0;
 
 // 节点的 key
-T key[MAXN];
+T key[MAX_N];
 
 // 节点 key 的计数
-int key_count[MAXN];
+int key_count[MAX_N];
 
 // 子树高度
-int height[MAXN];
+int height[MAX_N];
 
 // 左右儿子
-int ls[MAXN];
-int rs[MAXN];
+int ls[MAX_N];
+int rs[MAX_N];
 
 // 子树的数字总数
-int siz[MAXN];
+int siz[MAX_N];
 
 // 整体初始化
 void clear(int n = cnt) {

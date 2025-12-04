@@ -2,9 +2,9 @@
 using namespace std;
 
 // // 手写二叉堆（反向索引堆的基础）
-// constexpr int MAXN = 100'001;
+// constexpr int MAX_N = 100'000 + 5;
 // int n;
-// int64_t h[MAXN];
+// int64_t h[MAX_N];
 
 // // 以下的 up & down 以最小堆为例
 // void up(int i) {
@@ -56,11 +56,11 @@ using namespace std;
 反向索引堆：每个索引只能有一个值，索引存在且值可能发生变化时，直接改动索引
 可用于 Prim 算法和 Dijkstra 算法，替代懒删除堆
 */
-constexpr int MAXN = 100'001;
+constexpr int MAX_N = 100'000 + 5;
 int n;
 typedef pair<int64_t, int> pli;
-pli h[MAXN];
-int where[MAXN];
+pli h[MAX_N];
+int where[MAX_N];
 
 void heapswap(pli &x1, pli &x2) {
     swap(where[x1.second], where[x2.second]);

@@ -7,13 +7,13 @@ using namespace std;
 如果是其他键，需要离散化；最大堆只需要将 while 不等号反向
 */ 
 
-constexpr int MAXN = 100'001;
+constexpr int MAX_N = 100'000 + 5;
 int n;
-int arr[MAXN]; // 键排好序后，对应的值
+int arr[MAX_N]; // 键排好序后，对应的值
 int top;
-int st[MAXN];
+int st[MAX_N];
 int head;
-int ls[MAXN], rs[MAXN];
+int ls[MAX_N], rs[MAX_N];
 
 // 以下的 arr 和 st 均为 1-based
 void build(int n, const int *arr) {

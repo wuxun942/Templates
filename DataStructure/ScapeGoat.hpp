@@ -13,7 +13,7 @@ using T = long long;
 constexpr T INF = LLONG_MAX;
 
 constexpr double ALPHA = 0.7;
-constexpr int MAXN = 100'001;
+constexpr int MAX_N = 100'000 + 5;
 
 // 空间使用计数
 int cnt = 0;
@@ -22,23 +22,23 @@ int cnt = 0;
 int head = 0;
 
 // 节点的 key
-T key[MAXN];
+T key[MAX_N];
 
 // 节点 key 的计数
-int key_count[MAXN];
+int key_count[MAX_N];
 
 // 左右儿子
-int ls[MAXN];
-int rs[MAXN];
+int ls[MAX_N];
+int rs[MAX_N];
 
 // 子树的数字总数
-int siz[MAXN];
+int siz[MAX_N];
 
 // 子树节点总数
-int diff[MAXN];
+int diff[MAX_N];
 
 // 中序收集节点的数组
-int collect[MAXN];
+int collect[MAX_N];
 
 // 中序收集节点的计数
 int ci;

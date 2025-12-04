@@ -17,10 +17,10 @@ using namespace std;
 // 以下均以 1-based
 
 // 无权树
-constexpr int MX = 100'001;
-int head[MX];
-int nxt[MX];
-int to[MX];
+constexpr int MAX_N = 100'000 + 5;
+int head[MAX_N];
+int nxt[MAX_N];
+int to[MAX_N];
 int e;
 
 void add_edge(int x, int y) {
@@ -102,11 +102,11 @@ vector<int> calc_centroid2(const vector<vector<int>> &edges) {
 }
 
 // 有权树
-constexpr int MX = 100'001;
-int head[MX];
-int nxt[MX];
-int to[MX];
-int weight[MX];
+constexpr int MAX_N = 100'000 + 5;
+int head[MAX_N];
+int nxt[MAX_N];
+int to[MAX_N];
+int weight[MAX_N];
 int e;
 
 void add_edge(int x, int y, int w) {

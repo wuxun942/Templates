@@ -46,8 +46,8 @@ public:
 };
 
 // 静态数组实现
-constexpr int MAXN = 100'000;
-int fa[MAXN], sz[MAXN], cc;
+constexpr int MAX_N = 100'000 + 5;
+int fa[MAX_N], sz[MAX_N], cc;
 void build(int n) {
     iota(fa, fa + n, 0);
     fill(sz, sz + n, 1);

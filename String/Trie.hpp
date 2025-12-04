@@ -4,8 +4,8 @@ using namespace std;
 // 字典树，做题时更推荐使用静态数组实现
 
 // 只考虑26个字母的字典树的静态数组实现
-constexpr int MAXL = 5'000'001;
-int trie[MAXL][27]; // 末位表示 end
+constexpr int MAX_L = 5'000'000 + 5;
+int trie[MAX_L][27]; // 末位表示 end
 int cnt_v;
 void clear(int n = cnt_v) {
     cnt_v = 0;
@@ -58,8 +58,8 @@ bool search_prefix(const string &s) {
 
 // 0-1 字典树
 using T = int;
-constexpr int MAXL = 5'000'001; // 最长比特位 * 数量
-int trie[MAXL][3];
+constexpr int MAX_L = 5'000'000 + 5; // 最长比特位 * 数量
+int trie[MAX_L][3];
 int cnt_v;
 
 void clear(int n = cnt_v) {

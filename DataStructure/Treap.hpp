@@ -15,7 +15,7 @@ Treap：一种弱平衡树，通过随机化权重实现的笛卡尔树
 using T = long long;
 constexpr T INF = LLONG_MAX;
 
-constexpr int MAXN = 100'001;
+constexpr int MAX_N = 100'000 + 5;
 
 // 空间使用计数
 int cnt = 0;
@@ -24,20 +24,20 @@ int cnt = 0;
 int head = 0;
 
 // 节点的 key
-T key[MAXN];
+T key[MAX_N];
 
 // 节点 key 的计数
-int key_count[MAXN];
+int key_count[MAX_N];
 
 // 左右儿子
-int ls[MAXN];
-int rs[MAXN];
+int ls[MAX_N];
+int rs[MAX_N];
 
 // 子树的数字总数
-int siz[MAXN];
+int siz[MAX_N];
 
 // 随机生成的权重
-int priority[MAXN];
+int priority[MAX_N];
 
 // 整体初始化
 void clear(int n = cnt) {
@@ -215,7 +215,7 @@ FHQ Treap：将 Treap 的旋转操作换成分裂和合并，可实现可持久�
 
 using T = long long;
 constexpr T INF = LLONG_MAX;
-constexpr int MAXN = 100'001;
+constexpr int MAX_N = 100'000 + 5;
 
 // 空间使用计数
 int cnt = 0;
@@ -224,20 +224,20 @@ int cnt = 0;
 int head = 0;
 
 // 节点的 key
-T key[MAXN];
+T key[MAX_N];
 
 // 节点 key 的计数
-int key_count[MAXN];
+int key_count[MAX_N];
 
 // 左右儿子
-int ls[MAXN];
-int rs[MAXN];
+int ls[MAX_N];
+int rs[MAX_N];
 
 // 子树的数字总数
-int siz[MAXN];
+int siz[MAX_N];
 
 // 随机生成的权重
-int priority[MAXN];
+int priority[MAX_N];
 
 // 整体初始化
 void clear(int n = cnt) {
@@ -430,7 +430,7 @@ T post(T x) {
 
 using T = long long;
 constexpr T INF = LLONG_MAX;
-constexpr int MAXN = 100'001;
+constexpr int MAX_N = 100'000 + 5;
 
 // 空间使用计数
 int cnt = 0;
@@ -439,17 +439,17 @@ int cnt = 0;
 int head = 0;
 
 // 节点的 key
-T key[MAXN];
+T key[MAX_N];
 
 // 左右儿子
-int ls[MAXN];
-int rs[MAXN];
+int ls[MAX_N];
+int rs[MAX_N];
 
 // 子树的数字总数
-int siz[MAXN];
+int siz[MAX_N];
 
 // 随机生成的权重
-int priority[MAXN];
+int priority[MAX_N];
 
 // 整体初始化
 void clear(int n = cnt) {
@@ -599,17 +599,17 @@ using T = long long;
 constexpr T INF = LLONG_MAX;
 
 // 每个版本的最大节点数
-constexpr int MAXN = 100'001;
+constexpr int MAX_N = 100'000 + 5;
 
 // 节点总数 = 每个版本的最大节点数 * 倍数
 // 通常来说，这个数至少是树高的 5 倍；实际上这个数往往会更小
-constexpr int MAXM = MAXN * 85;
+constexpr int MAXM = MAX_N * 85;
 
 // 节点编号
 int cnt = 0;
 
 // 不同版本的头节点
-int heads[MAXN];
+int heads[MAX_N];
 
 // 节点的 key
 T key[MAXM];

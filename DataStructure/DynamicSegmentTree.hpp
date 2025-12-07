@@ -8,102 +8,123 @@ using namespace std;
 */
 
 constexpr int MAX_N = 400'000 + 5;
+
 using T = long long;
+constexpr T INIT = 0;
+
 using F = int;
-struct Node {
-    T val;
-    int left = 0;
-    int right = 0;
-    F to_add = 0;
-} tree[MAX_N];
-int cnt = 0;
+
 int n, init_val;
+int cnt = 0;
 
-void add_node(int &o) {
-    if (o == 0) {
-        o = ++cnt;
-        tree[o].val = init_val;
-    }
+T tree[MAX_N];
+
+int ls[MAX_N];
+int rs[MAX_N];
+
+F to_add[MAX_N];
+
+void clear(int sz = cnt) {
+    fill(tree, tree + sz + 1, 0);
+    fill(ls, ls + sz + 1, 0);
+    fill(rs, rs + sz + 1, 0);
+    fill(to_add, to_add + sz + 1, 0);
 }
 
-void apply(int o, int l, int r, F f) {
-    Node &cur = tree[o];
-    cur.val += 1LL * (r - l + 1) * f;
-    cur.to_add += f;
+int add_node(int val = init_val) {
+    tree[++cnt] = val;
+    return cnt;
 }
 
-void spread(int o, int l, int r) {
-    Node &cur = tree[o];
-    if (cur.to_add == 0) {
+T merge_val(T a, T b) {
+    return a + b;
+}
+
+void apply(int i, int l, int r, F f) {
+    tree[i] += 1LL * (r - l + 1) * f;
+    to_add[i] += f;
+}
+
+void down(int i, int l, int r) {
+    if (to_add[i] == 0) {
         return;
     }
     int m = (l + r) / 2;
-    add_node(cur.left);
-    add_node(cur.right);
-    apply(cur.left, l, m, cur.to_add);
-    apply(cur.right, m + 1, r, cur.to_add);
-    cur.to_add = 0;
+    if (ls[i] == 0) {
+        ls[i] = add_node();
+    }
+    if (rs[i] == 0) {
+        rs[i] == add_node();
+    }
+    apply(ls[i], l, m, to_add[i]);
+    apply(rs[i], m + 1, r, to_add[i]);
+    to_add[i] = 0;
 }
 
-void maintain(int o) {
-    Node &cur = tree[o];
+void up(int i) {
     // 0 节点（空节点）作冗余处理
-    cur.val = tree[cur.left].val + tree[cur.right].val;
+    tree[i] = merge_val(tree[ls[i]], tree[rs[i]]);
 
     // 一般写法，需要考虑是否为空节点
-    // if (cur.left == 0) {
-    //     cur.val = tree[cur.right].val;
+    // if (ls[i] == 0) {
+    //     tree[i] = tree[rs[i]];
     // } else if (cur.right == 0) {
-    //     cur.val = tree[cur.left].val;
+    //     tree[i] = tree[ls[i]];
     // } else {
-    //     cur.val = tree[cur.left].val + tree[cur.right].val;
+    //     tree[i] = merge_val(tree[ls[i]], tree[rs[i]]);
     // }
 }
 
-void update(int o, int l, int r, int ql, int qr, F f) {
-    Node &cur = tree[o];
+void update(int i, int l, int r, int ql, int qr, F f) {
     if (ql <= l && r <= qr) {
-        apply(o, l, r, f);
+        apply(i, l, r, f);
         return;
     }
-    spread(o, l, r);
+    down(i, l, r);
     int m = (l + r) / 2;
     if (ql <= m) {
-        add_node(cur.left);
-        update(cur.left, l, m, ql, qr, f);
+        if (ls[i] == 0) {
+            ls[i] = add_node();
+        }
+        update(ls[i], l, m, ql, qr, f);
     }
     if (qr > m) {
-        add_node(cur.right);
-        update(cur.right, m + 1, r, ql, qr, f);
+        if (rs[i] == 0) {
+            rs[i] = add_node();
+        }
+        update(rs[i], m + 1, r, ql, qr, f);
     }
-    maintain(o);
+    up(i);
 }
 
-T query(int o, int l, int r, int ql, int qr) {
-    Node &cur = tree[o];
+T query(int i, int l, int r, int ql, int qr) {
     if (ql <= l && r <= qr) {
-        return cur.val;
+        return tree[i];
     }
-    spread(o, l, r);
+    down(i, l, r);
     int m = (l + r) / 2;
-    if (qr <= m) {
-        add_node(cur.left);
-        return query(cur.left, l, m, ql, qr);
+    T res = INIT;
+    if (ql <= m) {
+        if (ls[i] == 0) {
+            ls[i] = add_node();
+        }
+        res = merge_val(res, query(ls[i], l, m, ql, qr));
     }
-    if (ql > m) {
-        add_node(cur.right);
-        return query(cur.right, m + 1, r, ql, qr);
+    if (qr > m) {
+        if (rs[i] == 0) {
+            rs[i] = add_node();
+        }
+        res = merge_val(res, query(rs[i], m + 1, r, ql, qr));
     }
-    add_node(cur.left);
-    add_node(cur.right);
-    return query(cur.left, l, m, ql, qr) + query(cur.right, m + 1, r, ql, qr);
+    return res;
 }
 
-void build(int mx, T val) {
-    n = mx;
+void build(int sz, T val) {
+    n = sz;
     cnt = 1;
-    tree[1].val = init_val = val;
-    tree[0].val = 0; // 作冗余处理
+    tree[1] = val; // 根节点初始化
+    init_val = val;
+    // tree[0] = 0; // 作冗余处理
 }
 
 void update(int ql, int qr, F f) {

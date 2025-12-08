@@ -2,6 +2,8 @@
 using namespace std;
 
 /*
+可持久化：通过节点复用，记录每个版本的信息
+
 可持久化线段树（单点修改）：以查找最大值为例
 一般来说，初始数组是 0 号版本
 */
@@ -32,6 +34,15 @@ T tree[MAX_M];
 int ls[MAX_M];
 int rs[MAX_M];
 
+// 清空
+void clear(int sz = cnt) {
+    cnt = 0;
+    fill(tree + 1, tree + sz + 1, 0);
+    fill(ls + 1, ls + sz + 1, 0);
+    fill(rs + 1, rs + sz + 1, 0);
+}
+
+// 拷贝节点
 int copy(int i) {
     tree[++cnt] = tree[i];
     ls[cnt] = ls[i];
@@ -60,6 +71,7 @@ int build(const T *arr, int l, int r) {
     return i;
 }
 
+// 建立 0 号版本
 void build(const T *arr, int arr_size) {
     n = arr_size;
     roots[0] = build(arr, 1, n);
@@ -86,6 +98,7 @@ int update(int i, int l, int r, int qi, T val) {
     return i;
 }
 
+// 在以 i 为根的线段树上，把 qi 位置改为 val，存储为 v 版本
 void update(int v, int i, int qi, T val) {
     roots[v] = update(i, 1, n, qi, val);
 }
@@ -105,6 +118,7 @@ T query(int i, int l, int r, int ql, int qr) {
     return res;
 }
 
+// 在以 i 为根的线段树上，查询 [ql, qr] 的信息，存储为 v 版本
 T query(int v, int i, int ql, int qr) {
     roots[v] = i;
     return query(i, 1, n, ql, qr);

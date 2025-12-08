@@ -673,7 +673,7 @@ int merge(int l, int r) {
     return r;
 }
 
-// 以 i 为根节点的树上插入 x，作为 v 版本
+// 在以 i 为根节点的树上插入 x，作为 v 版本
 void insert(int v, int i, T x) {
     split(0, 0, i, x);
     int l = rs[0];
@@ -686,7 +686,7 @@ void insert(int v, int i, T x) {
     roots[v] = merge(merge(l, cnt), r);
 }
 
-// 以 i 为根节点的树上删除 x（保证存在），作为 v 版本
+// 在以 i 为根节点的树上删除 x（保证存在），作为 v 版本
 void remove(int v, int i, T x) {
     split(0, 0, i, x);
     int lm = rs[0];
@@ -698,7 +698,7 @@ void remove(int v, int i, T x) {
     roots[v] = merge(merge(l, merge(ls[m], rs[m])), r);
 }
 
-// 比 x 小的数字数量；如需查询排名，需要在此基础上加 1
+// 在以 i 为根节点的树上查找比 x 小的数字数量；如需查询排名，需要在此基础上加 1
 int small(int i, T x) {
     if (i == 0) {
         return 0;
@@ -709,7 +709,7 @@ int small(int i, T x) {
     return siz[ls[i]] + 1 + small(rs[i], x);
 }
 
-// 查询第 k 小的数字
+// 在以 i 为根节点的树上查询第 k 小的数字
 T index(int i, int k) {
     if (siz[ls[i]] >= k) {
         return index(ls[i], k);
@@ -720,7 +720,7 @@ T index(int i, int k) {
     return key[i];
 }
 
-// 查找 x 的前驱
+// 在以 i 为根节点的树上查找 x 的前驱
 T pre(int i, T x) {
     if (i == 0) {
         return -INF;
@@ -731,7 +731,7 @@ T pre(int i, T x) {
     return max(key[i], pre(rs[i], x));
 }
 
-// 查找 x 的后继
+// 在以 i 为根节点的树上查找 x 的后继
 T post(int i, T x) {
     if (i == 0) {
         return INF;

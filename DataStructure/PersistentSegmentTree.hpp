@@ -13,7 +13,7 @@ constexpr int MAX_N = 100'000 + 5;
 constexpr int MAX_Q = 100'000 + 5;
 
 // 可持久化线段树的使用空间 = n * 4 + q * log n
-constexpr int MAX_M = MAX_N * 4 + 17 * MAX_Q;
+constexpr int MAX_M = MAX_N * 4 + MAX_Q * 17;
 
 using T = int;
 constexpr T INIT = INT_MIN;
@@ -24,8 +24,8 @@ T arr[MAX_N];
 // 空间使用计数
 int cnt = 0;
 
-// 每个版本的头
-int heads[MAX_Q];
+// 每个版本的根节点
+int roots[MAX_Q];
 
 T tree[MAX_M];
 
@@ -60,6 +60,16 @@ int build(const T *arr, int l, int r) {
     return i;
 }
 
+void build(const T *arr, int arr_size) {
+    n = arr_size;
+    roots[0] = build(arr, 1, n);
+}
+
+void build(int sz, T init_val) {
+    fill(arr + 1, arr + sz + 1, init_val);
+    build(arr, sz);
+}
+
 int update(int i, int l, int r, int qi, T val) {
     i = copy(i);
     if (l == r) {
@@ -74,6 +84,10 @@ int update(int i, int l, int r, int qi, T val) {
     }
     up(i);
     return i;
+}
+
+void update(int v, int i, int qi, T val) {
+    roots[v] = update(i, 1, n, qi, val);
 }
 
 T query(int i, int l, int r, int ql, int qr) {
@@ -91,20 +105,7 @@ T query(int i, int l, int r, int ql, int qr) {
     return res;
 }
 
-void build(const T *arr, int arr_size) {
-    n = arr_size;
-    heads[0] = build(arr, 1, n);
-}
-
-void build(int sz, T init_val) {
-    fill(arr + 1, arr + sz + 1, init_val);
-    build(arr, sz);
-}
-
-int update(int v, int qi, T val) {
-    return update(heads[v], 1, n, qi, val);
-}
-
-T query(int v, int ql, int qr) {
-    return query(heads[v], 1, n, ql, qr);
+T query(int v, int i, int ql, int qr) {
+    roots[v] = i;
+    return query(i, 1, n, ql, qr);
 }

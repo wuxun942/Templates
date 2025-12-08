@@ -167,6 +167,16 @@ void build(const T *arr, int i, int l, int r) {
     up(i);
 }
 
+void build(const T *arr, int arr_size) {
+    n = arr_size;
+    build(arr, 1, 1, n);
+}
+
+void build(int sz, T init_val) {
+    fill(arr + 1, arr + n + 1, init_val);
+    build(arr, 1, 1, n);
+}
+
 void update(int i, int l, int r, int ql, int qr, F v) {
     if (ql <= l && r <= qr) {
         apply(i, l, r, v);
@@ -183,6 +193,13 @@ void update(int i, int l, int r, int ql, int qr, F v) {
     up(i);
 }
 
+void update(int ql, int qr, F f) {
+    if (ql > qr) {
+        return;
+    }
+    update(1, 1, n, ql, qr, f);
+}
+
 T query(int i, int l, int r, int ql, int qr) {
     if (ql <= l && r <= qr) {
         return tree[i];
@@ -197,23 +214,6 @@ T query(int i, int l, int r, int ql, int qr) {
         return merge_val(res, query(i * 2 + 1, m + 1, r, ql, qr));
     }
     return res;
-}
-
-void build(const T *arr, int arr_size) {
-    n = arr_size;
-    build(arr, 1, 1, n);
-}
-
-void build(int sz, T init_val) {
-    fill(arr + 1, arr + n + 1, init_val);
-    build(arr, 1, 1, n);
-}
-
-void update(int ql, int qr, F f) {
-    if (ql > qr) {
-        return;
-    }
-    update(1, 1, n, ql, qr, f);
 }
 
 T query(int ql, int qr) {

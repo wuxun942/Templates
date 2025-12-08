@@ -10,8 +10,8 @@ constexpr int MAX_N = 100'000 + 5;
 // 空间使用计数
 int cnt = 0;
 
-// 头结点编号
-int head = 0;
+// 根结点编号
+int root = 0;
 
 // 节点的 key
 T key[MAX_N];
@@ -28,7 +28,7 @@ int siz[MAX_N];
 
 // 整体初始化
 void clear(int n = cnt) {
-    head = cnt = 0;    
+    root = cnt = 0;    
     fill(key, key + n + 1, 0);
     fill(fa, fa + n + 1, 0);
     fill(ls, ls + n + 1, 0);
@@ -42,7 +42,7 @@ void up(int i) {
 }
 
 // 判断节点是左儿子还是右儿子
-// 规定：头节点是左儿子
+// 规定：根节点是左儿子
 int lr(int i) {
     return rs[fa[i]] == i ? 1 : 0;
 }
@@ -78,7 +78,7 @@ void rotate(int i) {
 }
 
 // 提根操作：使 i 成为 goal 的儿子
-// goal = 0 时，i 直接成为头节点
+// goal = 0 时，i 直接成为根节点
 void splay(int i, int goal) {
     int f = fa[i], g = fa[f];
     while (f != goal) {
@@ -95,13 +95,13 @@ void splay(int i, int goal) {
         g = fa[f];
     }
     if (goal == 0) {
-        head = i;
+        root = i;
     }
 }
 
 // 查找第 k 小节点的编号，如果不存在则返回 0
 int find(int k) {
-    int i = head;
+    int i = root;
     while (i != 0) {
         if (siz[ls[i]] + 1 == k) {
             return i;
@@ -119,11 +119,11 @@ int find(int k) {
 void insert(T x) {
     key[++cnt] = x;
     siz[cnt] = 1;
-    if (head == 0) { // 空树
-        head = cnt;
+    if (root == 0) { // 空树
+        root = cnt;
     } else {
         // 当前节点 i
-        int i = head;
+        int i = root;
         // i 的父亲
         int f = 0;
         // i 是 f 的哪个儿子
@@ -151,7 +151,7 @@ void insert(T x) {
 
 // 查找排名
 int get_rank(T x) {
-    int i = head, last = head;
+    int i = root, last = root;
     int ans = 0;
     while (i != 0) {
         last = i;
@@ -175,7 +175,7 @@ T index(int k) {
 
 // 查找 x 的前驱
 T pre(T x) {
-    int i = head, last = head;
+    int i = root, last = root;
     T ans = -INF;
     while (i != 0) {
         last = i;
@@ -192,7 +192,7 @@ T pre(T x) {
 
 // 查找 x 的后继
 T post(T x) {
-    int i = head, last = head;
+    int i = root, last = root;
     T ans = INF;
     while (i != 0) {
         last = i;
@@ -217,9 +217,9 @@ void remove(T x) {
         // 先提根
         splay(i, 0);
         if (ls[i] == 0) {
-            head = rs[i];
+            root = rs[i];
         } else if (rs[i] == 0) {
-            head = ls[i];
+            root = ls[i];
         } else { // 既有左儿子又有右儿子
             // 查找第 k + 1 小的节点
             int j = find(k + 1);
@@ -229,11 +229,11 @@ void remove(T x) {
             ls[j] = ls[i];
             fa[ls[j]] = j;
             up(j);
-            // 头节点变为 j，i 不再被访问（相当于删除）
-            head = j;
+            // 根节点变为 j，i 不再被访问（相当于删除）
+            root = j;
         }
-        if (head != 0) {
-            fa[head] = 0;
+        if (root != 0) {
+            fa[root] = 0;
         }
     }
 }

@@ -107,6 +107,16 @@ void build(const T *arr, int i, int l, int r) {
     up(i);
 }
 
+void build(const T *arr, int arr_size) {
+    n = arr_size;
+    build(arr, 1, 1, n);
+}
+
+void build(int sz, T init_val) {
+    fill(arr + 1, arr + sz + 1, init_val);
+    build(arr, sz);
+}
+
 void update(int i, int l, int r, int qi, T val) {
     if (l == r) {
         tree[i] = val;
@@ -119,6 +129,10 @@ void update(int i, int l, int r, int qi, T val) {
         update(i * 2 + 1, m + 1, r, qi, val);
     }
     up(i);
+}
+
+void update(int qi, T val) {
+    update(1, 1, n, qi, val);
 }
 
 T query(int i, int l, int r, int ql, int qr) {
@@ -134,20 +148,6 @@ T query(int i, int l, int r, int ql, int qr) {
         res = merge_val(res, query(i * 2 + 1, m + 1, r, ql, qr));
     }
     return res;
-}
-
-void build(const T *arr, int arr_size) {
-    n = arr_size;
-    build(arr, 1, 1, n);
-}
-
-void build(int sz, T init_val) {
-    fill(arr + 1, arr + sz + 1, init_val);
-    build(arr, sz);
-}
-
-void update(int qi, T val) {
-    update(1, 1, n, qi, val);
 }
 
 T query(int ql, int qr) {

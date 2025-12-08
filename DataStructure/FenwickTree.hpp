@@ -206,25 +206,6 @@ void build(T *tree, const T *arr) {
     }
 }
 
-// 传统单点修改
-void update(T *tree, int i, T val) {
-    for (; i <= tree_size; i += i & -i) {
-        tree[i] += val;
-    }
-}
-
-// 传统单点查询
-T query(const T *tree, int i) {
-    if (i > tree_size) {
-        throw overflow_error("FenwickTree Overflow");
-    }
-    T ans = 0;
-    for (; i > 0; i &= i - 1) {
-        ans += tree[i];
-    }
-    return ans;
-}
-
 void build(int n) {
     tree_size = n;
     fill(info1, info1 + tree_size + 1, 0);
@@ -243,12 +224,31 @@ void build(const T *arr, int n) {
     build(info2, diff2);
 }
 
+// 传统单点修改
+void update(T *tree, int i, T val) {
+    for (; i <= tree_size; i += i & -i) {
+        tree[i] += val;
+    }
+}
+
 // 区间修改
 void update(int l, int r, T val) {
     update(info1, l, val);
     update(info1, r + 1, -val);
     update(info2, l, (l - 1) * val);
     update(info2, r + 1, -r * val);
+}
+
+// 传统单点查询
+T query(const T *tree, int i) {
+    if (i > tree_size) {
+        throw overflow_error("FenwickTree Overflow");
+    }
+    T ans = 0;
+    for (; i > 0; i &= i - 1) {
+        ans += tree[i];
+    }
+    return ans;
 }
 
 // 区间查询

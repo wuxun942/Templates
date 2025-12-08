@@ -18,8 +18,8 @@ constexpr int MAX_N = 100'000 + 5;
 // 空间使用计数
 int cnt = 0;
 
-// 头节点
-int head = 0;
+// 根节点
+int root = 0;
 
 // 节点的 key
 T key[MAX_N];
@@ -54,7 +54,7 @@ int side;
 
 // 整体初始化
 void clear(int n = cnt) {
-    cnt = head = 0;
+    cnt = root = 0;
     fill(key, key + n + 1, 0);
     fill(key_count, key_count + n + 1, 0);
     fill(ls, ls + n + 1, 0);
@@ -108,7 +108,7 @@ void rebuild() {
         inorder(top);
         if (ci > 0) {
             if (father == 0) {
-                head = build(1, ci);
+                root = build(1, ci);
             } else if (side == 1) {
                 ls[father] = build(1, ci);
             } else {
@@ -128,7 +128,7 @@ bool balance(int i) {
 void insert(int i, int f, int s, T x) {
     if (i == 0) {
         if (f == 0) {
-            head = init(x);
+            root = init(x);
         } else if (s == 1) {
             ls[f] = init(x);
         } else {
@@ -153,7 +153,7 @@ void insert(int i, int f, int s, T x) {
 
 void insert(T x) {
     top = father = side = 0;
-    insert(head, 0, 0, x);
+    insert(root, 0, 0, x);
     rebuild();
 }
 
@@ -170,7 +170,7 @@ int small(int i, T x) {
 
 // 查找排名：返回 x 的名次（从 1 开始）
 int get_rank(T x) {
-    return small(head, x) + 1;
+    return small(root, x) + 1;
 }
 
 // 查询第 k 小的数字（超过 size 则抛出异常）
@@ -184,10 +184,10 @@ T index(int i, int k) {
 }
 
 T index(int k) {
-    if (k > siz[head] || k <= 0) {
+    if (k > siz[root] || k <= 0) {
         throw overflow_error("ScapeGoat Overflow");
     }
-    return index(head, k);
+    return index(root, k);
 }
 
 // 查找 x 的前驱（严格小于 x 中最大的数）
@@ -202,7 +202,7 @@ int pre(T x) {
 // 查找 x 的后继（严格大于 x 中最小的数）
 int post(T x) {
     int kth = get_rank(x + 1);
-    if (kth == siz[head] + 1) {
+    if (kth == siz[root] + 1) {
         return INF;
     }
     return index(kth);
@@ -229,7 +229,7 @@ void remove(T x) {
     // 存在 x
     if (get_rank(x) != get_rank(x + 1)) {
         top = father = side = 0;
-        remove(head, 0, 0, x);
+        remove(root, 0, 0, x);
         rebuild();
     }
 }

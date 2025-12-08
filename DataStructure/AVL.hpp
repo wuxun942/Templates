@@ -14,8 +14,8 @@ constexpr int MAX_N = 100'000 + 5;
 // 空间使用计数
 int cnt = 0;
 
-// 头结点编号
-int head = 0;
+// 根结点编号
+int root = 0;
 
 // 节点的 key
 T key[MAX_N];
@@ -35,7 +35,7 @@ int siz[MAX_N];
 
 // 整体初始化
 void clear(int n = cnt) {
-    head = cnt = 0;    
+    root = cnt = 0;    
     fill(key, key + n + 1, 0);
     fill(key_count, key_count + n + 1, 0);
     fill(height, height + n + 1, 0);
@@ -114,7 +114,7 @@ int insert(int i, T x) {
 }
 
 void insert(int x) {
-    head = insert(head, x);
+    root = insert(root, x);
 }
 
 /*
@@ -141,7 +141,7 @@ int small(int i, T x) {
 
 // 查找排名：返回 x 的名次（从 1 开始）
 int get_rank(T x) {
-    return small(head, x) + 1;
+    return small(root, x) + 1;
 }
 
 // 删除右子树的最左节点
@@ -190,7 +190,7 @@ int remove(int i, T x) {
 
 void remove(T x) {
     if (get_rank(x) != get_rank(x + 1)) {
-        head = remove(head, x);
+        root = remove(root, x);
     }
 }
 
@@ -206,10 +206,10 @@ T index(int i, int k) {
 }
 
 int index(T k) {
-    if (k > siz[head] || k <= 0) {
+    if (k > siz[root] || k <= 0) {
         throw overflow_error("AVL Overflow");
     }
-    return index(head, k);
+    return index(root, k);
 }
 
 // 查找 x 的前驱（严格小于 x 中最大的数）
@@ -225,7 +225,7 @@ T pre(int i, T x) {
 }
 
 T pre(T x) {
-    return pre(head, x);
+    return pre(root, x);
 }
 
 // 查找 x 的后继（严格大于 x 中最小的数）
@@ -241,5 +241,5 @@ T post(int i, T x) {
 }
 
 T post(T x) {
-    return post(head, x);
+    return post(root, x);
 }

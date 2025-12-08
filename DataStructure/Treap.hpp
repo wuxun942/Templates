@@ -20,8 +20,8 @@ constexpr int MAX_N = 100'000 + 5;
 // 空间使用计数
 int cnt = 0;
 
-// 头节点
-int head = 0;
+// 根节点
+int root = 0;
 
 // 节点的 key
 T key[MAX_N];
@@ -41,7 +41,7 @@ int priority[MAX_N];
 
 // 整体初始化
 void clear(int n = cnt) {
-    cnt = head = 0;
+    cnt = root = 0;
     fill(key, key + n + 1, 0);
     fill(key_count, key_count + n + 1, 0);
     fill(ls + 1, ls + n + 1, 0);
@@ -101,7 +101,7 @@ int insert(int i, T x) {
 }
 
 void insert(T x) {
-    head = insert(head, x);
+    root = insert(root, x);
 }
 
 // 有几个数比 x 小
@@ -117,7 +117,7 @@ int small(int i, T x) {
 
 // 查找排名：返回 x 的名次（从 1 开始）
 int get_rank(T x) {
-    return small(head, x) + 1;
+    return small(root, x) + 1;
 }
 
 // 查询第 k 小的数字
@@ -132,10 +132,10 @@ T index(int i, int k) {
 }
 
 T index(int k) {
-    if (k > siz[head] || k <= 0) {
+    if (k > siz[root] || k <= 0) {
         throw overflow_error("Treap Overflow");
     }
-    return index(head, k);
+    return index(root, k);
 }
 
 // 查找 x 的前驱（严格小于 x 中最大的数）
@@ -150,7 +150,7 @@ T pre(int i, T x) {
 }
 
 T pre(T x) {
-    return pre(head, x);
+    return pre(root, x);
 }
 
 // 查找 x 的后继（严格大于 x 中最小的数）
@@ -165,7 +165,7 @@ T post(int i, T x) {
 }
 
 T post(T x) {
-    return post(head, x);
+    return post(root, x);
 }
 
 // 删除节点：如果有多个，只删除一个
@@ -201,7 +201,7 @@ int remove(int i, T x) {
 
 void remove(T x) {
     if (get_rank(x) != get_rank(x + 1)) {
-        head = remove(head, x);
+        root = remove(root, x);
     }
 }
 
@@ -220,8 +220,8 @@ constexpr int MAX_N = 100'000 + 5;
 // 空间使用计数
 int cnt = 0;
 
-// 头节点
-int head = 0;
+// 根节点
+int root = 0;
 
 // 节点的 key
 T key[MAX_N];
@@ -241,7 +241,7 @@ int priority[MAX_N];
 
 // 整体初始化
 void clear(int n = cnt) {
-    cnt = head = 0;
+    cnt = root = 0;
     fill(key, key + n + 1, 0);
     fill(key_count, key_count + n + 1, 0);
     fill(ls + 1, ls + n + 1, 0);
@@ -334,30 +334,30 @@ void change_count(int i, T x, int change) {
 // 插入节点
 void insert(T x) {
     // 存在 key = x 的节点
-    if (find(head, x) != 0) {
-        change_count(head, x, 1);
+    if (find(root, x) != 0) {
+        change_count(root, x, 1);
         return;
     }
-    split_key(0, 0, head, x);
+    split_key(0, 0, root, x);
     key[++cnt] = x;
     key_count[cnt] = siz[cnt] = 1;
     priority[cnt] = rand();
-    head = merge(merge(rs[0], cnt), ls[0]);
+    root = merge(merge(rs[0], cnt), ls[0]);
 }
 
 // 删除节点
 void remove(T x) {
-    int i = find(head, x);
+    int i = find(root, x);
     if (i != 0) {
         if (key_count[i] > 1) {
-            change_count(head, x, -1);
+            change_count(root, x, -1);
         } else {
-            split_key(0, 0, head, x);
+            split_key(0, 0, root, x);
             int lm = rs[0];
             int r = ls[0];
             split_key(0, 0, lm, x - 1);
             int l = rs[0];
-            head = merge(l, r);
+            root = merge(l, r);
         }
     }
 }
@@ -375,7 +375,7 @@ int small(int i, T x) {
 
 // 查找排名：返回 x 的名次（从 1 开始）
 int get_rank(T x) {
-    return small(head, x) + 1;
+    return small(root, x) + 1;
 }
 
 // 查询第 k 小的数字（超过 size 则抛出异常）
@@ -390,10 +390,10 @@ T index(int i, int k) {
 }
 
 T index(int k) {
-    if (k > siz[head] || k <= 0) {
+    if (k > siz[root] || k <= 0) {
         throw overflow_error("FHQ Treap Overflow");
     }
-    return index(head, k);
+    return index(root, k);
 }
 
 // 查找 x 的前驱（严格小于 x 中最大的数）
@@ -408,7 +408,7 @@ T pre(int i, T x) {
 }
 
 T pre(T x) {
-   return pre(head, x);
+   return pre(root, x);
 }
 
 // 查找 x 的后继（严格大于 x 中最小的数）
@@ -423,7 +423,7 @@ T post(int i, T x) {
 }
 
 T post(T x) {
-    return post(head, x);
+    return post(root, x);
 }
 
 // 无 key_count 版本
@@ -435,8 +435,8 @@ constexpr int MAX_N = 100'000 + 5;
 // 空间使用计数
 int cnt = 0;
 
-// 头节点
-int head = 0;
+// 根节点
+int root = 0;
 
 // 节点的 key
 T key[MAX_N];
@@ -453,7 +453,7 @@ int priority[MAX_N];
 
 // 整体初始化
 void clear(int n = cnt) {
-    cnt = head = 0;
+    cnt = root = 0;
     fill(key, key + n + 1, 0);
     fill(ls + 1, ls + n + 1, 0);
     fill(rs + 1, rs + n + 1, 0);
@@ -518,30 +518,30 @@ int merge(int l, int r) {
 
 // 插入节点：按 x 分裂，再插入，合并
 void insert(T x) {
-    split_key(0, 0, head, x);
+    split_key(0, 0, root, x);
     key[++cnt] = x;
     siz[cnt] = 1;
     priority[cnt] = rand();
-    head = merge(merge(rs[0], cnt), ls[0]);
+    root = merge(merge(rs[0], cnt), ls[0]);
 }
 
-// 删除节点：先按 x 分裂，再按 x - 1 分裂，删除第二次分裂的头节点
+// 删除节点：先按 x 分裂，再按 x - 1 分裂，删除第二次分裂的根节点
 void remove(T x) {
-    split_key(0, 0, head, x);
+    split_key(0, 0, root, x);
     int lm = rs[0];
     int r = ls[0];
     split_key(0, 0, lm, x - 1);
     int l = rs[0];
     int m = ls[0];
-    head = merge(merge(l, merge(ls[m], rs[m])), r);
+    root = merge(merge(l, merge(ls[m], rs[m])), r);
 }
 
 // 查找排名：返回 x 的名次（从 1 开始）
 int get_rank(T x) {
     // 按 x - 1 分裂，小于等于 x - 1 的树的大小加 1 即为排名
-    split_key(0, 0, head, x - 1);
+    split_key(0, 0, root, x - 1);
     int ans = siz[rs[0]] + 1;
-    head = merge(rs[0], ls[0]);
+    root = merge(rs[0], ls[0]);
     return ans;
 }
 
@@ -557,10 +557,10 @@ T index(int i, int k) {
 }
 
 T index(int k) {
-    if (k > siz[head] || k <= 0) {
+    if (k > siz[root] || k <= 0) {
         throw overflow_error("FHQ Treap Overflow");
     }
-    return index(head, k);
+    return index(root, k);
 }
 
 // 查找 x 的前驱（严格小于 x 中最大的数）
@@ -575,7 +575,7 @@ T pre(int i, T x) {
 }
 
 T pre(T x) {
-   return pre(head, x);
+   return pre(root, x);
 }
 
 // 查找 x 的后继（严格大于 x 中最小的数）
@@ -590,7 +590,7 @@ T post(int i, T x) {
 }
 
 T post(T x) {
-    return post(head, x);
+    return post(root, x);
 }
 
 // 可持久化 FHQ Treap（只保留无 key_count 的版本）
@@ -608,8 +608,8 @@ constexpr int MAXM = MAX_N * 85;
 // 节点编号
 int cnt = 0;
 
-// 不同版本的头节点
-int heads[MAX_N];
+// 不同版本的根节点
+int roots[MAX_N];
 
 // 节点的 key
 T key[MAXM];
@@ -673,7 +673,7 @@ int merge(int l, int r) {
     return r;
 }
 
-// 以 i 为头节点的树上插入 x，作为 v 版本
+// 以 i 为根节点的树上插入 x，作为 v 版本
 void insert(int v, int i, T x) {
     split(0, 0, i, x);
     int l = rs[0];
@@ -683,10 +683,10 @@ void insert(int v, int i, T x) {
     key[cnt] = x;
     siz[cnt] = 1;
     priority[cnt] = rand();
-    heads[v] = merge(merge(l, cnt), r);
+    roots[v] = merge(merge(l, cnt), r);
 }
 
-// 以 i 为头节点的树上删除 x（保证存在），作为 v 版本
+// 以 i 为根节点的树上删除 x（保证存在），作为 v 版本
 void remove(int v, int i, T x) {
     split(0, 0, i, x);
     int lm = rs[0];
@@ -695,7 +695,7 @@ void remove(int v, int i, T x) {
     int l = rs[0];
     int m = ls[0];
     ls[0] = rs[0] = 0;
-    heads[v] = merge(merge(l, merge(ls[m], rs[m])), r);
+    roots[v] = merge(merge(l, merge(ls[m], rs[m])), r);
 }
 
 // 比 x 小的数字数量；如需查询排名，需要在此基础上加 1

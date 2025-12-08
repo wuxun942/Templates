@@ -75,6 +75,14 @@ void up(int i) {
     // }
 }
 
+void build(int sz, T val) {
+    n = sz;
+    cnt = 1;
+    tree[1] = val; // 根节点初始化
+    init_val = val;
+    // tree[0] = 0; // 作冗余处理
+}
+
 void update(int i, int l, int r, int ql, int qr, F f) {
     if (ql <= l && r <= qr) {
         apply(i, l, r, f);
@@ -97,6 +105,10 @@ void update(int i, int l, int r, int ql, int qr, F f) {
     up(i);
 }
 
+void update(int ql, int qr, F f) {
+    update(1, 1, n, ql, qr, f);
+}
+
 T query(int i, int l, int r, int ql, int qr) {
     if (ql <= l && r <= qr) {
         return tree[i];
@@ -117,18 +129,6 @@ T query(int i, int l, int r, int ql, int qr) {
         res = merge_val(res, query(rs[i], m + 1, r, ql, qr));
     }
     return res;
-}
-
-void build(int sz, T val) {
-    n = sz;
-    cnt = 1;
-    tree[1] = val; // 根节点初始化
-    init_val = val;
-    // tree[0] = 0; // 作冗余处理
-}
-
-void update(int ql, int qr, F f) {
-    update(1, 1, n, ql, qr, f);
 }
 
 T query(int ql, int qr) {

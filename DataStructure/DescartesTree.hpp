@@ -12,7 +12,7 @@ int n;
 int arr[MAX_N]; // 键排好序后，对应的值
 int top;
 int st[MAX_N];
-int head;
+int root;
 int ls[MAX_N], rs[MAX_N];
 
 // 以下的 arr 和 st 均为 1-based
@@ -37,5 +37,5 @@ void build(int n, const int *arr) {
         st[++pos] = i;
         top = pos;
     }
-    head = st[1];
+    root = st[1];
 }

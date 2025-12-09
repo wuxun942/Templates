@@ -11,7 +11,7 @@ using namespace std;
 // 维护数组的最大空间
 constexpr int MAX_N = 100'000 + 5;
 
-// 最大查询次数
+// 最大版本数量
 constexpr int MAX_Q = 100'000 + 5;
 
 // 可持久化线段树的使用空间 = n * 4 + q * log n
@@ -43,7 +43,7 @@ void clear(int sz = cnt) {
 }
 
 // 拷贝节点
-int copy(int i) {
+int copy_node(int i) {
     tree[++cnt] = tree[i];
     ls[cnt] = ls[i];
     rs[cnt] = rs[i];
@@ -83,7 +83,7 @@ void build(int sz, T init_val) {
 }
 
 int update(int i, int l, int r, int qi, T val) {
-    i = copy(i);
+    i = copy_node(i);
     if (l == r) {
         tree[i] = val;
         return i;

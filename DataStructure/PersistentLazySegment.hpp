@@ -7,8 +7,8 @@ using namespace std;
 1. 仿照单点修改，每次修改只对最上层节点做添加；但懒标记下传时也要添加
 2. 标记永久化
 
-通常来说，前者更为通用，但空间占用较大，为 O(n + (m + q) * log n)，
-需要开 n * 4 + (m + q) * 4 * log n，其中 m 为版本数，q 为查询数
+通常来说，前者更为通用，但空间占用较大，为 O(n + q * log n)，
+需要开 n * 4 + q * 4 * log n，其中 q 为版本数
 当然，具体题目中懒标记不一定会传到底，所以 AC 代码的使用空间只可能更小（和特殊情况的动态开点线段树同理）
 
 后者只用于 区间增加 + 维护区间和 的情况，可以有效减少空间占用
@@ -20,13 +20,10 @@ using namespace std;
 constexpr int MAX_N = 100'000 + 5;
 
 // 最大版本数量
-constexpr int MAX_M = 100'000 + 5;
-
-// 最大查询次数
 constexpr int MAX_Q = 100'000 + 5;
 
-// 可持久化 Lazy 线段树的使用空间 = n * 4 + (m + q) * 4 * log n
-constexpr int MAX_S = MAX_N * 4 + (MAX_M + MAX_Q) * 4 * 17;
+// 可持久化 Lazy 线段树的使用空间 = n * 4 + q * 4 * log n
+constexpr int MAX_S = MAX_N * 4 + MAX_Q * 4 * 17;
 
 using T = int;
 constexpr T INIT = 0;
@@ -41,7 +38,7 @@ T arr[MAX_N];
 int cnt = 0;
 
 // 每个版本的根节点
-int roots[MAX_M];
+int roots[MAX_Q];
 
 T tree[MAX_S];
 
@@ -59,7 +56,7 @@ void clear(int sz = cnt) {
 }
 
 // 拷贝节点
-int copy(int i) {
+int copy_node(int i) {
     tree[++cnt] = tree[i];
     to_add[cnt] = to_add[i];
     ls[cnt] = ls[i];
@@ -76,8 +73,8 @@ void down(int i, int l, int r) {
     if (to_add[i] == TO_ADD_INIT) {
         return;
     }
-    ls[i] = copy(ls[i]);
-    rs[i] = copy(rs[i]);
+    ls[i] = copy_node(ls[i]);
+    rs[i] = copy_node(rs[i]);
     int m = (l + r) / 2;
     apply(ls[i], l, m, to_add[i]);
     apply(rs[i], m + 1, r, to_add[i]);
@@ -118,7 +115,7 @@ void build(int sz, T init_val) {
 }
 
 int update(int i, int l, int r, int ql, int qr, T val) {
-    i = copy(i);
+    i = copy_node(i);
     if (ql <= l && r <= qr) {
         apply(i, l, r, val);
         return i;

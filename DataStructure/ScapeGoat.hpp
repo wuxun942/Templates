@@ -52,7 +52,7 @@ int father;
 // top是父节点的什么孩子，1代表左孩子，2代表右孩子
 int side;
 
-// 整体初始化
+// 清空数据
 void clear(int n = cnt) {
     cnt = root = 0;
     fill(key, key + n + 1, 0);

@@ -26,7 +26,7 @@ int rs[MAX_N];
 // 子树大小
 int siz[MAX_N];
 
-// 整体初始化
+// 清空数据
 void clear(int n = cnt) {
     root = cnt = 0;    
     fill(key, key + n + 1, 0);

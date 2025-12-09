@@ -34,13 +34,6 @@ int next_node[MAX_N][MAX_L + 1];
 // 每层节点一跳的长度
 int len[MAX_N][MAX_L + 1];
 
-// 建立跳表，即建立 -inf 节点
-void build() {
-    cnt = 1;
-    key[cnt] = -INF;
-    level[cnt] = MAX_L;
-}
-
 // 清空跳表
 void clear(int n = cnt) {
     build();
@@ -49,6 +42,13 @@ void clear(int n = cnt) {
     fill(level, level + n + 1, 0);
     memset(next_node, 0, (n + 1) * (MAX_L + 1) * sizeof(int));
     memset(len, 0, (n + 1) * (MAX_L + 1) * sizeof(int));
+}
+
+// 初始化跳表，即建立 -inf 节点
+void build() {
+    cnt = 1;
+    key[cnt] = -INF;
+    level[cnt] = MAX_L;
 }
 
 // 生成随机层数

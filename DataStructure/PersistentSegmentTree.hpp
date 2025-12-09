@@ -42,6 +42,11 @@ void clear(int sz = cnt) {
     fill(rs + 1, rs + sz + 1, 0);
 }
 
+int add_node(T x = INIT) {
+    tree[++cnt] = x;
+    return cnt;
+}
+
 // 拷贝节点
 int copy_node(int i) {
     tree[++cnt] = tree[i];
@@ -60,10 +65,9 @@ void up(int i) {
 
 int build(const T *arr, int l, int r) {
     if (l == r) {
-        tree[++cnt] = arr[l];
-        return cnt;
+        return add_node(arr[l]);
     }
-    int i = ++cnt;
+    int i = add_node();
     int m = (l + r) / 2;
     ls[i] = build(arr, l, m);
     rs[i] = build(arr, m + 1, r);

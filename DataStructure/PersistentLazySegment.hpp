@@ -25,10 +25,10 @@ constexpr int MAX_Q = 100'000 + 5;
 // 可持久化 Lazy 线段树的使用空间 = n * 4 + q * 4 * log n
 constexpr int MAX_S = MAX_N * 4 + MAX_Q * 4 * 17;
 
-using T = int;
+using T = long long;
 constexpr T INIT = 0;
 
-using F = int;
+using F = long long;
 constexpr F TO_ADD_INIT = 0;
 
 int n;
@@ -55,6 +55,12 @@ void clear(int sz = cnt) {
     fill(rs + 1, rs + sz + 1, 0);
 }
 
+int add_node(T x = INIT) {
+    tree[++cnt] = x;
+    to_add[cnt] = TO_ADD_INIT;
+    return cnt;
+}
+
 // 拷贝节点
 int copy_node(int i) {
     tree[++cnt] = tree[i];
@@ -64,9 +70,17 @@ int copy_node(int i) {
     return cnt;
 }
 
+T merge_val(T a, T b) {
+    return a + b;
+}
+
+F merge_todo(F a, F b) {
+    return a + b;
+}
+
 void apply(int i, int l, int r, F val) {
-    tree[i] += (r - l + 1) * val;
-    to_add[i] += val;
+    tree[i] = merge_val(tree[i], (r - l + 1) * val);
+    to_add[i] = merge_todo(to_add[i], val);
 }
 
 void down(int i, int l, int r) {
@@ -81,21 +95,15 @@ void down(int i, int l, int r) {
     to_add[i] = 0;
 }
 
-T merge_val(T a, T b) {
-    return a + b;
-}
-
 void up(int i) {
     tree[i] = merge_val(tree[ls[i]], tree[rs[i]]);
 }
 
 int build(const T *arr, int l, int r) {
     if (l == r) {
-        tree[++cnt] = arr[l];
-        to_add[cnt] = TO_ADD_INIT;
-        return cnt;
+        return add_node(arr[l]);
     }
-    int i = ++cnt;
+    int i = add_node();
     int m = (l + r) / 2;
     ls[i] = build(arr, l, m);
     rs[i] = build(arr, m + 1, r);
@@ -157,4 +165,111 @@ T query(int i, int l, int r, int ql, int qr) {
 T query(int v, int i, int ql, int qr) {
     roots[v] = i;
     return query(i, 1, n, ql, qr);
+}
+
+// 标记永久化实现
+constexpr int MAX_N = 100'000 + 5;
+
+using T = long long;
+constexpr T INIT = 0;
+constexpr T TO_ADD_INIT = 0;
+
+int n;
+T arr[MAX_N];
+
+T tree[MAX_N << 2];
+T add_tag[MAX_N << 2];
+
+// 清空
+void clear(int sz = cnt) {
+    cnt = 0;
+    fill(tree + 1, tree + sz + 1, 0);
+    fill(ls + 1, ls + sz + 1, 0);
+    fill(rs + 1, rs + sz + 1, 0);
+}
+
+int add_node(T x = INIT) {
+    tree[++cnt] = x;
+    to_add[cnt] = TO_ADD_INIT;
+    return cnt;
+}
+
+// 拷贝节点
+int copy_node(int i) {
+    tree[++cnt] = tree[i];
+    to_add[cnt] = to_add[i];
+    ls[cnt] = ls[i];
+    rs[cnt] = rs[i];
+    return cnt;
+}
+
+T merge_val(T a, T b) {
+    return a + b;
+}
+
+T merge_tag(T a, T b) {
+    return a + b;
+}
+
+int build(const T *arr, int l, int r) {
+    if (l == r) {
+        return add_node(arr[l]);
+    }
+    int i = add_node();
+    int m = (l + r) / 2;
+    ls[i] = build(arr, l, m);
+    rs[i] = build(arr, m + 1, r);
+    tree[i] = merge_val(tree[i * 2], tree[i * 2 + 1]);
+    return i;
+}
+
+void build(const T *arr, int sz) {
+    n = sz;
+    roots[0] = build(arr, 1, n);
+}
+
+void build(int sz, T init_val) {
+    fill(arr + 1, arr + sz + 1, init_val);
+    build(arr, sz);
+}
+
+int update(int i, int l, int r, int ql, int qr, T val) {
+    i = copy_node(i);
+    tree[i] = merge_val(tree[i], (min(r, qr) - max(l, ql) + 1) * val);
+    if (ql <= l && r <= qr) {
+        add_tag[i] = merge_tag(add_tag[i], val);
+        return i;
+    }
+    int m = (l + r) / 2;
+    if (ql <= m) {
+        update(ls[i], l, m, ql, qr, val);
+    }
+    if (qr > m) {
+        update(rs[i], m + 1, r, ql, qr, val);
+    }
+    return i;
+}
+
+void update(int v, int i, int ql, int qr, T val) {
+    roots[v] = update(i, 1, n, ql, qr, val);
+}
+
+T query(int i, int l, int r, int ql, int qr, T to_add) {
+    if (ql <= l && r <= qr) {
+        return merge_val(tree[i], to_add * (r - l + 1));
+    }
+    int m = (l + r) / 2;
+    T res = INIT;
+    if (ql <= m) {
+        res = merge_val(res, query(ls[i], l, m, ql, qr, to_add + add_tag[i]));
+    }
+    if (qr > m) {
+        res = merge_val(res, query(rs[i], m + 1, r, ql, qr, to_add + add_tag[i]));
+    }
+    return res;
+}
+
+T query(int v, int i, int ql, int qr) {
+    roots[v] = i;
+    return query(i, 1, n, ql, qr, TO_ADD_INIT);
 }

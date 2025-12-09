@@ -290,15 +290,15 @@ class LazySegmentTree {
     T query(int i, int l, int r, int ql, int qr, T to_add) {
         Node &cur = tree[i];
         if (ql <= l && r <= qr) {
-            return cur.val + to_add * (r - l + 1);
+            return merge_val(cur.val, to_add * (r - l + 1));
         }
         int m = (l + r) / 2;
         T res = INIT;
         if (ql <= m) {
-            res = merge_val(res, query(i * 2, l, m, ql, qr, to_add + cur.tag));
+            res = merge_val(res, query(i * 2, l, m, ql, qr, merge_tag(to_add, cur.tag)));
         }
         if (qr > m) {
-            res = merge_val(res, query(i * 2 + 1, m + 1, r, ql, qr, to_add + cur.tag));
+            res = merge_val(res, query(i * 2 + 1, m + 1, r, ql, qr, merge_tag(to_add, cur.tag)));
         }
         return res;
     }
@@ -339,6 +339,10 @@ T merge_val(T a, T b) {
     return a + b;
 }
 
+T merge_tag(T a, T b) {
+    return a + b;
+}
+
 void build(const T *arr, int i, int l, int r) {
     if (l == r) {
         tree[i] = arr[l];
@@ -370,9 +374,9 @@ void build(int sz, T init_val) {
 同时，这个过程不需要 push_up
 */
 void update(int i, int l, int r, int ql, int qr, T val) {
-    tree[i] += (min(r, qr) - max(l, ql) + 1) * val;
+    tree[i] = merge_val(tree[i], (min(r, qr) - max(l, ql) + 1) * val);
     if (ql <= l && r <= qr) {
-        add_tag[i] += val;
+        add_tag[i] = merge_tag(add_tag[i], val);
         return;
     }
     int m = (l + r) / 2;
@@ -391,15 +395,15 @@ void update(int ql, int qr, T val) {
 // 查询时，需要将所有标记信息自顶向下传
 T query(int i, int l, int r, int ql, int qr, T to_add) {
     if (ql <= l && r <= qr) {
-        return tree[i] + to_add * (r - l + 1);
+        return merge_val(tree[i], to_add * (r - l + 1));
     }
     int m = (l + r) / 2;
     T res = INIT;
     if (ql <= m) {
-        res = merge_val(res, query(i * 2, l, m, ql, qr, to_add + add_tag[i]));
+        res = merge_val(res, query(i * 2, l, m, ql, qr, merge_tag(to_add, add_tag[i])));
     }
     if (qr > m) {
-        res = merge_val(res, query(i * 2 + 1, m + 1, r, ql, qr, to_add + add_tag[i]));
+        res = merge_val(res, query(i * 2 + 1, m + 1, r, ql, qr, merge_tag(to_add, add_tag[i])));
     }
     return res;
 }

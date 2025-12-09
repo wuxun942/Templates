@@ -107,8 +107,8 @@ void build(const T *arr, int i, int l, int r) {
     up(i);
 }
 
-void build(const T *arr, int arr_size) {
-    n = arr_size;
+void build(const T *arr, int sz) {
+    n = sz;
     build(arr, 1, 1, n);
 }
 

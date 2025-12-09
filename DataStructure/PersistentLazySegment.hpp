@@ -25,7 +25,7 @@ constexpr int MAX_M = 100'000 + 5;
 // 最大查询次数
 constexpr int MAX_Q = 100'000 + 5;
 
-// 可持久化 Lazy 线段树的使用空间 = n * 4 + m * 4 * log n
+// 可持久化 Lazy 线段树的使用空间 = n * 4 + (m + q) * 4 * log n
 constexpr int MAX_S = MAX_N * 4 + (MAX_M + MAX_Q) * 4 * 17;
 
 using T = int;
@@ -119,7 +119,7 @@ void build(int sz, T init_val) {
 
 int update(int i, int l, int r, int ql, int qr, T val) {
     i = copy(i);
-    if (l == r) {
+    if (ql <= l && r <= qr) {
         apply(i, l, r, val);
         return i;
     }

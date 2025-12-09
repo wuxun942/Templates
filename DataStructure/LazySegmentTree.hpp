@@ -226,6 +226,103 @@ T query(int ql, int qr) {
 可以通过 标记永久化 完成，替代懒更新机制
 */
 
+// 泛型模板类封装
+
+template<typename T, typename F = T>
+class LazySegmentTree {
+    const T INIT = 0;
+    const T TO_ADD_INIT = 0;
+
+    struct Node {
+        T val;
+        F tag;
+    };
+
+    int n;
+    vector<Node> tree;
+
+    T merge_val(T a, T b) {
+        return a + b;
+    }
+
+    F merge_tag(F a, F b) {
+        return a + b;
+    }
+
+    void build(const vector<T> &arr, int i, int l, int r) {
+        Node &cur = tree[i];
+        if (l == r) {
+            cur.val = arr[l];
+            cur.tag = TO_ADD_INIT;
+            return;
+        }
+        int m = (l + r) / 2;
+        build(arr, i * 2, l, m);
+        build(arr, i * 2 + 1, m + 1, r);
+        tree[i].val = merge_val(tree[i * 2].val, tree[i * 2 + 1].val);
+    }
+
+    /*
+    区间更新时，分三种情况：
+    1. 更新区间的父亲节点：只更新区间和信息
+    2. 更新区间本身：更新区间和信息和标记信息
+    3. 其他区间：不更新
+
+    同时，这个过程不需要 push_up
+    */
+    void update(int i, int l, int r, int ql, int qr, F f) {
+        Node &cur = tree[i];
+        cur.val = merge_val(cur.val, (min(r, qr) - max(l, ql) + 1) * f);
+        if (ql <= l && r <= qr) {
+            cur.tag = merge_tag(cur.tag, f);
+            return;
+        }
+        int m = (l + r) / 2;
+        if (ql <= m) {
+            update(i * 2, l, m, ql, qr, f);
+        }
+        if (qr > m) {
+            update(i * 2 + 1, m + 1, r, ql, qr, f);
+        }
+    }
+
+    // 查询时，需要将所有标记信息自顶向下传
+    T query(int i, int l, int r, int ql, int qr, T to_add) {
+        Node &cur = tree[i];
+        if (ql <= l && r <= qr) {
+            return cur.val + to_add * (r - l + 1);
+        }
+        int m = (l + r) / 2;
+        T res = INIT;
+        if (ql <= m) {
+            res = merge_val(res, query(i * 2, l, m, ql, qr, to_add + cur.tag));
+        }
+        if (qr > m) {
+            res = merge_val(res, query(i * 2 + 1, m + 1, r, ql, qr, to_add + cur.tag));
+        }
+        return res;
+    }
+    
+public:
+    LazySegmentTree(int n, T init_val) : LazySegmentTree(vector<T>(n, init_val)) {}
+
+    LazySegmentTree(const vector<T> &arr) : n(arr.size()), tree(2 << bit_width(arr.size() - 1)) {
+        build(arr, 1, 0, n - 1);
+    }
+
+    void update(int ql, int qr, F f) {
+        if (ql > qr) {
+            return;
+        }
+        update(1, 0, n - 1, ql, qr, f);
+    }
+
+    T query(int ql, int qr) {
+        return query(1, 0, n - 1, ql, qr, TO_ADD_INIT);
+    }
+};
+
+// 静态数组实现
 constexpr int MAX_N = 100'000 + 5;
 
 using T = long long;

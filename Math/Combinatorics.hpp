@@ -20,7 +20,6 @@ long long comb(int n, int m) {
 constexpr int MAX_N = 100 + 5;
 long long c[MAX_N][MAX_N];
 auto init = []() {
-    memset(c, 0, sizeof(c));
     c[0][0] = 1;
     for (int i = 1; i < MAX_N; ++i) {
         c[i][0] = c[i][i] = 1;
@@ -45,15 +44,15 @@ long long qpow(long long x, long long n, int mod = MOD) {
 }
 
 constexpr int MAX_N = 200'000 + 5;
-long long fac[MAX_N], inv_f[MAX_N];
+long long fac[MAX_N], inv_fac[MAX_N];
 auto init = []() {
     fac[0] = 1;
     for (int i = 1; i < MAX_N; i++) {
         fac[i] = fac[i - 1] * i % MOD;
     }
-    inv_f[MAX_N - 1] = qpow(fac[MAX_N - 1], MOD - 2, MOD);
+    inv_fac[MAX_N - 1] = qpow(fac[MAX_N - 1], MOD - 2, MOD);
     for (int i = MAX_N - 2; i >= 0; i--) {
-        inv_f[i] = inv_f[i + 1] * (i + 1) % MOD;
+        inv_fac[i] = inv_fac[i + 1] * (i + 1) % MOD;
     }
     return 0;
 }();
@@ -62,7 +61,7 @@ long long comb(int n, int m, int mod = MOD) {
     if (n < m) {
         return 0;
     }
-    return fac[n] * inv_f[m] % mod * inv_f[n - m] % mod;
+    return fac[n] * inv_fac[m] % mod * inv_fac[n - m] % mod;
 }
 
 // 4. 小模数下的更大范围计算
@@ -70,7 +69,6 @@ long long comb(int n, int m, int mod = MOD) {
 constexpr int MAX_N = 100 + 5;
 long long c[MAX_N][MAX_N];
 auto init = []() {
-    memset(c, 0, sizeof(c));
     c[0][0] = 1;
     for (int i = 1; i < MAX_N; ++i) {
         c[i][0] = c[i][i] = 1;

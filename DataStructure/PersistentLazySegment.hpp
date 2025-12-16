@@ -140,9 +140,8 @@ int update(int i, int l, int r, int ql, int qr, T val) {
     return i;
 }
 
-// 在以 i 为根的线段树上，把 [ql, qr] 位置加 val，存储为 v 版本
-void update(int v, int i, int ql, int qr, T val) {
-    roots[v] = update(i, 1, n, ql, qr, val);
+void update(int v, int qv, int ql, int qr, T val) {
+    roots[v] = update(roots[qv], 1, n, ql, qr, val);
 }
 
 T query(int i, int l, int r, int ql, int qr) {
@@ -161,10 +160,9 @@ T query(int i, int l, int r, int ql, int qr) {
     return res;
 }
 
-// 在以 i 为根的线段树上，查询 [ql, qr] 的信息，存储为 v 版本
-T query(int v, int i, int ql, int qr) {
-    roots[v] = i;
-    return query(i, 1, n, ql, qr);
+T query(int v, int qv, int ql, int qr) {
+    roots[v] = roots[qv];
+    return query(roots[qv], 1, n, ql, qr);
 }
 
 // 标记永久化实现
@@ -250,8 +248,8 @@ int update(int i, int l, int r, int ql, int qr, T val) {
     return i;
 }
 
-void update(int v, int i, int ql, int qr, T val) {
-    roots[v] = update(i, 1, n, ql, qr, val);
+void update(int v, int qv, int ql, int qr, T val) {
+    roots[v] = update(roots[qv], 1, n, ql, qr, val);
 }
 
 T query(int i, int l, int r, int ql, int qr, T to_add) {
@@ -269,7 +267,7 @@ T query(int i, int l, int r, int ql, int qr, T to_add) {
     return res;
 }
 
-T query(int v, int i, int ql, int qr) {
-    roots[v] = i;
-    return query(i, 1, n, ql, qr, TO_ADD_INIT);
+T query(int v, int qv, int ql, int qr) {
+    roots[v] = roots[qv];
+    return query(roots[qv], 1, n, ql, qr, TO_ADD_INIT);
 }

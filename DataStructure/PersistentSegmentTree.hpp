@@ -102,9 +102,9 @@ int update(int i, int l, int r, int qi, T val) {
     return i;
 }
 
-// 在以 i 为根的线段树上，把 qi 位置改为 val，存储为 v 版本
-void update(int v, int i, int qi, T val) {
-    roots[v] = update(i, 1, n, qi, val);
+// 在 qv 版本的线段树上，把 qi 位置改为 val，存储为 v 版本
+void update(int v, int qv, int qi, T val) {
+    roots[v] = update(roots[qv], 1, n, qi, val);
 }
 
 T query(int i, int l, int r, int ql, int qr) {
@@ -122,8 +122,8 @@ T query(int i, int l, int r, int ql, int qr) {
     return res;
 }
 
-// 在以 i 为根的线段树上，查询 [ql, qr] 的信息，存储为 v 版本
-T query(int v, int i, int ql, int qr) {
-    roots[v] = i;
-    return query(i, 1, n, ql, qr);
+// 在 qv 版本的线段树上，查询 [ql, qr] 的信息，存储为 v 版本
+T query(int v, int qv, int ql, int qr) {
+    roots[v] = roots[qv];
+    return query(roots[qv], 1, n, ql, qr);
 }

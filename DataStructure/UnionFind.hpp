@@ -135,6 +135,7 @@ T dis[MAX_N];
 
 void build(int n) {
     iota(fa + 1, fa + n + 1, 1);
+    fill(dis + 1, dis + n + 1, 0);
 }
 
 int find(int x) {

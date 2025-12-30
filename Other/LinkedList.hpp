@@ -7,7 +7,7 @@ int nxt[MAX_E];
 int to[MAX_E];
 // long long weight[MAX_E];
 int cnt_edge = 0;
-void insert(int x, int y, long long w = 0) {
+void add_edge(int x, int y, long long w = 0) {
     nxt[++cnt_edge] = head[x];
     to[cnt_edge] = y;
     // weight[cnt_edge] = w;

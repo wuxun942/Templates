@@ -29,7 +29,7 @@ void add_edge(int x, int y, long long w = 0) {
 }
 
 int fa[MAX_N];
-int depth[MAX_N]{}; // 或者初始化 depth[0] = 0
+int depth[MAX_N]; // 或者初始化 depth[0] = 0
 int sz[MAX_N];
 
 // 每个子树的重儿子（子树最大）
@@ -112,7 +112,7 @@ void path_update(int x, int y) {
 */
 
 constexpr int MAX_N = 100'000 + 5, MAX_E = MAX_N << 1;
-int head[MAX_N]{};
+int head[MAX_N];
 int nxt[MAX_E];
 int to[MAX_E];
 // long long weight[MAX_E];
@@ -125,7 +125,7 @@ void add_edge(int x, int y, long long w = 0) {
 }
 
 int fa[MAX_N];
-int depth[MAX_N]{}; // 或者初始化 depth[0] = 0
+int depth[MAX_N]; // 如需初始化，只需要 depth[0] = 0
 int height[MAX_N];
 
 int son[MAX_N];

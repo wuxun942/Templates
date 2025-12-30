@@ -139,7 +139,7 @@ public:
 };
 
 constexpr int MAX_N = 100'000 + 5, MAX_M = 17, MAX_E = MAX_N << 1;
-int head[MAX_N]{};
+int head[MAX_N];
 int nxt[MAX_E];
 int to[MAX_E];
 // long long weight[MAX_E];
@@ -272,7 +272,7 @@ public:
 };
 
 constexpr int MAX_N = 100'000 + 5, MAX_E = MAX_N << 1;
-int head[MAX_N]{};
+int head[MAX_N];
 int nxt[MAX_E];
 int to[MAX_E];
 // long long weight[MAX_E];
@@ -285,8 +285,8 @@ void add_edge(int x, int y, long long w = 0) {
 }
 
 int fa[MAX_N];
-int depth[MAX_N]{};
-int sz[MAX_N]{};
+int depth[MAX_N];
+int sz[MAX_N];
 int son[MAX_N];
 int top[MAX_N];
 
@@ -340,7 +340,7 @@ int get_lca(int x, int y) {
 */
 
 constexpr int MAX_N = 500'000 + 5, MAX_E = MAX_N << 1;
-int head[MAX_N]{};
+int head[MAX_N];
 int nxt[MAX_E];
 int to[MAX_E];
 int cnt_edge = 0;
@@ -351,7 +351,7 @@ void add_edge(int x, int y, long long w = 0) {
 }
 
 int fa[MAX_N];
-int depth[MAX_N]{}; // 或者初始化 depth[0] = 0
+int depth[MAX_N]; // 或者初始化 depth[0] = 0
 int height[MAX_N];
 
 // 每个子树的长儿子（子树最高）
@@ -367,7 +367,7 @@ int dfn[MAX_N];
 int seg[MAX_N];
 
 constexpr int MAX_N = 100'000 + 5, MAX_H = 20;
-int stjump[MAX_N][MAX_H]{};
+int stjump[MAX_N][MAX_H];
 int up[MAX_N];
 int down[MAX_N];
 

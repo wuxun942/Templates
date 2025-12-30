@@ -79,7 +79,7 @@ void rotate(int i) {
 
 // 提根操作：使 i 成为 goal 的儿子
 // goal = 0 时，i 直接成为根节点
-void splay(int i, int goal) {
+void splay(int i, int goal, int &head = root) {
     int f = fa[i], g = fa[f];
     while (f != goal) {
         // 爷爷不是目标节点，至少要上升两步
@@ -95,13 +95,13 @@ void splay(int i, int goal) {
         g = fa[f];
     }
     if (goal == 0) {
-        root = i;
+        head = i;
     }
 }
 
 // 查找第 k 小节点的编号，如果不存在则返回 0
-int find(int k) {
-    int i = root;
+int find(int k, int &head = root) {
+    int i = head;
     while (i != 0) {
         if (siz[ls[i]] + 1 == k) {
             return i;
@@ -113,6 +113,26 @@ int find(int k) {
         }
     }
     return 0;
+}
+
+// 按排名分裂
+pair<int, int> split(int rank, int head = root) {
+    int l = find(rank);
+    int r = find(rank + 1);
+    splay(l, 0, head);
+    splay(r, l, head);
+    rs[l] = 0;
+    up(r);
+    up(l);
+    return {l, r};
+}
+
+// 合并两个 Splay 树，需要左树的值严格小于右树
+int merge(int l_head, int r_head) {
+    int l = find(siz[l_head], l_head);
+    splay(l, 0, l_head);
+    rs[l] = r_head;
+    return l;
 }
 
 // 插入节点

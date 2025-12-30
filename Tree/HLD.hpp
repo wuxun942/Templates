@@ -16,7 +16,7 @@ using namespace std;
 */
 
 constexpr int MAX_N = 100'000 + 5, MAX_E = MAX_N << 1;
-int head[MAX_N]{};
+int head[MAX_N];
 int nxt[MAX_E];
 int to[MAX_E];
 // long long weight[MAX_E];

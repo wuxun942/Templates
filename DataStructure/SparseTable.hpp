@@ -14,7 +14,7 @@ class ST {
     
 public:
     ST(const vector<int> &arr) {
-        int n = a.size(), m = bit_width<uint32_t>(n);
+        int n = arr.size(), m = bit_width<uint32_t>(n);
         st.resize(n, vector(m, 0)); // 看题目修改
         for (int i = 0; i < n; ++i) {
             st[i][0] = arr[i];
@@ -45,7 +45,7 @@ T arr[MAX_N];
 T st[MAX_N][MAX_M];
 
 void init() {
-    m = bit_width((unsigned) n);
+    m = bit_width<uint32_t>(n);
     for (int i = 0; i < n; ++i) {
         for (int j = 0; j < m; ++j) {
             st[i][j] = 0; // 看题目修改
@@ -74,6 +74,6 @@ T query(int l, int r) {
     if (l > r) {
         return 0;
     }
-    int k = __lg(r - l + 1);
+    int k = bit_width<uint32_t>(r - l + 1);
     return merge_val(st[l][k], st[r - (1 << k) + 1][k]);
 }

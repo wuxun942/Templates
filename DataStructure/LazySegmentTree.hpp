@@ -121,7 +121,7 @@ constexpr T INIT = 0;
 using F = long long;
 constexpr F TO_ADD_INIT = 0;
 
-int n;
+int arr_size;
 T arr[MAX_N];
 T tree[MAX_N << 2];
 F to_add[MAX_N << 2];
@@ -168,8 +168,8 @@ void build(const T *arr, int i, int l, int r) {
 }
 
 void build(const T *arr, int sz) {
-    n = sz;
-    build(arr, 1, 1, n);
+    arr_size = sz;
+    build(arr, 1, 1, arr_size);
 }
 
 void build(int sz, T init_val) {
@@ -197,7 +197,7 @@ void update(int ql, int qr, F f) {
     if (ql > qr) {
         return;
     }
-    update(1, 1, n, ql, qr, f);
+    update(1, 1, arr_size, ql, qr, f);
 }
 
 T query(int i, int l, int r, int ql, int qr) {
@@ -217,7 +217,7 @@ T query(int i, int l, int r, int ql, int qr) {
 }
 
 T query(int ql, int qr) {
-    return query(1, 1, n, ql, qr);
+    return query(1, 1, arr_size, ql, qr);
 }
 
 /*
@@ -329,7 +329,7 @@ using T = long long;
 constexpr T INIT = 0;
 constexpr T TO_ADD_INIT = 0;
 
-int n;
+int arr_size;
 T arr[MAX_N];
 
 T tree[MAX_N << 2];
@@ -356,8 +356,8 @@ void build(const T *arr, int i, int l, int r) {
 }
 
 void build(const T *arr, int sz) {
-    n = sz;
-    build(arr, 1, 1, n);
+    arr_size = sz;
+    build(arr, 1, 1, arr_size);
 }
 
 void build(int sz, T init_val) {
@@ -389,7 +389,7 @@ void update(int i, int l, int r, int ql, int qr, T val) {
 }
 
 void update(int ql, int qr, T val) {
-    update(1, 1, n, ql, qr, val);
+    update(1, 1, arr_size, ql, qr, val);
 }
 
 // 查询时，需要将所有标记信息自顶向下传
@@ -409,5 +409,5 @@ T query(int i, int l, int r, int ql, int qr, T to_add) {
 }
 
 T query(int ql, int qr) {
-    return query(1, 1, n, ql, qr, TO_ADD_INIT);
+    return query(1, 1, arr_size, ql, qr, TO_ADD_INIT);
 }

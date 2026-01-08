@@ -20,7 +20,7 @@ constexpr int MAX_M = MAX_N * 4 + MAX_Q * 17;
 using T = int;
 constexpr T INIT = INT_MIN;
 
-int n;
+int arr_size;
 T arr[MAX_N];
 
 // 空间使用计数
@@ -77,8 +77,8 @@ int build(const T *arr, int l, int r) {
 
 // 建立 0 号版本
 void build(const T *arr, int arr_size) {
-    n = arr_size;
-    roots[0] = build(arr, 1, n);
+    arr_size = arr_size;
+    roots[0] = build(arr, 1, arr_size);
 }
 
 void build(int sz, T init_val) {
@@ -104,7 +104,7 @@ int update(int i, int l, int r, int qi, T val) {
 
 // 在 qv 版本的线段树上，把 qi 位置改为 val，存储为 v 版本
 void update(int v, int qv, int qi, T val) {
-    roots[v] = update(roots[qv], 1, n, qi, val);
+    roots[v] = update(roots[qv], 1, arr_size, qi, val);
 }
 
 T query(int i, int l, int r, int ql, int qr) {
@@ -125,5 +125,5 @@ T query(int i, int l, int r, int ql, int qr) {
 // 在 qv 版本的线段树上，查询 [ql, qr] 的信息，存储为 v 版本
 T query(int v, int qv, int ql, int qr) {
     roots[v] = roots[qv];
-    return query(roots[qv], 1, n, ql, qr);
+    return query(roots[qv], 1, arr_size, ql, qr);
 }

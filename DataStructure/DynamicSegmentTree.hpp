@@ -14,7 +14,7 @@ constexpr T INIT = 0;
 
 using F = int;
 
-int n, init_val;
+int arr_size, init_val;
 int cnt = 0;
 
 T tree[MAX_N];
@@ -76,7 +76,7 @@ void up(int i) {
 }
 
 void build(int sz, T val) {
-    n = sz;
+    arr_size = sz;
     cnt = 1;
     tree[1] = val; // 根节点初始化
     init_val = val;
@@ -106,7 +106,7 @@ void update(int i, int l, int r, int ql, int qr, F f) {
 }
 
 void update(int ql, int qr, F f) {
-    update(1, 1, n, ql, qr, f);
+    update(1, 1, arr_size, ql, qr, f);
 }
 
 T query(int i, int l, int r, int ql, int qr) {
@@ -132,5 +132,5 @@ T query(int i, int l, int r, int ql, int qr) {
 }
 
 T query(int ql, int qr) {
-    return query(1, 1, n, ql, qr);
+    return query(1, 1, arr_size, ql, qr);
 }

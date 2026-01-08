@@ -31,7 +31,7 @@ constexpr T INIT = 0;
 using F = long long;
 constexpr F TO_ADD_INIT = 0;
 
-int n;
+int arr_size;
 T arr[MAX_N];
 
 // 空间使用计数
@@ -113,8 +113,8 @@ int build(const T *arr, int l, int r) {
 
 // 建立 0 号版本
 void build(const T *arr, int arr_size) {
-    n = arr_size;
-    roots[0] = build(arr, 1, n);
+    arr_size = arr_size;
+    roots[0] = build(arr, 1, arr_size);
 }
 
 void build(int sz, T init_val) {
@@ -141,7 +141,7 @@ int update(int i, int l, int r, int ql, int qr, T val) {
 }
 
 void update(int v, int qv, int ql, int qr, T val) {
-    roots[v] = update(roots[qv], 1, n, ql, qr, val);
+    roots[v] = update(roots[qv], 1, arr_size, ql, qr, val);
 }
 
 T query(int i, int l, int r, int ql, int qr) {
@@ -162,7 +162,7 @@ T query(int i, int l, int r, int ql, int qr) {
 
 T query(int v, int qv, int ql, int qr) {
     roots[v] = roots[qv];
-    return query(roots[qv], 1, n, ql, qr);
+    return query(roots[qv], 1, arr_size, ql, qr);
 }
 
 // 标记永久化实现
@@ -172,7 +172,7 @@ using T = long long;
 constexpr T INIT = 0;
 constexpr T TO_ADD_INIT = 0;
 
-int n;
+int arr_size;
 T arr[MAX_N];
 
 T tree[MAX_N << 2];
@@ -222,8 +222,8 @@ int build(const T *arr, int l, int r) {
 }
 
 void build(const T *arr, int sz) {
-    n = sz;
-    roots[0] = build(arr, 1, n);
+    arr_size = sz;
+    roots[0] = build(arr, 1, arr_size);
 }
 
 void build(int sz, T init_val) {
@@ -249,7 +249,7 @@ int update(int i, int l, int r, int ql, int qr, T val) {
 }
 
 void update(int v, int qv, int ql, int qr, T val) {
-    roots[v] = update(roots[qv], 1, n, ql, qr, val);
+    roots[v] = update(roots[qv], 1, arr_size, ql, qr, val);
 }
 
 T query(int i, int l, int r, int ql, int qr, T to_add) {
@@ -269,5 +269,5 @@ T query(int i, int l, int r, int ql, int qr, T to_add) {
 
 T query(int v, int qv, int ql, int qr) {
     roots[v] = roots[qv];
-    return query(roots[qv], 1, n, ql, qr, TO_ADD_INIT);
+    return query(roots[qv], 1, arr_size, ql, qr, TO_ADD_INIT);
 }

@@ -53,32 +53,32 @@ constexpr int MAX_N = 100'000 + 5;
 using T = int;
 int n;
 T arr[MAX_N];
-int tree_size;
+int arr_size;
 T tree[MAX_N];
 
 void build(int n, const T *arr) {
-    tree_size = n;
-    for (int i = 1; i <= tree_size; i++) {
+    arr_size = n;
+    for (int i = 1; i <= arr_size; i++) {
         tree[i] += arr[i];
-        if (int nxt = i + (i & -i); nxt <= tree_size) {
+        if (int nxt = i + (i & -i); nxt <= arr_size) {
             tree[nxt] += tree[i];
         }
     }
 }
 
 void build(int n) {
-    tree_size = n;
-    fill(tree, tree + tree_size + 1, 0);
+    arr_size = n;
+    fill(tree, tree + arr_size + 1, 0);
 }
 
 void update(int i, T val) {
-    for (; i <= tree_size; i += i & -i) {
+    for (; i <= arr_size; i += i & -i) {
         tree[i] += val;
     }
 }
 
 T query(int i) {
-    if (i > tree_size) {
+    if (i > arr_size) {
         throw overflow_error("FenwickTree Overflow");
     }
     T ans = 0;
@@ -194,22 +194,22 @@ using T = int;
 constexpr int MAX_N = 100'000 + 5;
 T info1[MAX_N], info2[MAX_N];
 T diff1[MAX_N], diff2[MAX_N];
-int tree_size;
+int arr_size;
 
 // 传统初始化方法
 void build(T *tree, const T *arr) {
-    for (int i = 1; i <= tree_size; i++) {
+    for (int i = 1; i <= arr_size; i++) {
         tree[i] += arr[i];
-        if (int nxt = i + (i & -i); nxt <= tree_size) {
+        if (int nxt = i + (i & -i); nxt <= arr_size) {
             tree[nxt] += tree[i];
         }
     }
 }
 
 void build(int n) {
-    tree_size = n;
-    fill(info1, info1 + tree_size + 1, 0);
-    fill(info2, info2 + tree_size + 1, 0);
+    arr_size = n;
+    fill(info1, info1 + arr_size + 1, 0);
+    fill(info2, info2 + arr_size + 1, 0);
 }
 
 void build(const T *arr, int n) {
@@ -219,14 +219,14 @@ void build(const T *arr, int n) {
         diff1[i] = arr[i] - arr[i - 1];
         diff2[i] = i * diff1[i];
     }
-    tree_size = n;
+    arr_size = n;
     build(info1, diff1);
     build(info2, diff2);
 }
 
 // 传统单点修改
 void update(T *tree, int i, T val) {
-    for (; i <= tree_size; i += i & -i) {
+    for (; i <= arr_size; i += i & -i) {
         tree[i] += val;
     }
 }
@@ -241,7 +241,7 @@ void update(int l, int r, T val) {
 
 // 传统单点查询
 T query(const T *tree, int i) {
-    if (i > tree_size) {
+    if (i > arr_size) {
         throw overflow_error("FenwickTree Overflow");
     }
     T ans = 0;

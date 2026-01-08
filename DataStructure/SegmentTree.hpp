@@ -84,7 +84,7 @@ constexpr int MAX_N = 100'000 + 5;
 using T = int;
 constexpr T INIT = INT_MIN;
 
-int n;
+int arr_size;
 T arr[MAX_N];
 T tree[MAX_N << 2];
 
@@ -108,8 +108,8 @@ void build(const T *arr, int i, int l, int r) {
 }
 
 void build(const T *arr, int sz) {
-    n = sz;
-    build(arr, 1, 1, n);
+    arr_size = sz;
+    build(arr, 1, 1, arr_size);
 }
 
 void build(int sz, T init_val) {
@@ -132,7 +132,7 @@ void update(int i, int l, int r, int qi, T val) {
 }
 
 void update(int qi, T val) {
-    update(1, 1, n, qi, val);
+    update(1, 1, arr_size, qi, val);
 }
 
 T query(int i, int l, int r, int ql, int qr) {
@@ -151,5 +151,5 @@ T query(int i, int l, int r, int ql, int qr) {
 }
 
 T query(int ql, int qr) {
-    return query(1, 1, n, ql, qr);
+    return query(1, 1, arr_size, ql, qr);
 }

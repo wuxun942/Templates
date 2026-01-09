@@ -34,14 +34,6 @@ public:
         cc--;
         return true;
     }
-
-    bool is_same(int x, int y) {
-        return find(x) == find(y);
-    }
-
-    int get_size(int x) {
-        return sz[find(x)];
-    }
 };
 
 long long kruskal(int n, vector<vector<int>> &edges) {
@@ -54,5 +46,5 @@ long long kruskal(int n, vector<vector<int>> &edges) {
             res += e[2];
         }
     }
-    return res;
+    return uf.cc == n ? res : -1;
 }

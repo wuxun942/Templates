@@ -3,7 +3,14 @@ using namespace std;
 
 /*
 带权并查集（边权并查集）
-每次合并都要给出两点的距离，这样就能得到任意一点与超级源点的距离
+从一维坐标的角度理解，dis[i] 表示 i 和其祖先的坐标差，
+即 dis[i] = index(i) - index(find(i))
+
+由此可以得到两个重要结论：
+1. 如果 x 和 y 属于同一集合，那么 index(x) - index(y) = dis[x] - dis[y]
+2. 给出两个不相交的点 from, to 的坐标差 val，
+设 find(from) = x, find(to) = y，那么合并后
+dis[x] = val + dis[to] - dis[from]
 */
 template<typename T>
 struct UnionFind {
@@ -23,25 +30,23 @@ struct UnionFind {
         return fa[x];
     }
 
-    bool is_same(int x, int y) {
+    bool same(int x, int y) {
         return find(x) == find(y);
     }
 
-    // 查询两点间的距离，需要保证两点连通
+    // 查询两点间的坐标差，需要保证两点连通
     T get_relative_distance(int from, int to) {
         find(from);
         find(to);
-        // to-from = (x-from) - (x-to) = dis[from] - dis[to]
         return dis[from] - dis[to];
     }
 
+    // 给出 from 和 to 的坐标差，合并两个集合
     bool merge(int from, int to, T value) {
         int x = find(from), y = find(to);
         if (x == y) {
             return dis[from] - dis[to] == value;
         }
-        // 由于 y-from = (y-x) + (x-from) = (y-to) + (to-from)
-        // 所以 y-x = (to-from) + (y-to) - (x-from) = value + dis[to] - dis[from]
         dis[x] = value + dis[to] - dis[from];
         fa[x] = y;
         return true;
@@ -68,25 +73,23 @@ int find(int x) {
     return fa[x];
 }
 
-bool is_same(int x, int y) {
+bool same(int x, int y) {
     return find(x) == find(y);
 }
 
-// 查询两点间的距离，需要保证两点连通
+// 查询两点间的坐标差，需要保证两点连通
 T get_relative_distance(int from, int to) {
     find(from);
     find(to);
-    // to-from = (x-from) - (x-to) = dis[from] - dis[to]
     return dis[from] - dis[to];
 }
 
+// 给出 from 和 to 的坐标差，合并两个集合
 bool merge(int from, int to, T value) {
     int x = find(from), y = find(to);
     if (x == y) {
         return dis[from] - dis[to] == value;
     }
-    // 由于 y-from = (y-x) + (x-from) = (y-to) + (to-from)
-    // 所以 y-x = (to-from) + (y-to) - (x-from) = value + dis[to] - dis[from]
     dis[x] = value + dis[to] - dis[from];
     fa[x] = y;
     return true;

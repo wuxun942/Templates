@@ -35,7 +35,7 @@ public:
         return true;
     }
 
-    bool is_same(int x, int y) {
+    bool same(int x, int y) {
         return find(x) == find(y);
     }
 
@@ -76,7 +76,7 @@ bool merge(int x, int y) {
     return true;
 }
 
-bool is_same(int x, int y) {
+bool same(int x, int y) {
     return find(x) == find(y);
 }
 

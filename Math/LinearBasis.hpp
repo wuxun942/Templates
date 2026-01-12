@@ -3,7 +3,10 @@ using namespace std;
 
 // 异或空间线性基，时间复杂度 O(n * logU)
 
-// 普通消元
+/*
+普通消元：可以在线，但只能求最大值
+思路：按最高位构建
+*/
 template<typename T>
 struct XorBasisNormal {
     vector<T> basis;
@@ -64,7 +67,10 @@ T max_xor() {
     return ans;
 }
 
-// 高斯消元
+/*
+高斯消元：必须离线，可以求第 k 大
+技巧同加法方程组的高斯消元
+*/
 template<typename T>
 struct XorBasisGauss {
     vector<T> basis;
@@ -112,7 +118,7 @@ struct XorBasisGauss {
         }
         T ans = 0;
         for (; k; k &= k - 1) {
-            ans ^= basis[__builtin_ctz(k)];
+            ans ^= basis[__builtin_ctzll(k)];
         }
         return ans;
     }
@@ -170,7 +176,7 @@ T get_kth_xor(uint64_t k) {
     }
     T ans = 0;
     for (; k; k &= k - 1) {
-        ans ^= basis[__builtin_ctz(k)];
+        ans ^= basis[__builtin_ctzll(k)];
     }
     return ans;
 }

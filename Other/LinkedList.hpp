@@ -1,3 +1,6 @@
+#include <bits/stdc++.h>
+using namespace std;
+
 // 数组模拟链表，常用于链式前向星
 
 // 链式前向星建图，以下为 1-based
@@ -7,6 +10,12 @@ int nxt[MAX_E];
 int to[MAX_E];
 // long long weight[MAX_E];
 int cnt_edge = 0;
+
+void clear(int n) {
+    fill(head + 1, head + n + 1, 0);
+    cnt_edge = 0;
+}
+
 void add_edge(int x, int y, long long w = 0) {
     nxt[++cnt_edge] = head[x];
     to[cnt_edge] = y;

@@ -89,7 +89,7 @@ void insert(T x, int k) {
 }
 
 // 以找异或最大值为例
-T search(T x, int k) {
+T query(T x, int k) {
     T res = 0;
     int cur = 0;
     for (int i = k - 1; i >= 0; --i) {

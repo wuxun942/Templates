@@ -10,7 +10,7 @@ using namespace std;
 using T = long long;
 constexpr T INF = LLONG_MAX;
 
-// 最大层数，层数值域为 [1, MAX_L]
+// 最大层数，为了方便查询，层数索引是 1-based
 constexpr int MAX_L = 20;
 
 // 最大节点数量

@@ -15,11 +15,11 @@ using namespace std;
 // 最大版本数量
 constexpr int MAX_Q = 200'000 + 5;
 
-// 最大 bit_width
-constexpr int MAX_B = 17;
+// 最大深度，0-1 Trie 中即 bit_width
+constexpr int MAX_H = 17;
 
-// 可持久化 0-1 Trie 的使用空间 = q * log U
-constexpr int MAX_M = MAX_Q * MAX_B;
+// 可持久化字典树的使用空间 = q * (h + 1)
+constexpr int MAX_M = MAX_Q * (MAX_H + 1);
 
 // 空间使用计数
 int cnt = 0;
@@ -53,7 +53,7 @@ void build() {
 void insert(int v, int qv, int x) {
     roots[v] = copy_node(roots[qv]);
     int cur = roots[v];
-    for (int i = MAX_B - 1; i >= 0; --i) {
+    for (int i = MAX_H - 1; i >= 0; --i) {
         int bit = x >> i & 1;
         tree[cur][bit] = copy_node(tree[cur][bit]);
         cur = tree[cur][bit];
@@ -65,14 +65,13 @@ void insert(int v, int qv, int x) {
 int query(int qv, int x) {
     int cur = roots[qv];
     int res = 0;
-    for (int i = MAX_B - 1; i >= 0; --i) {
+    for (int i = MAX_H - 1; i >= 0; --i) {
         int bit = x >> i & 1;
         if (int son = tree[cur][bit ^ 1]; son && passby[son]) {
             cur = son;
-            res = res * 2 + 1;
+            res |= 1 << i;
         } else {
             cur = tree[cur][bit];
-            res = res * 2;
         }
     }
     return res;

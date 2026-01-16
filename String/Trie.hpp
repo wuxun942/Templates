@@ -95,11 +95,10 @@ T query(T x, int k) {
     for (int i = k - 1; i >= 0; --i) {
         int bit = x >> i & 1;
         if (int son = trie[cur][bit ^ 1]; trie[son][2] > 0) {
-            res = res * 2 + 1;
+            res |= 1 << i;
             cur = son;
         } else {
             cur = trie[cur][bit];
-            res = res * 2;
         }
     }
     return res;

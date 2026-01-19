@@ -36,14 +36,14 @@ vector<vector<int>> multiply(vector<vector<int>> &mat1, vector<vector<int>> &mat
 constexpr int MOD = 1'000'000'007;
 constexpr int SIZE = 100;
 using matrix = array<array<long long, SIZE>, SIZE>;
-matrix multiply(matrix &mat1, matrix &mat2, int sz = SIZE, int mod = MOD) {
+matrix multiply(matrix &mat1, matrix &mat2, int sz, int mod) {
     matrix ans{};
-    for (int i = 0; i < SIZE; ++i) {
-        for (int k = 0; k < SIZE; ++k) {
+    for (int i = 0; i < sz; ++i) {
+        for (int k = 0; k < sz; ++k) {
             if (mat1[i][k] == 0) {
                 continue;
             }
-            for (int j = 0; j < SIZE; ++j) {
+            for (int j = 0; j < sz; ++j) {
                 ans[i][j] = (ans[i][j] + mat1[i][k] * mat2[k][j]) % mod;
             }
         }
@@ -53,7 +53,7 @@ matrix multiply(matrix &mat1, matrix &mat2, int sz = SIZE, int mod = MOD) {
 
 matrix qpow(matrix mat, long long n, int sz = SIZE, int mod = MOD) {
     matrix ans{};
-    for (int i = 0; i < SIZE; ++i) {
+    for (int i = 0; i < sz; ++i) {
         ans[i][i] = 1;
     }
     for (; n > 0; n >>= 1, mat = multiply(mat, mat, sz, mod)) {

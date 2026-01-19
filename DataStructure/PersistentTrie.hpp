@@ -67,7 +67,7 @@ int query(int qv, int x) {
     int res = 0;
     for (int i = MAX_H - 1; i >= 0; --i) {
         int bit = x >> i & 1;
-        if (int son = tree[cur][bit ^ 1]; son && passby[son]) {
+        if (int son = tree[cur][bit ^ 1]; passby[son]) {
             cur = son;
             res |= 1 << i;
         } else {

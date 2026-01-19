@@ -76,8 +76,8 @@ int build(const T *arr, int l, int r) {
 }
 
 // 建立 0 号版本
-void build(const T *arr, int arr_size) {
-    arr_size = arr_size;
+void build(const T *arr, int sz) {
+    arr_size = sz;
     roots[0] = build(arr, 1, arr_size);
 }
 

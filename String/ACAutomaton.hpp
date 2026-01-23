@@ -2,19 +2,19 @@
 using namespace std;
 
 // 朴素 AC 自动机
-constexpr int MAX_L = 1'000'000 + 5;
-int trie[MAX_L][27]; // 末位表示 end
-int fail[MAX_L];
-int last[MAX_L]; // 上一个匹配位置
-int cnt_v;
-int q[MAX_L];
+constexpr int MAX_V = 1'000'000 + 5;
+int tree[MAX_V][27]; // 末位表示 end
+int fail[MAX_V];
+int last[MAX_V]; // 上一个匹配位置
+int cnt_v = 0;
+int q[MAX_V];
 void build(const vector<string>& a) {
     // 初始化
     int sum_len = 0;
     for (auto &s : a) {
         sum_len += s.size();
     }
-    memset(trie, 0, (sum_len + 1) * 27 * sizeof(int));
+    memset(tree, 0, (sum_len + 1) * 27 * sizeof(int));
     fill(fail, fail + sum_len + 1, 0);
 
     // 插入（同字典树）
@@ -22,31 +22,31 @@ void build(const vector<string>& a) {
     for (auto &s : a) {
         int cur = 0;
         for (char c : s) {
-            int &son = trie[cur][c - 'a'];
+            int &son = tree[cur][c - 'a'];
             if (son == 0) {
                 son = ++cnt_v;
             }
             cur = son;
         }
-        trie[cur][26] = 1;
+        tree[cur][26] = 1;
     }
 
     // 构建 fail 指针
     int l = 0, r = 0;
     for (int j = 0; j < 26; ++j) {
-        if (trie[0][j] != 0) {
-            q[r++] = trie[0][j];
+        if (tree[0][j] != 0) {
+            q[r++] = tree[0][j];
         }
     }
     while (l < r) {
         int x = q[l++];
         for (int j = 0; j < 26; ++j) {
-            if (trie[x][j] == 0) {
-                trie[x][j] = trie[fail[x]][j];
+            if (tree[x][j] == 0) {
+                tree[x][j] = tree[fail[x]][j];
             } else {
-                fail[trie[x][j]] = trie[fail[x]][j];
-                last[trie[x][j]] = trie[fail[trie[x][j]]][26] ? fail[trie[x][j]] : last[fail[trie[x][j]]];
-                q[r++] = trie[x][j];
+                fail[tree[x][j]] = tree[fail[x]][j];
+                last[tree[x][j]] = tree[fail[tree[x][j]]][26] ? fail[tree[x][j]] : last[fail[tree[x][j]]];
+                q[r++] = tree[x][j];
             }
         }
     }
@@ -56,9 +56,9 @@ void build(const vector<string>& a) {
 bool search(const string& s) {
     int cur = 0;
     for (char c : s) {
-        cur = trie[cur][c - 'a'];
+        cur = tree[cur][c - 'a'];
         for (int ptr = cur; ptr > 0; ptr = last[ptr]) {
-            if (trie[ptr][26]) {
+            if (tree[ptr][26]) {
                 return true;
             }
         }
@@ -67,18 +67,18 @@ bool search(const string& s) {
 }
 
 // 只考虑命中时报警
-constexpr int MAX_L = 1'000'000 + 5;
-int trie[MAX_L][27]; // 末位表示 end
-int fail[MAX_L];
-int q[MAX_L];
-int cnt_v;
+constexpr int MAX_V = 1'000'000 + 5;
+int tree[MAX_V][27]; // 末位表示 end
+int fail[MAX_V];
+int q[MAX_V];
+int cnt_v = 0;
 void build(const vector<string> &a) {
     // 初始化
     int sum_len = 0;
     for (auto &s : a) {
         sum_len += s.size();
     }
-    memset(trie, 0, (sum_len + 1) * 27 * sizeof(int));
+    memset(tree, 0, (sum_len + 1) * 27 * sizeof(int));
     fill(fail, fail + sum_len + 1, 0);
 
     // 插入（同字典树）
@@ -86,31 +86,31 @@ void build(const vector<string> &a) {
     for (auto &s : a) {
         int cur = 0;
         for (char c : s) {
-            int &son = trie[cur][c - 'a'];
+            int &son = tree[cur][c - 'a'];
             if (son == 0) {
                 son = ++cnt_v;
             }
             cur = son;
         }
-        trie[cur][26] = 1;
+        tree[cur][26] = 1;
     }
 
     // 构建 fail 指针
     int l = -1, r = 0;
     for (int j = 0; j < 26; ++j) {
-        if (trie[0][j] != 0) {
-            q[r++] = trie[0][j];
+        if (tree[0][j] != 0) {
+            q[r++] = tree[0][j];
         }
     }
     while (l + 1 < r) {
         int x = q[++l];
-        trie[x][26] |= trie[fail[x]][26]; // 等价位置也要有 end 标记
+        tree[x][26] |= tree[fail[x]][26]; // 等价位置也要有 end 标记
         for (int j = 0; j < 26; ++j) {
-            if (trie[x][j] == 0) {
-                trie[x][j] = trie[fail[x]][j];
+            if (tree[x][j] == 0) {
+                tree[x][j] = tree[fail[x]][j];
             } else {
-                fail[trie[x][j]] = trie[fail[x]][j];
-                q[r++] = trie[x][j];
+                fail[tree[x][j]] = tree[fail[x]][j];
+                q[r++] = tree[x][j];
             }
         }
     }
@@ -120,8 +120,8 @@ void build(const vector<string> &a) {
 bool search(const string &s) {
     int cur = 0;
     for (char c : s) {
-        cur = trie[cur][c - 'a'];
-        if (trie[cur][26]) {
+        cur = tree[cur][c - 'a'];
+        if (tree[cur][26]) {
             return true;
         }
     }
@@ -129,15 +129,15 @@ bool search(const string &s) {
 }
 
 // 扫描文章 + 离线统计词频
-constexpr int MAX_L = 1'000'000 + 5; // 模式串长度总和
-int trie[MAX_L][26];
-int fail[MAX_L];
-int cnt_v;
-int q[MAX_L];
-int head[MAX_L];
-int nxt[MAX_L];
-int to[MAX_L];
-int cnt[MAX_L];
+constexpr int MAX_V = 1'000'000 + 5; // 模式串长度总和
+int tree[MAX_V][26];
+int fail[MAX_V];
+int cnt_v = 0;
+int q[MAX_V];
+int head[MAX_V];
+int nxt[MAX_V];
+int to[MAX_V];
+int cnt[MAX_V];
 constexpr int MAX_N = 1'000'000 + 5; // 模式串个数
 int end_node[MAX_N];
 int n;
@@ -147,7 +147,7 @@ void build(const vector<string> &a) {
     for (auto &s : a) {
         sum_len += s.size();
     }
-    memset(trie, 0, (sum_len + 1) * 27 * sizeof(int));
+    memset(tree, 0, (sum_len + 1) * 27 * sizeof(int));
     fill(fail, fail + sum_len + 1, 0);
     fill(head, head + sum_len + 1, -1);
     fill(cnt, cnt + sum_len + 1, 0);
@@ -159,7 +159,7 @@ void build(const vector<string> &a) {
         auto &s = a[i];
         int cur = 0;
         for (char c : s) {
-            int &son = trie[cur][c - 'a'];
+            int &son = tree[cur][c - 'a'];
             if (son == 0) {
                 son = ++cnt_v;
             }
@@ -171,18 +171,18 @@ void build(const vector<string> &a) {
     // 构建 fail 指针
     int l = -1, r = 0;
     for (int j = 0; j < 26; ++j) {
-        if (trie[0][j] != 0) {
-            q[r++] = trie[0][j];
+        if (tree[0][j] != 0) {
+            q[r++] = tree[0][j];
         }
     }
     while (l + 1 < r) {
         int x = q[++l];
         for (int j = 0; j < 26; ++j) {
-            if (trie[x][j] == 0) {
-                trie[x][j] = trie[fail[x]][j];
+            if (tree[x][j] == 0) {
+                tree[x][j] = tree[fail[x]][j];
             } else {
-                fail[trie[x][j]] = trie[fail[x]][j];
-                q[r++] = trie[x][j];
+                fail[tree[x][j]] = tree[fail[x]][j];
+                q[r++] = tree[x][j];
             }
         }
     }
@@ -208,7 +208,7 @@ void dfs(int x) {
 vector<int> scan(const string &s) {
     int cur = 0;
     for (char c : s) {
-        cur = trie[cur][c - 'a'];
+        cur = tree[cur][c - 'a'];
         ++cnt[cur];
     }
     dfs(0);

@@ -15,7 +15,7 @@ constexpr int MAX_N = 100'000 + 5;
 constexpr int MAX_Q = 100'000 + 5;
 
 // 可持久化线段树的使用空间 = n * 4 + q * log n
-constexpr int MAX_M = MAX_N * 4 + MAX_Q * 17;
+constexpr int MAX_V = MAX_N * 4 + MAX_Q * 17;
 
 using T = int;
 constexpr T INIT = INT_MIN;
@@ -29,10 +29,10 @@ int cnt = 0;
 // 每个版本的根节点
 int roots[MAX_Q];
 
-T tree[MAX_M];
+T tree[MAX_V];
 
-int ls[MAX_M];
-int rs[MAX_M];
+int ls[MAX_V];
+int rs[MAX_V];
 
 // 清空
 void clear(int sz = cnt) {

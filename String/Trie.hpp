@@ -1,15 +1,17 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-// 字典树，做题时更推荐使用静态数组实现
+// 字典树 trie，做题时更推荐使用静态数组实现
 
 // 只考虑26个字母的字典树的静态数组实现
-constexpr int MAX_L = 5'000'000 + 5;
-int trie[MAX_L][27]; // 末位表示 end
-int cnt_v;
+constexpr int MAX_N = 100'000 + 5;
+constexpr int MAX_H = 20;
+constexpr int MAX_V = MAX_N * (MAX_H + 1);
+int tree[MAX_V][27]; // 末位表示 end
+int cnt_v = 0;
 void clear(int n = cnt_v) {
     cnt_v = 0;
-    memset(trie, 0, (n + 1) * 27 * sizeof(int));
+    memset(tree, 0, (n + 1) * 27 * sizeof(int));
 }
 
 void clear(const vector<string> &a) {
@@ -23,31 +25,31 @@ void clear(const vector<string> &a) {
 void insert(const string &s) {
     int cur = 0;
     for (char c : s) {
-        int &son = trie[cur][c - 'a'];
+        int &son = tree[cur][c - 'a'];
         if (son == 0) {
             son = ++cnt_v;
         }
         cur = son;
     }
-    trie[cur][26] = 1;
+    tree[cur][26] = 1;
 }
 
 bool search_word(const string &s) {
     int cur = 0;
     for (char c : s) {
-        int son = trie[cur][c - 'a'];
+        int son = tree[cur][c - 'a'];
         if (son == 0) {
             return false;
         }
         cur = son;
     }
-    return trie[cur][26];
+    return tree[cur][26];
 }
 
 bool search_prefix(const string &s) {
     int cur = 0;
     for (char c : s) {
-        int son = trie[cur][c - 'a'];
+        int son = tree[cur][c - 'a'];
         if (son == 0) {
             return false;
         }
@@ -57,58 +59,53 @@ bool search_prefix(const string &s) {
 }
 
 // 0-1 字典树
-using T = int;
-constexpr int MAX_L = 5'000'000 + 5; // 最长比特位 * 数量
-int trie[MAX_L][3];
-int cnt_v;
+constexpr int MAX_N = 200'000 + 5;
+constexpr int MAX_H = 30;
+constexpr int MAX_V = MAX_N * (MAX_H + 1); // 总长度 = 数量 * (最长比特位 + 1)
+int tree[MAX_V][2];
+int passby[MAX_V];
+int cnt_v = 0;
 
 void clear(int n = cnt_v) {
     cnt_v = 0;
-    memset(trie, 0, (n + 1) * 3 * sizeof(int));
-}
-
-void clear(const vector<T> &a) {
-    int mx = 0;
-    for (T x : a) {
-        mx = max(mx, bit_width((unsigned) x));
-    }
-    clear(mx * a.size());
+    memset(tree, 0, (n + 1) * 2 * sizeof(int));
+    fill(passby, passby + cnt_v, 0);
 }
 
 // k: 比特位长度，不要减一
-void insert(T x, int k) {
+void insert(int x, int k = MAX_H) {
     int cur = 0;
     for (int i = k - 1; i >= 0; --i) {
-        int bit = x >> i & 1, &son = trie[cur][bit];
+        int bit = x >> i & 1, &son = tree[cur][bit];
         if (son == 0) {
             son = ++cnt_v;
         }
         cur = son;
-        ++trie[cur][2];
+        ++passby[cur];
     }
 }
 
 // 以找异或最大值为例
-T query(T x, int k) {
-    T res = 0;
+int query(int x, int k = MAX_H) {
+    int res = 0;
     int cur = 0;
     for (int i = k - 1; i >= 0; --i) {
         int bit = x >> i & 1;
-        if (int son = trie[cur][bit ^ 1]; trie[son][2] > 0) {
+        if (int son = tree[cur][bit ^ 1]; passby[son] > 0) {
             res |= 1 << i;
             cur = son;
         } else {
-            cur = trie[cur][bit];
+            cur = tree[cur][bit];
         }
     }
     return res;
 }
 
-// 删除节点
-void remove(T x, int k) {
+// 删除节点：不需要直接删除，只需要减少经过次数
+void remove(int x, int k = MAX_H) {
     int cur = 0;
     for (int i = k - 1; i >= 0; --i) {
-        cur = trie[cur][x >> i & 1];
-        --trie[cur][2];
+        cur = tree[cur][x >> i & 1];
+        --passby[cur];
     }
 }

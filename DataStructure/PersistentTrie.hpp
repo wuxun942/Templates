@@ -19,7 +19,7 @@ constexpr int MAX_Q = 200'000 + 5;
 constexpr int MAX_H = 17;
 
 // 可持久化字典树的使用空间 = q * (h + 1)
-constexpr int MAX_M = MAX_Q * (MAX_H + 1);
+constexpr int MAX_V = MAX_Q * (MAX_H + 1);
 
 // 空间使用计数
 int cnt = 0;
@@ -27,8 +27,8 @@ int cnt = 0;
 // 每个版本的根节点
 int roots[MAX_Q];
 
-int tree[MAX_M][2];
-int passby[MAX_M];
+int tree[MAX_V][2];
+int passby[MAX_V];
 
 // 清空
 void clear(int sz = cnt) {
@@ -62,10 +62,10 @@ void insert(int v, int qv, int x) {
 }
 
 // 在 qv 版本的 0-1 Trie 上，查找与 x 的最大异或和
-int query(int qv, int x) {
+int query(int qv, int x, int k = MAX_H) {
     int cur = roots[qv];
     int res = 0;
-    for (int i = MAX_H - 1; i >= 0; --i) {
+    for (int i = k - 1; i >= 0; --i) {
         int bit = x >> i & 1;
         if (int son = tree[cur][bit ^ 1]; passby[son]) {
             cur = son;

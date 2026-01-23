@@ -23,7 +23,7 @@ constexpr int MAX_N = 100'000 + 5;
 constexpr int MAX_Q = 100'000 + 5;
 
 // 可持久化 Lazy 线段树的使用空间 = n * 4 + q * 4 * log n
-constexpr int MAX_S = MAX_N * 4 + MAX_Q * 4 * 17;
+constexpr int MAX_V = MAX_N * 4 + MAX_Q * 4 * 17;
 
 using T = long long;
 constexpr T INIT = 0;
@@ -40,12 +40,12 @@ int cnt = 0;
 // 每个版本的根节点
 int roots[MAX_Q];
 
-T tree[MAX_S];
+T tree[MAX_V];
 
-F to_add[MAX_S];
+F to_add[MAX_V];
 
-int ls[MAX_S];
-int rs[MAX_S];
+int ls[MAX_V];
+int rs[MAX_V];
 
 // 清空
 void clear(int sz = cnt) {

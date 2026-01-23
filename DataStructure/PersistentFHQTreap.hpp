@@ -17,7 +17,7 @@ constexpr int MAX_N = 100'000 + 5;
 constexpr int MAX_Q = 100'000 + 5;
 
 // 可持久化 FHQ Treap 使用空间 = q * 5 * log n
-constexpr int MAXM = MAX_Q * 5 * 17;
+constexpr int MAX_V = MAX_Q * 5 * 17;
 
 // 节点编号
 int cnt = 0;
@@ -26,17 +26,17 @@ int cnt = 0;
 int roots[MAX_N];
 
 // 节点的 key
-T key[MAXM];
+T key[MAX_V];
 
 // 左右儿子
-int ls[MAXM];
-int rs[MAXM];
+int ls[MAX_V];
+int rs[MAX_V];
 
 // 子树大小
-int siz[MAXM];
+int siz[MAX_V];
 
 // 随机生成的权重
-int priority[MAXM];
+int priority[MAX_V];
 
 // 拷贝节点，返回新节点编号
 int copy_node(int i) {

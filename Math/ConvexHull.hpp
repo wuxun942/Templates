@@ -12,7 +12,7 @@ F dot(array<T, 2> v1, array<T, 2> v2) {
     return (F) v1[0] * v2[0] + (F) v1[1] * v2[1];
 }
 
-template<typename T, typename F = T>
+template<typename T, typename F = __int128>
 F det(array<T, 2> v1, array<T, 2> v2) {
     return (F) v1[0] * v2[1] - (F) v1[1] * v2[0];
 }

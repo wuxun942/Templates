@@ -7,11 +7,13 @@ using namespace std;
 constexpr int MAX_N = 100'000 + 5;
 constexpr int MAX_H = 20;
 constexpr int MAX_V = MAX_N * (MAX_H + 1);
-int tree[MAX_V][27]; // 末位表示 end
+int tree[MAX_V][26];
+int passby[MAX_V];
 int cnt_v = 0;
 void clear(int n = cnt_v) {
     cnt_v = 0;
-    memset(tree, 0, (n + 1) * 27 * sizeof(int));
+    memset(tree, 0, (n + 1) * 26 * sizeof(int));
+    fill(passby, passby + n + 1, 0);
 }
 
 void clear(const vector<string> &a) {
@@ -69,7 +71,7 @@ int cnt_v = 0;
 void clear(int n = cnt_v) {
     cnt_v = 0;
     memset(tree, 0, (n + 1) * 2 * sizeof(int));
-    fill(passby, passby + cnt_v, 0);
+    fill(passby, passby + n + 1, 0);
 }
 
 // k: 比特位长度，不要减一
